@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
+    <!--<link th:href="@{/webjars/font-awesome/6.4.2/css/font-awesome.css}" rel="stylesheet">-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Sobre Nosotros</title>
+    <style>
+        body, html {
+            margin: 5%;
+            margin-top: 8%;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            padding: 0;
+            width: 100%; /* Ancho completo de la página */
+        }
+        img {
+            width: 100%; /* Ocupar todo el ancho del contenedor */
+            height: auto; /* Mantener la proporción de la imagen */
+        }
+    </style>
+</head>
+
+<body style="background-image: url('/imgs/fondo.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
+    
+    <div class="container">
+        <!-- Encabezado -->
+        <div class="row align-items-center">
+            <div class="row">
+                <a href="/home/index">
+					<img src="/imgs/banner.png" alt="Banner" />
+				</a>
+            </div>
+        </div>
+        <br>
+        <!-- Navegador -->
+        <div class="row align-items-center">
+            <div class="col text-center" style="width: 100%;">
+                <div th:replace="~{navbar :: navbarFragment}"></div>
+            </div>
+        </div>
+        <br>
+        <br>
+        <!-- Cuerpo -->
+         <div class="row align-items-center justify-content-center">
+            <div class="col-md-6 text-center" style="background-color: rgba(255, 255, 255, 0.7); border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <h2>Sobre Nosotros</h2>
+
+                <p>Somos un equipo apasionado de amantes del fútbol que se unió con la visión de crear un espacio en línea donde los aficionados de todo el mundo puedan conectarse, compartir su pasión y disfrutar de contenido emocionante sobre este hermoso deporte.</p>
+
+                <p>Nuestro objetivo es proporcionar noticias actualizadas, análisis profundos, debates animados y una comunidad acogedora para todos los amantes del fútbol, desde los más dedicados hasta los recién llegados.</p>
+
+                <p>Estamos comprometidos con la excelencia, la imparcialidad y el respeto mutuo. Creemos en la diversidad de opiniones y en la celebración de la riqueza cultural que el fútbol trae consigo.</p>
+
+                <p>Únete a nosotros en este emocionante viaje mientras celebramos la pasión y la emoción del hermoso juego que une a personas de todas las edades, géneros y culturas. ¡Bienvenido a nuestra comunidad!</p>
+            </div>
+        </div>
+        <br>
+        <br>
+        <!-- Footer -->
+        <footer class="bg-body-tertiary text-center text-lg-start">
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+                © 2024 Copyright: FOOTBALLZONE
+            </div> 
+        </footer>
+    </div>
+
+</body>
+
+</html>

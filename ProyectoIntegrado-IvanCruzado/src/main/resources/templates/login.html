@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .login-container {
+      background-color: rgba(255, 255, 255, 0.8); /* Color de fondo con opacidad */
+      padding: 20px;
+      height: 45%;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center; /* Centra el contenido del contenedor */
+    }
+    input[type="text"],
+    input[type="password"] {
+      width: calc(100% - 22px);
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    input[type="submit"] {
+      background-color: #007bff;
+      padding: 10px;
+      width: 100%;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      color: #fff;
+      cursor: pointer;
+    }
+    input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+    
+    .error-message {
+	    background-color: red;
+	    color: antiquewhite;
+	    text-align: center;
+	    border-radius: 4px; 
+	    padding: 10px; 
+	    display: none; /* Ocultar por defecto */
+	}
+	
+	form {
+	    position: relative; /* Establecer posición relativa para el formulario */
+	    text-align: left; /* Alinea el texto a la izquierda */
+	}
+
+	.error-message {
+	    position: absolute;
+	    top: 100%; /* Colocar el mensaje de error debajo del formulario */
+	    left: 50%;
+	    transform: translateX(-50%); /* Centrar horizontalmente */
+	}
+
+    /* Estilos para el formulario con credenciales inválidas */
+    .invalid-credentials form {
+        padding: 30px; /* Aumenta el tamaño del formulario */
+    }
+    
+    .invalid-credentials label {
+        text-align: left; /* Alinea los labels a la izquierda */
+    }
+
+  </style>
+</head>
+<body style="background-image: url('/imgs/fondologin-register.jpg');">
+	
+  <div class="login-container">
+    <h2 style="text-align: center;">Login</h2>
+    <form th:action="@{/auth/login}" th:object="${usuario}" method="post">
+		<input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <label for="username">Username</label>
+        <input type="text" class="form-control" placeholder="Username" th:field="*{username}" id="username" name="username"/>
+        <label for="password">Password</label>
+        <input type="password" class="form-control" placeholder="Password" th:field="*{password}" id="password" name="password"/>
+        <input type="submit" value="Iniciar sesión">
+    	<div style="text-align: center;">¿Aún no tienes cuenta? <a th:href="@{/auth/registerForm}">Regístrate</a></div>
+	  	<br>
+	    <div class="error-message" th:text="${loginError}"></div>
+    </form>
+  </div>
+</body>
+<script>
+  // Obtener el elemento de mensaje de error
+  var errorMessage = document.querySelector('.error-message');
+
+  // Mostrar el mensaje de error si tiene texto
+  if (errorMessage.textContent.trim() !== '') {
+    errorMessage.style.display = 'block';
+  }
+  
+  setTimeout(function() {
+    errorMessage.style.display = 'none';
+  }, 5000);
+</script>
+</html>

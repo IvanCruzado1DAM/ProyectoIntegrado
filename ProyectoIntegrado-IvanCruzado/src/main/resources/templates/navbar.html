@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
+    <!--<link th:href="@{/webjars/font-awesome/6.4.2/css/font-awesome.css}" rel="stylesheet">-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .menu-vertical {
+            display: none; /* Inicialmente oculto */
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1000;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+    </style>
+    <script>
+        function toggleMenu() {
+            var menu = document.getElementById("menuVertical");
+            menu.style.display = (menu.style.display === "none") ? "block" : "none";
+        }
+    </script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light " th:fragment="navbarFragment"
+        style="background-color:rgb(37, 150, 190); width: 98%;">
+        <div class="container">
+            <div class="d-flex justify-content-between w-100">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <!-- Elementos comunes para usuarios autenticados y no autenticados -->
+                    <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
+                        <a class="nav-link" href="#" style="white-space: nowrap; color: white;">Registrar Equipo</a>
+                    </li>
+                    <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
+                        <a class="nav-link" href="#" style="white-space: nowrap; color: white;">Registrar Usuario</a>
+                    </li>
+                    <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
+                        <a class="nav-link" href="#" style="white-space: nowrap; color: white;">Redactar Noticia</a>
+                    </li>
+                   
+                    <!-- Elementos siempre visibles -->
+                     <li sec:authorize="!hasRole('ROLE_ADMIN')" class="nav-item active">
+                        <a class="nav-link" href="/home/yourteam"
+                            style="white-space: nowrap; color: white;">Tu Equipo</a>
+                    </li>
+                    <li sec:authorize="!hasRole('ROLE_ADMIN')" class="nav-item active">
+                        <a class="nav-link" href="/home/aboutus" style="white-space: nowrap; color: white;">Sobre
+                            nosotros</a>
+                    </li>
+                    <li sec:authorize="!hasRole('ROLE_ADMIN')" class="nav-item active">
+                        <a class="nav-link" href="/home/contactus"
+                            style="white-space: nowrap; color: white;">Contáctanos</a>
+                    </li>
+
+                    <!-- Elementos para usuarios no autenticados -->
+                    <li sec:authorize="!isAuthenticated()" class="nav-item">
+                        <a class="nav-link" th:href="@{/auth/registerForm}"
+                            style="white-space: nowrap; color: white;"><span class="fa fa-user"></span> Sign up</a>
+                    </li>
+                    <li sec:authorize="!isAuthenticated()" class="nav-item">
+                        <a class="nav-link" th:href="@{/auth/login}" style="white-space: nowrap; color: white;"><span
+                                class="fa fa-sign-in"></span> Login</a>
+                    </li>
+
+                    <!-- Elementos para usuarios autenticados -->
+                    <li sec:authorize="isAuthenticated()" class="nav-item">
+                        <a class="nav-link" th:text="${usuario}" style="white-space: nowrap; color: white;"></a>
+                    </li>
+                    <li sec:authorize="hasRole('ROLE_USER')" class="nav-item active">
+                        <a class="nav-link editar" type="submit" href="/home/editUser"
+                            style="color: white; height: 50px; width: 105px;">Editar Perfil</a>
+                    </li>
+                    <li sec:authorize="isAuthenticated()" class="nav-item">
+                        <form th:action="@{/logout}" method="post">
+                            <button class="btn btn-link fa fa-sign-in" type="submit"
+                                style="color: white; width: 105px; margin-top: 5px; margin-left: -15px;">
+                                Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</body>
+
+</html>

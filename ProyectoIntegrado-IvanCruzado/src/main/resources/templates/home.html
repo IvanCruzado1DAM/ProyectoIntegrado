@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
+	<!--<link th:href="@{/webjars/font-awesome/6.4.2/css/font-awesome.css}" rel="stylesheet">-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<title>Home</title>
+	<style>
+		body, html {
+            margin: 5%;
+            margin-top: 10%;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            padding: 0;
+           
+            width: 100%; /* Ancho completo de la página */
+        }
+        img {
+            width: 100%; /* Ocupar todo el ancho del contenedor */
+            height: auto; /* Mantener la proporción de la imagen */
+            
+        }
+        
+	</style>
+</head>
+
+<body style="background-image: url('/imgs/fondo.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
+	
+	<div class="container">
+		<!-- Encabezado -->
+		<div class="row align-items-center">
+			<div class="row">
+				<img src="/imgs/banner.png" alt="Banner" />
+			</div>
+		</div>
+		<br>
+		<!-- Navegador -->
+		<div class="row align-items-center">
+			<div class="col text-center" style="width: 100%;">
+				<div th:replace="~{navbar :: navbarFragment}"></div>
+			</div>
+		</div>
+		<br>
+		<br>
+		<!-- Cuerpo -->
+		 <div class="row align-items-center justify-content-center">
+        <div class="col-md-6 text-center" style="background-color: rgba(255, 255, 255, 0.7); border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+				<h2>¡Bienvenido a FootballZone!</h2>
+
+<p> En FootballZone, te sumergimos en el apasionante mundo del fútbol, donde la emoción nunca termina y cada partido es una nueva aventura. Desde las hazañas legendarias de los grandes jugadores hasta los momentos más emocionantes en la historia de este deporte, aquí encontrarás todo lo que necesitas para mantener tu pasión por el fútbol encendida.
+
+<p>  Explora nuestras noticias de última hora, mantente al tanto de los fichajes más recientes y descubre análisis detallados de los partidos más importantes. No importa si eres un fanático acérrimo de un equipo en particular o simplemente amas el juego en general, en FootballZone, tenemos algo para todos.</p>
+
+<p>  Únete a nuestra comunidad de aficionados, comparte tus opiniones y debates enérgicos sobre el deporte más popular del mundo. Ya seas un seguidor de la liga local o un apasionado del fútbol internacional, aquí encontrarás un lugar donde tu amor por el juego puede florecer. </p>
+
+<p>  Estamos aquí para celebrar la grandeza del fútbol, desde los momentos de gloria en el campo hasta los relatos más inspiradores fuera de él. ¡Bienvenido a FootballZone, donde el fútbol cobra vida!</p>​
+			</div>
+		</div>
+		<br>
+		<br>
+		<!-- Footer -->
+		<footer class="bg-body-tertiary text-center text-lg-start">
+			<div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+				© 2024 Copyright: FOOTBALLZONE
+			</div> 
+		</footer>
+	</div>
+
+</body>
+
+</html>
