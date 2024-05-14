@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class UserModel {
-	private int idUser;
+	private int id_user;
 	private String name, username, password;
 	private int id_team_user;
 	private String role;

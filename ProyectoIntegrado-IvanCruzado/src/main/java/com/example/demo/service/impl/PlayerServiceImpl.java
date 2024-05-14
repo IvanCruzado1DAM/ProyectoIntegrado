@@ -75,7 +75,6 @@ public class PlayerServiceImpl implements PlayerService {
 				 .filter(p -> p.getId_team() == idTeam)
 				.map(p -> modelMapper.map(p, PlayerModel.class))
 				.collect(Collectors.toList());
-		System.err.println(filtredplayersList);
 		return filtredplayersList;
 		
 	}

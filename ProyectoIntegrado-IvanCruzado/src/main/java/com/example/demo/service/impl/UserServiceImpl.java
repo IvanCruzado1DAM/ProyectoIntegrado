@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.entity.Team;
 import com.example.demo.entity.User;
 import com.example.demo.model.UserModel;
 import com.example.demo.repository.UserRepository;
@@ -96,18 +97,25 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 	@Override
 	public User updateUser(UserModel userModel) {
-		User userExistente = userRepository.findById(userModel.getIdUser()).orElse(null);
+		User userExistente = userRepository.findById(userModel.getId_user());
 		if (userExistente != null) {
 			userExistente.setName(userModel.getName());
 			userExistente.setUsername(userModel.getUsername());
-			userExistente.setPassword(userModel.getPassword());
+			if(!userModel.getPassword().equals("")) {
+				userExistente.setPassword(passwordEncoder().encode(userModel.getPassword()));
+			}
+			userExistente.setId_team_user(userModel.getId_team_user());
 
 			return userRepository.save(userExistente);
 		}
-		return null;
+		return userExistente;
 	}
 
-	
+	@Override
+	public User loadUserById(int id) {
+		User user = userRepository.findById(id);
+		return user;
+	}
 	
 	public String getCurrentUsername() {
 	    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -128,7 +136,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	
 
 	public String deleteUser(UserModel userModel) {
-		User userExistente = userRepository.findById(userModel.getIdUser()).orElse(null);
+		User userExistente = userRepository.findById(userModel.getId_user());
 		if (userExistente != null) {
 			userRepository.delete(userExistente);
 		}
