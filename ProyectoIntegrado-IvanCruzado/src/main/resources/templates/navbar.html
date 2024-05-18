@@ -38,10 +38,10 @@
                 <ul class="navbar-nav">
                     <!-- Elementos comunes para usuarios autenticados y no autenticados -->
                     <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
-                        <a class="nav-link" href="#" style="white-space: nowrap; color: white;">Registrar Equipo</a>
+                        <a class="nav-link" href="/admin/register" style="white-space: nowrap; color: white;">Registrar</a>
                     </li>
                     <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
-                        <a class="nav-link" href="#" style="white-space: nowrap; color: white;">Registrar Usuario</a>
+                        <a class="nav-link" href="#" style="white-space: nowrap; color: white;">Editar</a>
                     </li>
                     <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
                         <a class="nav-link" href="#" style="white-space: nowrap; color: white;">Redactar Noticia</a>

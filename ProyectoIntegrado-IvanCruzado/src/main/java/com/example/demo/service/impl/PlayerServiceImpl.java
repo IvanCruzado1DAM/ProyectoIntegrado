@@ -62,8 +62,8 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	public Player loadPlayerById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		Player player = playerRepository.findById(id);
+		return player;
 	}
 
 	@Override

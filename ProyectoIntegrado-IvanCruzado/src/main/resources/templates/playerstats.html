@@ -89,7 +89,6 @@
 			color: #333;
 			border: 3px solid mediumaquamarine;
 		}
-
 	</style>
 </head>
 
@@ -113,70 +112,51 @@
 			</div>
 		</div>
 		<br>
-		<br>
-		<!-- Cuerpo -->
-		<div>
-			<div class="position-group">
-				<h3>Porteros</h3>
-				<div class="player-container">
-					<th:block th:each="player : ${players}">
-						<div th:if="${player.position == 'Portero'}" class="player-item">
-							<a th:href="${'/yourteam/squad/player/' + player.id_player}">
-								<img th:src="${player.image}" alt="Imagen de jugador" style="margin: 0 50px;">
-							</a>
-							<p th:text="${player.name}"></p>
-						</div>
-					</th:block>
+		 <div class="col text-start">
+            <strong>
+                <a href="/yourteam/squad" class="btn btn-primary" style="text-decoration: none; color: inherit; color: white;">
+                    <span class="fa fa-arrow-left"></span>
+                    Volver a la Plantilla
+                </a>
+            </strong>
+        </div>
+
+		<div class="position-group">
+			<h3>Datos del Jugador</h3>
+			<br>
+			<div class="row" style="width: 65%; padding: 10px; border-radius: 10px;">
+				<div class="col-md-8" style="padding-left: 5%;">
+					<img th:src="${player.image}" alt="Imagen de jugador" style="max-height: 500px;">
+				</div>
+				<div class="col-md-4" style="width: 35%; align-self: center; margin-left: -5%;">
+					<div
+						style="padding: 20px; background-color: #fff; border-radius: 5px; box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);">
+						<p style="margin-bottom: 10px;"><strong>Nombre:</strong> <span th:text="${player.name}"></span>
+						</p>
+						<p style="margin-bottom: 10px;"><strong>Posición:</strong> <span
+								th:text="${player.position}"></span></p>
+						<p style="margin-bottom: 10px;"><strong>Nacionalidad:</strong> <span
+								th:text="${player.nationality}"></span></p>
+						<p style="margin-bottom: 10px;"><strong>Valor de Mercado:</strong> <span
+								th:text="${player.market_value}"></span>€</p>
+						<p style="margin-bottom: 10px;"><strong th:if="${player.position == 'Portero'}">Goles
+								encajados:</strong><span
+								th:if="${player.position != 'Portero'}"><strong>Goles:</strong></span> <span
+								th:text="${player.goals}"></span></p>
+						<p style="margin-bottom: 10px;"><strong th:if="${player.position == 'Portero'}">Porterías a
+								cero:</strong><span
+								th:if="${player.position != 'Portero'}"><strong>Asistencias:</strong></span> <span
+								th:if="${player.position == 'Portero'}">0</span><span
+								th:if="${player.position != 'Portero'}" th:text="${player.assists}"></span></p>
+						<p style="margin-bottom: 10px;"><strong>Tarjetas Amarillas:</strong> <span
+								th:text="${player.yc}"></span></p>
+						<p><strong>Tarjetas Rojas:</strong> <span th:text="${player.rc}"></span></p>
+					</div>
 				</div>
 			</div>
 
-			<!-- Jugadores Defensas -->
-			<div class="position-group">
-				<h3>Defensas</h3>
-				<div class="player-container">
-					<th:block th:each="player : ${players}">
-						<div th:if="${player.position == 'Defensa'}" class="player-item">
-							<a th:href="${'/yourteam/squad/player/' + player.id_player}">
-								<img th:src="${player.image}" alt="Imagen de jugador" style="margin: 0 50px;">
-							</a>
-							<p th:text="${player.name}"></p>
-						</div>
-					</th:block>
-				</div>
-			</div>
-
-			<!-- Jugadores Centrocampistas -->
-			<div class="position-group">
-				<h3>Centrocampistas</h3>
-				<div class="player-container">
-					<th:block th:each="player : ${players}">
-						<div th:if="${player.position == 'Centrocampista'}" class="player-item">
-							<a th:href="${'/yourteam/squad/player/' + player.id_player}">
-								<img th:src="${player.image}" alt="Imagen de jugador" style="margin: 0 50px;">
-							</a>
-							<p th:text="${player.name}"></p>
-						</div>
-					</th:block>
-				</div>
-			</div>
-
-			<!-- Jugadores Delanteros -->
-			<div class="position-group">
-				<h3>Delanteros</h3>
-				<div class="player-container">
-					<th:block th:each="player : ${players}">
-						<div th:if="${player.position == 'Delantero'}" class="player-item">
-							<a th:href="${'/yourteam/squad/player/' + player.id_player}">
-								<img th:src="${player.image}" alt="Imagen de jugador" style="margin: 0 50px;">
-							</a>
-							<p th:text="${player.name}"></p>
-						</div>
-					</th:block>
-				</div>
-			</div>
 		</div>
-
-
+		<br>
 		<!-- Footer -->
 		<footer class="bg-body-tertiary text-center text-lg-start">
 			<div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">

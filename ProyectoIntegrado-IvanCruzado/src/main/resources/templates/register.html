@@ -93,7 +93,6 @@
         <label for="id_team_user">Equipo favorito:</label>
         <br>
         <select style="margin-top: 2%;" class="form-control" id="id_team_user" name="id_team_user">
-            <option value="">Selecciona un equipo</option>
             <option th:field="*{id_team_user}" th:each="team : ${teams}" th:value="${team.id_team}" th:text="${team.name}">Equipo</option>
         </select>
     </div>
