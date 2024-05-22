@@ -11,7 +11,7 @@
 		body,
 		html {
 			margin: 5%;
-			margin-top: 13%;
+			margin-top: 7%;
 			padding: 0;
 			height: 100%;
 			display: flex;
@@ -60,6 +60,13 @@
 							style="max-width: 75%; max-height: 75%;">
 					</a>
 
+					<a href="/yourteam/squad" class="col-md-6 text-center"
+						style="background-color: rgba(255, 255, 255, 0.7); border-radius: 20%; width: 300px; height: 300px; display: flex; flex-direction: column; justify-content: center; align-items: center; ">
+						<h2 style="text-align: center; padding-top: 5%; margin-bottom: -5%;">Plantilla</h2>
+						<br>
+						<img src="'../static' + ${userTeam.badge}" th:src="@{${userTeam.badge}}" alt="Badge"
+							style="max-width: 75%; max-height: 75%;">
+					</a>
 
 					<a href="/yourteam/multimedia" class="col-md-6 text-center"
 						style="background-color: rgba(255, 255, 255, 0.7); border-radius: 20%; width: 300px; height: 300px; margin-left: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
@@ -67,14 +74,9 @@
 						<img src="'../static/imgs/noticias.png'" th:src="@{/imgs/noticias.png}" alt="Badge"
 							style="max-width: 75%; max-height: 75%;">
 					</a>
-				</div>
 
-				<a href="/yourteam/squad" class="col-md-6 text-center"
-					style="background-color: rgba(255, 255, 255, 0.7); border-radius: 20%; width: 300px; height: 300px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-top: 2%;">
-					<h2 style="text-align: center; padding-top: 5%; margin-bottom: -5%;">Plantilla</h2>
-					<img src="'../static' + ${userTeam.badge}" th:src="@{${userTeam.badge}}" alt="Badge"
-						style="max-width: 90%; max-height: 90%;">
-				</a>
+
+				</div>
 			</div>
 		</div>
 		<br>

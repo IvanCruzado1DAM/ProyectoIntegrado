@@ -23,7 +23,6 @@ public class Team {
 	private String badge;
 	private int id_coach;
 	private String stadium;
-	private String image_stadium;
 	private int id_president;
 	private int capital;
 	private int occupation;

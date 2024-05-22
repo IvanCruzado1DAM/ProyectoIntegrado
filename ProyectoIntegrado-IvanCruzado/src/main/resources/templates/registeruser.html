@@ -2,289 +2,336 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
-    <!--<link th:href="@{/webjars/font-awesome/6.4.2/css/font-awesome.css}" rel="stylesheet">-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Home</title>
-    <style>
-        body,
-        html {
-            margin: 5%;
-            margin-top: 10%;
-            padding: 0;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-image: url('/imgs/fondo.jpg');
-            background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-        }
+	<meta charset="UTF-8">
+	<link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
+	<!--<link th:href="@{/webjars/font-awesome/6.4.2/css/font-awesome.css}" rel="stylesheet">-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<title>Home</title>
+	<style>
+		body,
+		html {
+			margin: 5%;
+			margin-top: 10%;
+			padding: 0;
+			height: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			background-image: url('/imgs/fondo.jpg');
+			background-size: cover;
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-attachment: fixed;
+		}
 
-        .container {
-            padding: 0;
-            width: 100%; /* Ancho completo de la página */
-        }
+		.container {
+			padding: 0;
+			width: 100%;
+			/* Ancho completo de la página */
+		}
 
-        img {
-            width: 100%; /* Ocupar todo el ancho del contenedor */
-            height: auto; /* Mantener la proporción de la imagen */
-        }
-         .additional-fields {
-            display: none;
-        }
-        .form-label{
+		img {
+			width: 100%;
+			/* Ocupar todo el ancho del contenedor */
+			height: auto;
+			/* Mantener la proporción de la imagen */
+		}
+
+		.additional-fields {
+			display: none;
+		}
+
+		.form-label {
 			font-weight: bold;
 		}
+
 		.form-control {
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para resaltar los campos de formulario */
-            transition: box-shadow 0.3s ease; /* Transición suave de la sombra */
-        }
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			/* Sombra para resaltar los campos de formulario */
+			transition: box-shadow 0.3s ease;
+			/* Transición suave de la sombra */
+		}
 
-        .form-control:focus {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra más intensa al enfocar el campo */
-        }	
-    </style>
-    <script>
-        function toggleFields() {
-            var userType = document.querySelector('input[name="userType"]:checked').value;
-            var userFields = document.getElementById('userFields');
-            var playerFields = document.getElementById('playerFields');
-            var presidentFields = document.getElementById('presidentFields');
-            var coachFields = document.getElementById('coachFields');
-            var dietistFields = document.getElementById('dietistFields');
-            var physioFields = document.getElementById('physioFields');
+		.form-control:focus {
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+			/* Sombra más intensa al enfocar el campo */
+		}
+	</style>
+	<script>
+		function toggleFields() {
+			var userType = document.querySelector('input[name="userType"]:checked').value;
+			var userFields = document.getElementById('userFields');
+			var playerFields = document.getElementById('playerFields');
+			var presidentFields = document.getElementById('presidentFields');
+			var coachFields = document.getElementById('coachFields');
+			var dietistFields = document.getElementById('dietistFields');
+			var physioFields = document.getElementById('physioFields');
 
-            userFields.style.display = (userType === 'user') ? 'block' : 'none';
-            playerFields.style.display = (userType === 'player') ? 'block' : 'none';
-            presidentFields.style.display = (userType === 'president') ? 'block' : 'none';
-            coachFields.style.display = (userType === 'coach') ? 'block' : 'none';
-            dietistFields.style.display = (userType === 'dietist') ? 'block' : 'none';
-            physioFields.style.display = (userType === 'physio') ? 'block' : 'none';
-        }
-    </script>
+			userFields.style.display = (userType === 'user') ? 'block' : 'none';
+			playerFields.style.display = (userType === 'player') ? 'block' : 'none';
+			presidentFields.style.display = (userType === 'president') ? 'block' : 'none';
+			coachFields.style.display = (userType === 'coach') ? 'block' : 'none';
+			dietistFields.style.display = (userType === 'dietist') ? 'block' : 'none';
+			physioFields.style.display = (userType === 'physio') ? 'block' : 'none';
+		}
+	</script>
 </head>
 
 <body>
-    <div class="container">
-        <!-- Encabezado -->
-        <div class="row align-items-center">
-            <div class="row">
-                <img src="/imgs/banner.png" alt="Banner" />
-            </div>
-        </div>
-        <br>
-        <!-- Navegador -->
-        <div class="row align-items-center">
-            <div class="col text-center" style="width: 100%;">
-                <div th:replace="~{navbar :: navbarFragment}"></div>
-            </div>
-        </div>
-        <br>
-        <br>
-        <!-- Cuerpo -->
-         <div class="container" style="border: 1px solid black; border-radius: 20px; background-color: aliceblue; padding: 5%;">
-        <h2>Registro de Usuario</h2>
-        <form action="/register" method="post">
-            <!-- Common fields -->
-            <div class="mb-3">
-                <label for="name" class="form-label">Nombre</label>
-                <input type="text" class="form-control" id="name" name="name" required>
-            </div>
+	<div class="container">
+		<!-- Encabezado -->
+		<div class="row align-items-center">
+			<div class="row">
+				<img src="/imgs/banner.png" alt="Banner" />
+			</div>
+		</div>
+		<br>
+		<!-- Navegador -->
+		<div class="row align-items-center">
+			<div class="col text-center" style="width: 100%;">
+				<div th:replace="~{navbar :: navbarFragment}"></div>
+			</div>
+		</div>
+		<br>
+		<br>
+		<!-- Cuerpo -->
+		<div class="container"
+			style="border: 1px solid black; border-radius: 20px; background-color: aliceblue; padding: 5%;">
+			<h2>Registro de Usuario</h2>
+			<form action="/registerNewUser" th:object="${user}" method="post">
+				<!-- Common fields -->
+				<div class="mb-3">
+					<label for="name" class="form-label">Nombre</label>
+					<input type="text" class="form-control" id="name" name="name" required>
+				</div>
 
-            <div class="mb-3">
-                <label for="userType" class="form-label">Tipo de Usuario</label><br>
-                <input type="radio" id="user" name="userType" value="user" onclick="toggleFields()" checked>
-                <label for="user">Usuario</label><br>
-                <input type="radio" id="player" name="userType" value="player" onclick="toggleFields()">
-                <label for="player">Jugador</label><br>
-                <input type="radio" id="president" name="userType" value="president" onclick="toggleFields()">
-                <label for="president">Presidente</label><br>
-                <input type="radio" id="coach" name="userType" value="coach" onclick="toggleFields()">
-                <label for="coach">Entrenador</label><br>
-                <input type="radio" id="dietist" name="userType" value="dietist" onclick="toggleFields()">
-                <label for="dietist">Dietista</label><br>
-                <input type="radio" id="physio" name="userType" value="physio" onclick="toggleFields()">
-                <label for="physio">Fisioterapeuta</label>
-            </div>
+				<div class="mb-3">
+					<label for="userType" class="form-label">Tipo de Usuario</label><br>
+					<input type="radio" id="user" name="userType" value="user" onclick="toggleFields()" checked>
+					<label for="user">Usuario</label><br>
+					<input type="radio" id="player" name="userType" value="player" onclick="toggleFields()">
+					<label for="player">Jugador</label><br>
+					<input type="radio" id="president" name="userType" value="president" onclick="toggleFields()">
+					<label for="president">Presidente</label><br>
+					<input type="radio" id="coach" name="userType" value="coach" onclick="toggleFields()">
+					<label for="coach">Entrenador</label><br>
+					<input type="radio" id="dietist" name="userType" value="dietist" onclick="toggleFields()">
+					<label for="dietist">Dietista</label><br>
+					<input type="radio" id="physio" name="userType" value="physio" onclick="toggleFields()">
+					<label for="physio">Fisioterapeuta</label>
+				</div>
 
-            <!-- User fields -->
-            <div id="userFields" class="additional-fields">
-                <div class="mb-3">
-                    <label for="username" class="form-label">Nombre de Usuario</label>
-                    <input type="text" class="form-control" id="username" name="username">
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Contraseña</label>
-                    <input type="password" class="form-control" id="password" name="password">
-                </div>
-                <div class="mb-3">
-                    <label for="id_team_user" class="form-label">ID del Equipo</label>
-                    <input type="number" class="form-control" id="id_team_user" name="id_team_user">
-                </div>
-                <div class="mb-3">
-                    <label for="role" class="form-label">Rol</label>
-                    <input type="text" class="form-control" id="role" name="role">
-                </div>
-            </div>
+				<!-- User fields -->
+				<div id="userFields" class="additional-fields">
+					<div class="mb-3">
+						<label for="username" class="form-label">Nombre de Usuario</label>
+						<input type="text" class="form-control" id="username" name="username">
+					</div>
+					<div class="mb-3">
+						<label for="password" class="form-label">Contraseña</label>
+						<input type="password" class="form-control" id="password" name="password">
+					</div>
+					<div class="mb-3">
+						<div class="form-label-group">
+							<label for="id_team_user">Equipo favorito:</label>
+							<br>
+							<select style="margin-top: 2%;" class="form-control" id="id_team_user" name="id_team_user">
+								<option th:field="*{id_team_user}" th:each="team : ${teams}" th:value="${team.id_team}"
+									th:text="${team.name}">Equipo</option>
+							</select>
+						</div>
+						
+					</div>
+					<div class="mb-3">
+						<label for="role" class="form-label">Rol</label>
+						<input type="text" class="form-control" id="role" name="role">
+					</div>
+				</div>
 
-            <!-- Player fields -->
-            <div id="playerFields" class="additional-fields">
-                <div class="mb-3">
-                    <label for="position" class="form-label">Posición</label>
-                    <input type="text" class="form-control" id="position" name="position">
-                </div>
-                <div class="mb-3">
-                    <label for="age" class="form-label">Edad</label>
-                    <input type="number" class="form-control" id="age" name="age">
-                </div>
-                <div class="mb-3">
-                    <label for="image" class="form-label">Imagen</label>
-                    <input type="text" class="form-control" id="image" name="image">
-                </div>
-                <div class="mb-3">
-                    <label for="id_team" class="form-label">ID del Equipo</label>
-                    <input type="number" class="form-control" id="id_team" name="id_team">
-                </div>
-                <div class="mb-3">
-                    <label for="dorsal" class="form-label">Dorsal</label>
-                    <input type="number" class="form-control" id="dorsal" name="dorsal">
-                </div>
-                <div class="mb-3">
-                    <label for="nationality" class="form-label">Nacionalidad</label>
-                    <input type="text" class="form-control" id="nationality" name="nationality">
-                </div>
-                <div class="mb-3">
-                    <label for="market_value" class="form-label">Valor de Mercado</label>
-                    <input type="number" class="form-control" id="market_value" name="market_value">
-                </div>
-                <div class="mb-3">
-                    <label for="salary" class="form-label">Salario</label>
-                    <input type="number" class="form-control" id="salary" name="salary">
-                </div>
-                <div class="mb-3">
-                    <label for="goals" class="form-label">Goles</label>
-                    <input type="number" class="form-control" id="goals" name="goals">
-                </div>
-                <div class="mb-3">
-                    <label for="assists" class="form-label">Asistencias</label>
-                    <input type="number" class="form-control" id="assists" name="assists">
-                </div>
-                <div class="mb-3">
-                    <label for="yc" class="form-label">Tarjetas Amarillas</label>
-                    <input type="number" class="form-control" id="yc" name="yc">
-                </div>
-                <div class="mb-3">
-                    <label for="rc" class="form-label">Tarjetas Rojas</label>
-                    <input type="number" class="form-control" id="rc" name="rc">
-                </div>
-                <div class="mb-3">
-                    <label for="contract" class="form-label">Contrato</label>
-                    <input type="number" class="form-control" id="contract" name="contract">
-                </div>
-                <div class="mb-3">
-                    <label for="footballaspects" class="form-label">Aspectos Futbolísticos</label>
-                    <input type="text" class="form-control" id="footballaspects" name="footballaspects">
-                </div>
-                <div class="mb-3">
-                    <label for="diet" class="form-label">Dieta</label>
-                    <input type="text" class="form-control" id="diet" name="diet">
-                </div>
-                <div class="mb-3">
-                    <label for="transfer_status" class="form-label">Estado de Transferencia</label>
-                    <input type="text" class="form-control" id="transfer_status" name="transfer_status">
-                </div>
-                <div class="mb-3">
-                    <label for="is_injured" class="form-label">¿Está Lesionado?</label>
-                    <input type="checkbox" id="is_injured" name="is_injured">
-                </div>
-                <div class="mb-3">
-                    <label for="is_sancionated" class="form-label">¿Está Sancionado?</label>
-                    <input type="checkbox" id="is_sancionated" name="is_sancionated">
-                </div>
-            </div>
+				<!-- Player fields -->
+				<div id="playerFields" class="additional-fields">
+					<div class="mb-3">
+						<label for="position" class="form-label">Posición</label>
+						<input type="text" class="form-control" id="position" name="position">
+					</div>
+					<div class="mb-3">
+						<label for="age" class="form-label">Edad</label>
+						<input type="number" class="form-control" id="age" name="age">
+					</div>
+					<div class="mb-3">
+						<label for="image" class="form-label">Imagen</label>
+						<input type="text" class="form-control" id="image" name="image">
+					</div>
+					<div class="mb-3">
 
-            <!-- President fields -->
-            <div id="presidentFields" class="additional-fields">
-                <div class="mb-3">
-                    <label for="nacionality" class="form-label">Nacionalidad</label>
-                    <input type="text" class="form-control" id="nacionality" name="nacionality">
-                </div>
-                <div class="mb-3">
-                    <label for="image" class="form-label">Imagen</label>
-                    <input type="text" class="form-control" id="image" name="image">
-                </div>
-                <div class="mb-3">
-                    <label for="arrival_year" class="form-label">Año de Llegada</label>
-                    <input type="number" class="form-control" id="arrival_year" name="arrival_year">
-                </div>
-                <div class="mb-3">
-                    <label for="idteam_president" class="form-label">ID del Equipo</label>
-                    <input type="number" class="form-control" id="idteam_president" name="idteam_president">
-                </div>
-            </div>
+						<div class="form-label-group">
+							<label for="id_teamplayer">Equipo favorito:</label>
+							<br>
+							<select style="margin-top: 2%;" class="form-control" id="id_teamplayer" name="id_teamplayer">
+								<option th:field="*{id_team}" th:each="team : ${teams}" th:value="${team.id_team}"
+									th:text="${team.name}">Equipo</option>
+							</select>
+						</div>
+					</div>
+					<div class="mb-3">
+						<label for="dorsal" class="form-label">Dorsal</label>
+						<input type="number" class="form-control" id="dorsal" name="dorsal">
+					</div>
+					<div class="mb-3">
+						<label for="nationality" class="form-label">Nacionalidad</label>
+						<input type="text" class="form-control" id="nationality" name="nationality">
+					</div>
+					<div class="mb-3">
+						<label for="market_value" class="form-label">Valor de Mercado</label>
+						<input type="number" class="form-control" id="market_value" name="market_value">
+					</div>
+					<div class="mb-3">
+						<label for="salary" class="form-label">Salario</label>
+						<input type="number" class="form-control" id="salary" name="salary">
+					</div>
+					<div class="mb-3">
+						<label for="goals" class="form-label">Goles</label>
+						<input type="number" class="form-control" id="goals" name="goals">
+					</div>
+					<div class="mb-3">
+						<label for="assists" class="form-label">Asistencias</label>
+						<input type="number" class="form-control" id="assists" name="assists">
+					</div>
+					<div class="mb-3">
+						<label for="yc" class="form-label">Tarjetas Amarillas</label>
+						<input type="number" class="form-control" id="yc" name="yc">
+					</div>
+					<div class="mb-3">
+						<label for="rc" class="form-label">Tarjetas Rojas</label>
+						<input type="number" class="form-control" id="rc" name="rc">
+					</div>
+					<div class="mb-3">
+						<label for="contract" class="form-label">Contrato</label>
+						<input type="number" class="form-control" id="contract" name="contract">
+					</div>
+					<div class="mb-3">
+						<label for="footballaspects" class="form-label">Aspectos Futbolísticos</label>
+						<input type="text" class="form-control" id="footballaspects" name="footballaspects">
+					</div>
+					<div class="mb-3">
+						<label for="diet" class="form-label">Dieta</label>
+						<input type="text" class="form-control" id="diet" name="diet">
+					</div>
+					<div class="mb-3">
+						<label for="transfer_status" class="form-label">Estado de Transferencia</label>
+						<input type="text" class="form-control" id="transfer_status" name="transfer_status">
+					</div>
+					<div class="mb-3">
+						<label for="is_injured" class="form-label">¿Está Lesionado?</label>
+						<input type="checkbox" id="is_injured" name="is_injured">
+					</div>
+					<div class="mb-3">
+						<label for="is_sancionated" class="form-label">¿Está Sancionado?</label>
+						<input type="checkbox" id="is_sancionated" name="is_sancionated">
+					</div>
+				</div>
 
-            <!-- Coach fields -->
-            <div id="coachFields" class="additional-fields">
-                <div class="mb-3">
-                    <label for="nacionality" class="form-label">Nacionalidad</label>
-                    <input type="text" class="form-control" id="nacionality" name="nacionality">
-                </div>
-                <div class="mb-3">
-                    <label for="photo" class="form-label">Foto</label>
-                    <input type="text" class="form-control" id="photo" name="photo">
-                </div>
-                <div class="mb-3">
-                    <label for="arrival_season" class="form-label">Temporada de Llegada</label>
-                    <input type="text" class="form-control" id="arrival_season" name="arrival_season">
-                </div>
-                <div class="mb-3">
-                    <label for="idteam_coach" class="form-label">ID del Equipo</label>
-                    <input type="number" class="form-control" id="idteam_coach" name="idteam_coach">
-                </div>
-            </div>
+				<!-- President fields -->
+				<div id="presidentFields" class="additional-fields">
+					<div class="mb-3">
+						<label for="nacionality" class="form-label">Nacionalidad</label>
+						<input type="text" class="form-control" id="nacionality" name="nacionality">
+					</div>
+					<div class="mb-3">
+						<label for="image" class="form-label">Imagen</label>
+						<input type="text" class="form-control" id="image" name="image">
+					</div>
+					<div class="mb-3">
+						<label for="arrival_year" class="form-label">Año de Llegada</label>
+						<input type="number" class="form-control" id="arrival_year" name="arrival_year">
+					</div>
+					<div class="mb-3">
+						<div class="form-label-group">
+							<label for="idteam_president">Equipo del Presidente:</label>
+							<br>
+							<select style="margin-top: 2%;" class="form-control" id="idteam_president" name="idteam_president">
+								<option th:field="*{idteam_president}" th:each="team : ${teams}"
+									th:value="${team.id_team}" th:text="${team.name}">Equipo</option>
+							</select>
+						</div>
+					</div>
+				</div>
 
-            <!-- Dietist fields -->
-            <div id="dietistFields" class="additional-fields">
-                <div class="mb-3">
-                    <label for="age" class="form-label">Edad</label>
-                    <input type="number" class="form-control" id="age" name="age">
-                </div>
-                <div class="mb-3">
-                    <label for="idteam_dietist" class="form-label">ID del Equipo</label>
-                    <input type="number" class="form-control" id="idteam_dietist" name="idteam_dietist">
-                </div>
-            </div>
+				<!-- Coach fields -->
+				<div id="coachFields" class="additional-fields">
+					<div class="mb-3">
+						<label for="nacionality" class="form-label">Nacionalidad</label>
+						<input type="text" class="form-control" id="nacionality" name="nacionality">
+					</div>
+					<div class="mb-3">
+						<label for="photo" class="form-label">Foto</label>
+						<input type="text" class="form-control" id="photo" name="photo">
+					</div>
+					<div class="mb-3">
+						<label for="arrival_season" class="form-label">Temporada de Llegada</label>
+						<input type="text" class="form-control" id="arrival_season" name="arrival_season">
+					</div>
+					<div class="mb-3">
+						<div class="form-label-group">
+							<label for="idteam_coach">Equipo del Entrenador:</label>
+							<br>
+							<select style="margin-top: 2%;" class="form-control" id="idteam_coach" name="idteam_coach">
+								<option th:field="*{idteam_coach}" th:each="team : ${teams}"
+									th:value="${team.id_team}" th:text="${team.name}">Equipo</option>
+							</select>
+						</div>
+					</div>
+				</div>
 
-            <!-- Physio fields -->
-            <div id="physioFields" class="additional-fields">
-                <div class="mb-3">
-                    <label for="age" class="form-label">Edad</label>
-                    <input type="number" class="form-control" id="age" name="age">
-                </div>
-                <div class="mb-3">
-                    <label for="idteam_physio" class="form-label">ID del Equipo</label>
-                    <input type="number" class="form-control" id="idteam_physio" name="idteam_physio">
-                </div>
-            </div>
+				<!-- Dietist fields -->
+				<div id="dietistFields" class="additional-fields">
+					<div class="mb-3">
+						<label for="age" class="form-label">Edad</label>
+						<input type="number" class="form-control" id="age" name="age">
+					</div>
+					<div class="mb-3">
+						<div class="form-label-group">
+							<label for="idteam_coach">Equipo del Dietista:</label>
+							<br>
+							<select style="margin-top: 2%;" class="form-control" id="idteam_dietist" name="idteam_dietist">
+								<option th:field="*{idteam_dietist}" th:each="team : ${teams}"
+									th:value="${team.id_team}" th:text="${team.name}">Equipo</option>
+							</select>
+						</div>
+					</div>
+				</div>
 
-            <button type="submit" class="btn btn-primary">Registrar</button>
-        </form>
-    </div>
-        <br>
-        <br>
-        <!-- Footer -->
-        <footer class="bg-body-tertiary text-center text-lg-start">
-            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
-                © 2024 Copyright: FOOTBALLZONE
-            </div>
-        </footer>
-    </div>
+				<!-- Physio fields -->
+				<div id="physioFields" class="additional-fields">
+					<div class="mb-3">
+						<label for="age" class="form-label">Edad</label>
+						<input type="number" class="form-control" id="age" name="age">
+					</div>
+					<div class="mb-3">
+						<div class="form-label-group">
+							<label for="idteam_physio">Equipo del Dietista:</label>
+							<br>
+							<select style="margin-top: 2%;" class="form-control" id="idteam_physio" name="idteam_physio">
+								<option th:field="*{idteam_physio}" th:each="team : ${teams}"
+									th:value="${team.id_team}" th:text="${team.name}">Equipo</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<button type="submit" class="btn btn-primary">Registrar</button>
+			</form>
+		</div>
+		<br>
+		<br>
+		<!-- Footer -->
+		<footer class="bg-body-tertiary text-center text-lg-start">
+			<div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+				© 2024 Copyright: FOOTBALLZONE
+			</div>
+		</footer>
+	</div>
 
 </body>
 
 </html>
-

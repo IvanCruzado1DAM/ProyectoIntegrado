@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Multimedia;
-import com.example.demo.model.GameModel;
 import com.example.demo.model.MultimediaModel;
 import com.example.demo.repository.MultimediaRepository;
 import com.example.demo.service.MultimediaService;
@@ -42,8 +41,14 @@ public class MultimediaServiceImpl implements MultimediaService {
 
 	@Override
 	public Multimedia addMultimedia(MultimediaModel multimediaModel) {
-		// TODO Auto-generated method stub
-		return null;
+		multimediaModel.setTitle_new(multimediaModel.getTitle_new());
+		multimediaModel.setDescription_new(multimediaModel.getDescription_new());
+		multimediaModel.setImage(multimediaModel.getImage());
+		multimediaModel.setTitle_video(multimediaModel.getTitle_video());
+		multimediaModel.setVideo(multimediaModel.getVideo());
+		multimediaModel.setId_multimedia(multimediaModel.getId_multimedia());
+		Multimedia m = transformMultimedia(multimediaModel);
+		return multiRepository.save(m);
 	}
 
 	@Override
@@ -60,14 +65,21 @@ public class MultimediaServiceImpl implements MultimediaService {
 
 	@Override
 	public Multimedia transformMultimedia(MultimediaModel multimediaModel) {
-		// TODO Auto-generated method stub
-		return null;
+		if (multimediaModel == null) {
+			return null; 
+		}
+
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(multimediaModel, Multimedia.class);
 	}
 
 	@Override
 	public MultimediaModel transformMultimediaModel(Multimedia multimedia) {
-		// TODO Auto-generated method stub
-		return null;
+		if (multimedia == null) {
+			return null; 
+		}
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(multimedia, MultimediaModel.class);
 	}
 
 	@Override

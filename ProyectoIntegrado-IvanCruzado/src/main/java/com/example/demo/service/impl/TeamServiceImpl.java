@@ -39,8 +39,15 @@ public class TeamServiceImpl implements TeamService {
 
 	@Override
 	public Team addTeam(TeamModel teamModel) {
-		// TODO Auto-generated method stub
-		return null;
+		teamModel.setName(teamModel.getName());	
+		teamModel.setCity(teamModel.getCity());	
+		teamModel.setId_president(teamModel.getId_president());	
+		teamModel.setStadium(teamModel.getStadium());	
+		teamModel.setId_coach(teamModel.getId_coach());	
+		teamModel.setCapital(teamModel.getCapital());	
+		teamModel.setOccupation(teamModel.getOccupation());	
+		Team t = transformTeam(teamModel);
+		return teamRepository.save(t);
 	}
 
 	@Override
@@ -57,14 +64,21 @@ public class TeamServiceImpl implements TeamService {
 
 	@Override
 	public Team transformTeam(TeamModel teamModel) {
-		// TODO Auto-generated method stub
-		return null;
+		if (teamModel == null) {
+			return null; 
+		}
+
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(teamModel, Team.class);
 	}
 
 	@Override
 	public TeamModel transformTeamModel(Team team) {
-		// TODO Auto-generated method stub
-		return null;
+		if (team == null) {
+			return null; 
+		}
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(team, TeamModel.class);
 	}
 
 }
