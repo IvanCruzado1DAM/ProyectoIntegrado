@@ -81,42 +81,37 @@
 		<br>
 		<!-- Cuerpo -->
 		<div class="form-container">
-			<form th:action="@{admin/registerNewMultimedia}" th:object="${multimedia}" method="post"
+			<form th:action="@{admin/registerNewMultimediaVideo}" th:object="${multimedia}" method="post"
 				enctype="multipart/form-data">
 				<div class="mb-3">
 					<label class="form-label">Selecciona el tipo de contenido:</label>
 					<div class="form-check">
 						<input class="form-check-input" type="radio" name="contentType" id="texto" value="texto"
-							checked>
+							>
 						<label class="form-check-label" for="texto">
 							Texto
 						</label>
 					</div>
 					<div class="form-check">
-						<input class="form-check-input" type="radio" name="contentType" id="video" value="video">
+						<input class="form-check-input" type="radio" name="contentType" id="video" value="video" checked>
 						<label class="form-check-label" for="video">
 							Video
 						</label>
 					</div>
 				</div>
 
-				<div id="textoFields">
+				<div id="videoFields">
 					<div class="mb-3">
-						<label class="form-label" for="title_new">Título:</label>
-						<input type="text" class="form-control" id="title_new" name="title_new" required>
+						<label class="form-label" for="title_video">Título:</label>
+						<input type="text" class="form-control" id="title_video" name="title_video">
 					</div>
 					<div class="mb-3">
-						<label class="form-label" for="description_new">Descripción:</label>
-						<textarea class="form-control" id="description_new" name="description_new" rows="3"
-							required></textarea>
+						<label class="form-label" for="video">Enlace del Video:</label>
+						<input type="text" class="form-control" id="video" name="video">
 					</div>
-					<div class="form-label-group">
-						<label for="image"><strong>Imagen Noticia: </strong></label>
-						<input style="margin-top: 1%;" type="file" id="multimediaFile" name="multimediaFile"
-							accept=".png, .jpg, .jpeg" onchange="updateHiddenField()" class="form-control">
-					</div>
-					<div><input type="hidden" id="image" name="image" th:field="*{image}"> </div>
 				</div>
+				<br>
+				<label for="idteammultimedia"><strong> Equipo favorito: </strong></label>
 				<br>
 				<select style="margin-top: 2%;" class="form-control" id="idteammultimedia" name="idteammultimedia">
 					<option th:field="*{idteammultimedia}" th:each="team : ${teams}" th:value="${team.id_team}"
@@ -141,11 +136,11 @@
 			// Función para mostrar los campos correspondientes según la selección del radio button
 
 			document.addEventListener('DOMContentLoaded', function () {
-				const videoRadio = document.getElementById('video');
+				const videoRadio = document.getElementById('texto');
 
 				videoRadio.addEventListener('change', function () {
 					if (this.checked) {
-						window.location.href = '/admin/registermultimediaVideo'; // Cambia esta URL por la que desees
+						window.location.href = '/admin/registermultimedia'; // Cambia esta URL por la que desees
 					}
 				});
 			});

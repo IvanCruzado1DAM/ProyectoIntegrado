@@ -42,6 +42,7 @@ public class AdminController {
 	private static final String REGISTERUSER_VIEW = "registeruser";
 	private static final String REGISTERTEAM_VIEW = "registerteam";
 	private static final String REGISTERMULTIMEDIA_VIEW = "registermultimedia";
+	private static final String REGISTERMULTIMEDIAVIDEO_VIEW = "registermultimediaVideo";
 	
 	@Autowired
 	@Qualifier("userService")
@@ -167,7 +168,7 @@ public class AdminController {
 	    String direfichero = "src/main/resources/static/imgs/news/";
 	    try {
 	        // Verifica si se ha subido un archivo de escudo
-	        if (!multimediaFile.isEmpty()) {
+	        if (multimediaFile != null && !multimediaFile.isEmpty()) {
 	            // Guarda el archivo en el directorio especificado
 	            Path rutalogo = Paths.get(direfichero + multimediaFile.getOriginalFilename());
 	            Files.write(rutalogo, multimediaFile.getBytes());
@@ -179,12 +180,34 @@ public class AdminController {
 	        MultimediaModel m = multimediaService.transformMultimediaModel(multimedia);
 	        multimediaService.addMultimedia(m);
 
-	        flash.addFlashAttribute("success", "Team registered successfully!");
+	        flash.addFlashAttribute("success", "Multimedia registered successfully!");
 	    } catch (Exception e) {
 	        flash.addFlashAttribute("error", "An error occurred while registering the team. Please try again.");
 	        e.printStackTrace();
 	        return "redirect:/registerteam"; // Redirige a la página de registro si hay un error
 	    }
+
+	    return "redirect:/home/index"; // Redirige a la página principal después del registro exitoso
+	}
+	
+	@GetMapping("/registermultimediaVideo")
+	public ModelAndView registermultimediaVideo(Model model) {
+		String userName = userService.getCurrentUsername();
+		List<TeamModel> teams = teamService.listAllTeams();
+		ModelAndView mav = new ModelAndView(REGISTERMULTIMEDIAVIDEO_VIEW);
+		mav.addObject("usuario", userName);
+		mav.addObject("multimedia", new Multimedia());
+		mav.addObject("teams", teams);
+		return mav;
+	}
+	
+	@PostMapping("/admin/registerNewMultimediaVideo")
+	public String registerNewMultimediaVideo(@ModelAttribute("multimedia") Multimedia multimedia,
+	                              RedirectAttributes flash) {	   
+	        // Guarda el equipo en la base de datos
+	        MultimediaModel m = multimediaService.transformMultimediaModel(multimedia);
+	        multimediaService.addMultimedia(m);
+	        flash.addFlashAttribute("success", "Multimedia registered successfully!");
 
 	    return "redirect:/home/index"; // Redirige a la página principal después del registro exitoso
 	}
