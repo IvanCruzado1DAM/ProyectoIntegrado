@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
+	<!--<link th:href="@{/webjars/font-awesome/6.4.2/css/font-awesome.css}" rel="stylesheet">-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<title>Home</title>
+	<style>
+		body,
+		html {
+			margin: 0;
+			padding: 0;
+			margin-top: 2%;
+			height: 150%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			background-image: url('/imgs/fondo.jpg');
+			background-size: cover;
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-attachment: fixed;
+		}
+
+		.container {
+			width: 100%;
+		}
+
+		img {
+			width: 100%;
+			height: auto;
+		}
+
+		.additional-fields {
+			display: none;
+		}
+
+		.form-label {
+			font-weight: bold;
+		}
+
+		.form-control {
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			transition: box-shadow 0.3s ease;
+		}
+
+		.form-control:focus {
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		}
+
+		.form-container {
+			border: 1px solid black;
+			border-radius: 20px;
+			background-color: rgba(240, 248, 255, 0.6);
+			padding: 5%;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<!-- Encabezado -->
+		<div class="row align-items-center">
+			<div class="row">
+				<a href="/home/index">
+					<img src="/imgs/banner.png" alt="Banner" />
+				</a>
+			</div>
+		</div>
+		<br>
+		<!-- Navegador -->
+		<div class="row align-items-center">
+			<div class="col text-center" style="width: 100%;">
+				<div th:replace="~{navbar :: navbarFragment}"></div>
+			</div>
+		</div>
+		<br>
+		<br>
+		<!-- Cuerpo -->
+		<div class="container form-container">
+			<h2 style="text-align: center; text-decoration:underline;">Registro de Usuario</h2>
+			<br>
+			<form th:action="@{/admin/registerusers/newUser}" th:object="${user}" method="post">
+				<input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+				<div class="form-label-group">
+					<label>Name:</label>
+					<input type="text" th:field="*{name}" class="form-control" placeholder="Nombre" name="name"
+						required />
+				</div>
+				<div class="form-label-group">
+					<label>Username:</label>
+					<input type="text" th:field="*{username}" class="form-control" placeholder="Usuario" name="username"
+						required />
+				</div>
+				<div class="form-label-group">
+					<label>Password:</label>
+					<input type="password" th:field="*{password}" class="form-control" placeholder="Password"
+						name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}"
+						title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una mayúscula, una minúscula, un número y un carácter especial."
+						oninput="passwordConfirmation.setCustomValidity(''); checkPasswordMatch();">
+
+				</div>
+
+				<div class="form-label-group">
+					<label>Repetir Password:</label>
+					<input type="password" class="form-control" placeholder="Repetir Password"
+						name="passwordConfirmation" title="Las contraseñas no coinciden"
+						oninput="checkPasswordMatch();">
+					<div id="passwordMatchError" style="color: red; display: none;">Las contraseñas no coinciden</div>
+				</div>
+				<div class="form-label-group">
+					<label for="id_team_user">Equipo favorito:</label>
+					<select  class="form-control" id="id_team_user" name="id_team_user">
+						<option th:field="*{id_team_user}" th:each="team : ${teams}" th:value="${team.id_team}"
+							th:text="${team.name}">Equipo</option>
+					</select>
+				</div>
+				<br>
+				<input class="btn btn-lg btn-primary btn-block text-uppercase" id="boton" type="submit"
+					value="Registrar" />
+			</form>
+		</div>
+		<br>
+		<br>
+		<!-- Footer -->
+		<footer class="bg-body-tertiary text-center text-lg-start">
+			<div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+				© 2024 Copyright: FOOTBALLZONE
+			</div>
+		</footer>
+	</div>
+</body>
+<script>
+	// Obtener el elemento de mensaje de error
+	var errorMessage = document.querySelector('.error-message');
+
+	// Mostrar el mensaje de error si tiene texto
+	if (errorMessage.textContent.trim() !== '') {
+		errorMessage.style.display = 'block';
+	}
+
+	setTimeout(function () {
+		errorMessage.style.display = 'none';
+	}, 5000);
+
+	function checkPasswordMatch() {
+		var password = document.querySelector('input[name=password]').value;
+		var confirmPassword = document.querySelector('input[name=passwordConfirmation]').value;
+		var passwordMatchError = document.getElementById('passwordMatchError');
+		var submitButton = document.getElementById('boton');
+
+		if (password !== confirmPassword) {
+			passwordMatchError.style.display = 'block';
+			submitButton.disabled = true;
+			submitButton.style.color = 'black';
+			submitButton.style.fontWeight = 'bold';
+			submitButton.style.backgroundColor = 'lightgrey';
+		} else {
+			passwordMatchError.style.display = 'none';
+			submitButton.disabled = false;
+			submitButton.style.color = 'white';
+			submitButton.style.backgroundColor = '#007bff';
+		}
+	}
+</script>
+
+</html>

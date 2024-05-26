@@ -19,18 +19,23 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.entity.Dietist;
 import com.example.demo.entity.Multimedia;
 import com.example.demo.entity.Physio;
 import com.example.demo.entity.President;
 import com.example.demo.entity.Team;
 import com.example.demo.entity.User;
 import com.example.demo.model.CoachModel;
+import com.example.demo.model.DietistModel;
 import com.example.demo.model.MultimediaModel;
+import com.example.demo.model.PhysioModel;
 import com.example.demo.model.PresidentModel;
 import com.example.demo.model.TeamModel;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.impl.CoachServiceImpl;
+import com.example.demo.service.impl.DietistServiceImpl;
 import com.example.demo.service.impl.MultimediaServiceImpl;
+import com.example.demo.service.impl.PhysioServiceImpl;
 import com.example.demo.service.impl.PresidentServiceImpl;
 import com.example.demo.service.impl.TeamServiceImpl;
 import com.example.demo.service.impl.UserServiceImpl;
@@ -39,10 +44,15 @@ import com.example.demo.service.impl.UserServiceImpl;
 @RequestMapping("/admin")
 public class AdminController {
 
+	private static final String REGISTERUSERS_VIEW = "registerallusers";
 	private static final String REGISTERUSER_VIEW = "registeruser";
 	private static final String REGISTERTEAM_VIEW = "registerteam";
 	private static final String REGISTERMULTIMEDIA_VIEW = "registermultimedia";
 	private static final String REGISTERMULTIMEDIAVIDEO_VIEW = "registermultimediaVideo";
+	private static final String REGISTERNEWUSER_VIEW = "registernewuser";
+	private static final String REGISTERNEWPHYSIO_VIEW = "registernewphysio";
+	private static final String REGISTERNEWDIETIST_VIEW = "registernewdietist";
+	
 	
 	@Autowired
 	@Qualifier("userService")
@@ -68,6 +78,14 @@ public class AdminController {
 	@Autowired
 	@Qualifier("teamService")
 	private TeamServiceImpl teamService;
+	
+	@Autowired
+	@Qualifier("physioService")
+	private PhysioServiceImpl physioService;
+	
+	@Autowired
+	@Qualifier("dietistService")
+	private DietistServiceImpl dietistService;
 
 	@GetMapping("/register")
 	public ModelAndView register(Model model) {
@@ -211,6 +229,69 @@ public class AdminController {
 
 	    return "redirect:/home/index"; // Redirige a la página principal después del registro exitoso
 	}
+	
+	@GetMapping("/registerusers")
+	public ModelAndView registerusers() {
+		String userName = userService.getCurrentUsername();
+		ModelAndView mav = new ModelAndView(REGISTERUSERS_VIEW);
+		mav.addObject("usuario", userName);
+		return mav;
+	}
+	
+	@GetMapping("/registerusers/user")
+	public ModelAndView registerUser() {
+		String userName = userService.getCurrentUsername();
+		List<TeamModel> teams = teamService.listAllTeams();
+		ModelAndView mav = new ModelAndView(REGISTERNEWUSER_VIEW);
+		mav.addObject("usuario", userName);
+		mav.addObject("user", new User());
+		mav.addObject("teams", teams);
+		return mav;
+	}
+	
+	@PostMapping("/registerusers/newUser")
+	public String register(@ModelAttribute User user, RedirectAttributes flash) {
+		userService.registrar(user);
+		flash.addFlashAttribute("success", "User registered successfully!");
+		return "redirect:/admin/registerusers/user";
+	}
 
+	@GetMapping("/registerusers/physio")
+	public ModelAndView registerPhysio() {
+		String userName = userService.getCurrentUsername();
+		List<TeamModel> teams = teamService.listAllTeams();
+		ModelAndView mav = new ModelAndView(REGISTERNEWPHYSIO_VIEW);
+		mav.addObject("usuario", userName);
+		mav.addObject("user", new Physio());
+		mav.addObject("teams", teams);
+		return mav;
+	}
+	
+	@PostMapping("/registerusers/newPhysio")
+	public String registerPhysio(@ModelAttribute Physio user, RedirectAttributes flash) {
+		PhysioModel p = physioService.transformPhysioModel(user);
+		physioService.addPhysio(p);
+		flash.addFlashAttribute("success", "Physio registered successfully!");
+		return "redirect:/admin/registerusers/physio";
+	}
+	
+	@GetMapping("/registerusers/dietist")
+	public ModelAndView registerDietist() {
+		String userName = userService.getCurrentUsername();
+		List<TeamModel> teams = teamService.listAllTeams();
+		ModelAndView mav = new ModelAndView(REGISTERNEWDIETIST_VIEW);
+		mav.addObject("usuario", userName);
+		mav.addObject("user", new Dietist());
+		mav.addObject("teams", teams);
+		return mav;
+	}
+	
+	@PostMapping("/registerusers/newDietist")
+	public String registerDietist(@ModelAttribute Dietist user, RedirectAttributes flash) {
+		DietistModel d = dietistService.transformDietistModel(user);
+		dietistService.addDietist(d);
+		flash.addFlashAttribute("success", "Dietist registered successfully!");
+		return "redirect:/admin/registerusers/dietist";
+	}
 	
 }
