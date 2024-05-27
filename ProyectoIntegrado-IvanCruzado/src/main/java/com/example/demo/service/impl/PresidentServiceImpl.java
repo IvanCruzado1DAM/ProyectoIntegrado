@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.entity.Coach;
 import com.example.demo.entity.Player;
 import com.example.demo.entity.President;
 import com.example.demo.model.PlayerModel;
 import com.example.demo.model.PresidentModel;
+import com.example.demo.model.TeamModel;
 import com.example.demo.repository.PresidentRepository;
 import com.example.demo.service.PresidentService;
 
@@ -32,8 +34,13 @@ public class PresidentServiceImpl implements PresidentService{
 
 	@Override
 	public President addPresident(PresidentModel presidentModel) {
-		// TODO Auto-generated method stub
-		return null;
+		presidentModel.setName(presidentModel.getName());
+		presidentModel.setNacionality(presidentModel.getNacionality());
+		presidentModel.setImage(presidentModel.getImage());
+		presidentModel.setArrival_year(presidentModel.getArrival_year());
+		presidentModel.setIdteampresident(presidentModel.getIdteampresident());
+		President p = transformPresident(presidentModel);
+		return presidentRepository.save(p);
 	}
 
 	@Override
@@ -50,20 +57,33 @@ public class PresidentServiceImpl implements PresidentService{
 
 	@Override
 	public President transformPresident(PresidentModel presidentModel) {
-		// TODO Auto-generated method stub
-		return null;
+		if (presidentModel == null) {
+			return null; 
+		}
+
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(presidentModel, President.class);
 	}
 
 	@Override
 	public PresidentModel transformPresidentModel(President president) {
-		// TODO Auto-generated method stub
-		return null;
+		if (president == null) {
+			return null; 
+		}
+
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(president, PresidentModel.class);
 	}
 
 	@Override
 	public President loadPresidentById(int id) {
 		President presi = presidentRepository.findById(id);
 		return presi;
+	}
+
+	@Override
+	public President findByIdteam_president(int id) {
+		 return presidentRepository.findByIdteampresident(id);
 	}
 
 }

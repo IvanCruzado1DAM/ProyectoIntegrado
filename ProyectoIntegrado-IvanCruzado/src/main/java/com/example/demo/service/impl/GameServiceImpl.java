@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.entity.Team;
 import com.example.demo.entity.Game;
 import com.example.demo.model.GameModel;
+import com.example.demo.model.PresidentModel;
 import com.example.demo.model.TeamModel;
 import com.example.demo.repository.GameRepository;
 import com.example.demo.service.GameService;
@@ -35,6 +36,55 @@ public class GameServiceImpl implements GameService{
                 .collect(Collectors.toList());
         
         return filteredGames;
+	}
+
+
+	@Override
+	public Game addGame(GameModel gameModel) {
+		gameModel.setIdLocalTeam(gameModel.getIdLocalTeam());
+		gameModel.setIdVisitantTeam(gameModel.getIdVisitantTeam());
+		gameModel.setNumberGame(gameModel.getNumberGame());
+		gameModel.setDate(gameModel.getDate());
+		gameModel.setTickets(gameModel.getTickets());
+		gameModel.setScore(gameModel.getScore());
+		Game g = transformGame(gameModel);
+		return g;
+	}
+
+
+	@Override
+	public int removeGame(int id) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	@Override
+	public Game updateGame(GameModel gameModel) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Game transformGame(GameModel gameModel) {
+		if (gameModel == null) {
+			return null; 
+		}
+
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(gameModel, Game.class);
+	}
+
+
+	@Override
+	public GameModel transformGameModel(Game game) {
+		if (game == null) {
+			return null; 
+		}
+
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(game, GameModel.class);
 	}
 
 }

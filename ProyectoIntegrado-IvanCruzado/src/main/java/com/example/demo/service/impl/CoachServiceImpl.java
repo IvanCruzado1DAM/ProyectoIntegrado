@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Coach;
+import com.example.demo.entity.Dietist;
 import com.example.demo.entity.Player;
 import com.example.demo.model.CoachModel;
+import com.example.demo.model.DietistModel;
 import com.example.demo.model.PlayerModel;
 import com.example.demo.repository.CoachRepository;
 import com.example.demo.service.CoachService;
@@ -32,8 +34,13 @@ public class CoachServiceImpl implements CoachService {
 
 	@Override
 	public Coach addCoach(CoachModel coachModel) {
-		// TODO Auto-generated method stub
-		return null;
+		coachModel.setName(coachModel.getName());
+		coachModel.setNacionality(coachModel.getNacionality());
+		coachModel.setPhoto(coachModel.getPhoto());
+		coachModel.setArrival_season(coachModel.getArrival_season());
+		coachModel.setIdteam_coach(coachModel.getIdteam_coach());
+		Coach c = transformCoach(coachModel);
+		return coachRepository.save(c);
 	}
 
 	@Override
@@ -50,14 +57,21 @@ public class CoachServiceImpl implements CoachService {
 
 	@Override
 	public Coach transformCoach(CoachModel coachModel) {
-		// TODO Auto-generated method stub
-		return null;
+		if (coachModel == null) {
+			return null; 
+		}
+
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(coachModel, Coach.class);
 	}
 
 	@Override
 	public CoachModel transformCoachModel(Coach coach) {
-		// TODO Auto-generated method stub
-		return null;
+		if (coach == null) {
+			return null; 
+		}
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(coach, CoachModel.class);
 	}
 
 	@Override

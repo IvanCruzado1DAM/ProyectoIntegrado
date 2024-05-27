@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
-import java.sql.Timestamp;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,6 +20,7 @@ public class President {
 	private String nacionality;
 	private String image;
 	private int arrival_year;
-	private int  idteam_president;
+	@Column(name = "idteam_president")
+	private int  idteampresident;
 
 }

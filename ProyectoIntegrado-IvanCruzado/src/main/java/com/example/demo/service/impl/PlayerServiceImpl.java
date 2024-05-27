@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.example.demo.entity.Multimedia;
 import com.example.demo.entity.Player;
 import com.example.demo.model.MultimediaModel;
+import com.example.demo.model.PhysioModel;
 import com.example.demo.model.PlayerModel;
 import com.example.demo.repository.PlayerRepository;
 import com.example.demo.service.PlayerService;
@@ -32,8 +33,27 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	public Player addPlayer(PlayerModel playerModel) {
-		// TODO Auto-generated method stub
-		return null;
+		playerModel.setName(playerModel.getName());
+		playerModel.setPosition(playerModel.getPosition());
+		playerModel.setAge(playerModel.getAge());
+		playerModel.setImage(playerModel.getImage());
+		playerModel.setId_team(playerModel.getId_team());
+		playerModel.setDorsal(playerModel.getDorsal());
+		playerModel.setNationality(playerModel.getNationality());
+		playerModel.setMarket_value(playerModel.getMarket_value());
+		playerModel.setSalary(playerModel.getSalary());
+		playerModel.setGoals(playerModel.getGoals());
+		playerModel.setAssists(playerModel.getAssists());
+		playerModel.setYc(playerModel.getYc());
+		playerModel.setRc(playerModel.getRc());
+		playerModel.setContract(playerModel.getContract());
+		playerModel.setFootballaspects(playerModel.getFootballaspects());
+		playerModel.setDiet(playerModel.getDiet());
+		playerModel.setTransfer_status(playerModel.getTransfer_status());
+		playerModel.set_injured(playerModel.is_injured());
+		playerModel.set_sancionated(playerModel.is_sancionated());
+		Player player=transformPlayer(playerModel);
+		return playerRepository.save(player);
 	}
 
 	@Override
@@ -50,14 +70,20 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	public Player transformPlayer(PlayerModel playerModel) {
-		// TODO Auto-generated method stub
-		return null;
+		if (playerModel == null) {
+			return null; 
+		}
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(playerModel, Player.class);
 	}
 
 	@Override
 	public PlayerModel transformPlayerModel(Player player) {
-		// TODO Auto-generated method stub
-		return null;
+		if (player == null) {
+			return null; 
+		}
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(player, PlayerModel.class);
 	}
 
 	@Override

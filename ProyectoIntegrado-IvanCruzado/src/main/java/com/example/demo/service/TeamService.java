@@ -20,4 +20,6 @@ public interface TeamService {
 	public abstract TeamModel transformTeamModel(Team team);
 
 	public abstract Team loadTeamById(int id);
+
+	public abstract TeamModel findById(int idteam_president);
 }

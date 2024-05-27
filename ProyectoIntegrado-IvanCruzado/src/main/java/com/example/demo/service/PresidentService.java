@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.demo.entity.President;
 import com.example.demo.model.PresidentModel;
+import com.example.demo.model.TeamModel;
 
 public interface PresidentService {
 	
@@ -20,5 +21,7 @@ public interface PresidentService {
 	public abstract PresidentModel transformPresidentModel(President president);
 
 	public abstract President loadPresidentById(int id);
+
+	public abstract President findByIdteam_president(int id);
 	
 }

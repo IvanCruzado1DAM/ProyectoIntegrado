@@ -81,4 +81,11 @@ public class TeamServiceImpl implements TeamService {
 		return modelMapper.map(team, TeamModel.class);
 	}
 
+	@Override
+	public TeamModel findById(int idteam_president) {
+		Team t = teamRepository.findById(idteam_president);
+		TeamModel team=transformTeamModel(t);
+		return team;
+	}
+
 }
