@@ -1,5 +1,9 @@
 package com.example.demo.service.impl;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,11 +11,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.demo.entity.Coach;
-import com.example.demo.entity.Player;
 import com.example.demo.entity.President;
-import com.example.demo.model.PlayerModel;
 import com.example.demo.model.PresidentModel;
 import com.example.demo.model.TeamModel;
 import com.example.demo.repository.PresidentRepository;
@@ -23,6 +26,10 @@ public class PresidentServiceImpl implements PresidentService{
 	@Autowired
 	@Qualifier("presidentRepository")
 	private PresidentRepository presidentRepository;
+	
+	@Autowired
+	@Qualifier("teamService")
+	private TeamServiceImpl teamService;
 	
 	@Override
 	public List<PresidentModel> listAllPresidents() {
@@ -84,6 +91,30 @@ public class PresidentServiceImpl implements PresidentService{
 	@Override
 	public President findByIdteam_president(int id) {
 		 return presidentRepository.findByIdteampresident(id);
+	}
+
+	public boolean guardarImagen(President presi, String direfichero, MultipartFile multimediaFile, RedirectAttributes flash) {
+		TeamModel team = teamService.findById(presi.getIdteampresident());
+		President existingPresident = findByIdteam_president(team.getId_team());
+		if (existingPresident != null) {
+			flash.addFlashAttribute("error", "There is already a president for this team.");
+			return false;
+		}
+		// Verifica si se ha subido un archivo de escudo
+		if (multimediaFile != null && !multimediaFile.isEmpty()) {
+			// Guarda el archivo en el directorio especificado
+			Path rutalogo = Paths.get(direfichero + multimediaFile.getOriginalFilename());
+			try {
+				Files.write(rutalogo, multimediaFile.getBytes());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			presi.setImage("/imgs/presidents/" + multimediaFile.getOriginalFilename());
+			return true;
+		}
+		return false;
+		
 	}
 
 }

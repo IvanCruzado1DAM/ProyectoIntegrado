@@ -58,6 +58,10 @@ public class LoginController {
 
 	@PostMapping("/auth/register")
 	public String register(@ModelAttribute User user, RedirectAttributes flash) {
+		if (userService.existsByUsername(user.getUsername())) {
+	        flash.addFlashAttribute("error", "Username already exists.");
+	        return "redirect:/auth/registerForm";
+	    }
 		userService.registrar(user);
 		flash.addFlashAttribute("success", "User registered successfully!");
 		return "redirect:/auth/login";

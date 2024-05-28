@@ -48,7 +48,7 @@ public class GameServiceImpl implements GameService{
 		gameModel.setTickets(gameModel.getTickets());
 		gameModel.setScore(gameModel.getScore());
 		Game g = transformGame(gameModel);
-		return g;
+		return gameRepository.save(g);
 	}
 
 

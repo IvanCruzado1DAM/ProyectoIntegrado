@@ -3,12 +3,14 @@ package com.example.demo.controller;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
+import java.util.Date;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -328,25 +330,10 @@ public class AdminController {
 			@RequestParam("imageFile") MultipartFile multimediaFile) {
 		String direfichero = "src/main/resources/static/imgs/presidents/";
 		try {
-
-			TeamModel team = teamService.findById(presi.getIdteampresident());
-			President existingPresident = presidentService.findByIdteam_president(team.getId_team());
-			if (existingPresident != null) {
-				flash.addFlashAttribute("error", "There is already a president for this team.");
-				return "redirect:/admin/registerusers/president";
+			if(presidentService.guardarImagen(presi,direfichero, multimediaFile, flash)) {
+				PresidentModel p = presidentService.transformPresidentModel(presi);
+				presidentService.addPresident(p);
 			}
-			// Verifica si se ha subido un archivo de escudo
-			if (multimediaFile != null && !multimediaFile.isEmpty()) {
-				// Guarda el archivo en el directorio especificado
-				Path rutalogo = Paths.get(direfichero + multimediaFile.getOriginalFilename());
-				Files.write(rutalogo, multimediaFile.getBytes());
-				System.out.println(multimediaFile.getOriginalFilename());
-				presi.setImage("/imgs/presidents/" + multimediaFile.getOriginalFilename());
-			}
-
-			// Guarda el equipo en la base de datos
-			PresidentModel p = presidentService.transformPresidentModel(presi);
-			presidentService.addPresident(p);
 
 			flash.addFlashAttribute("success", "President registered successfully!");
 		} catch (Exception e) {
@@ -370,7 +357,11 @@ public class AdminController {
 	}
 	
 	@PostMapping("/registerusers/newGame")
-	public String registerNewGame(@ModelAttribute Game game, RedirectAttributes flash, @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
+	public String registerNewGame(@ModelAttribute Game game, RedirectAttributes flash,@RequestParam("date") String dateString, RedirectAttributes redirectAttributes) throws ParseException {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
+        Date parsedDate = dateFormat.parse(dateString);
+        Timestamp timestamp = new Timestamp(parsedDate.getTime());
+        game.setDate(timestamp);
 		GameModel g = gameService.transformGameModel(game);
 		gameService.addGame(g);
 		flash.addFlashAttribute("success", "Game registered successfully!");
@@ -390,7 +381,8 @@ public class AdminController {
 	
 	@PostMapping("/registerusers/newPlayer")
 	public String registerNewPlayer(@ModelAttribute("player") Player player, RedirectAttributes flash,
-			@RequestParam("imageFile") MultipartFile multimediaFile) {
+			@RequestParam("imageFile") MultipartFile multimediaFile, @RequestParam(value = "injured", required = false, defaultValue = "false") boolean injured,
+            @RequestParam(value = "sancionated", required = false, defaultValue = "false") boolean sancionated) {
 		String direfichero = "src/main/resources/static/imgs/players/sevillafc/";
 		try {
 			 Path directory = Paths.get(direfichero);
@@ -408,11 +400,12 @@ public class AdminController {
 				// Guarda el archivo en el directorio especificado
 				Path rutalogo = Paths.get(direfichero + multimediaFile.getOriginalFilename());
 				Files.write(rutalogo, multimediaFile.getBytes());
-				System.out.println(multimediaFile.getOriginalFilename());
 				player.setImage("/imgs/players/sevillafc/" + multimediaFile.getOriginalFilename());
 			}
 
 			// Guarda el equipo en la base de datos
+			player.set_injured(injured);
+	        player.set_sancionated(sancionated);
 			PlayerModel p = playerService.transformPlayerModel(player);
 			playerService.addPlayer(p);
 

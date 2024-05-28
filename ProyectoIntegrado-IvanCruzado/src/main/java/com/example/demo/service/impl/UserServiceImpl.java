@@ -27,6 +27,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Service("userService")
@@ -159,6 +160,15 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	public UserModel transformUserModel(User user) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+
+	public boolean existsByUsername(String username) {
+		if(userRepository.findByUsername(username) != null) {
+			return true;
+		}
+		return false;
 	}
 
 
