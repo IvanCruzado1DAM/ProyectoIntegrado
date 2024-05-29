@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.example.demo.entity.Multimedia;
 import com.example.demo.model.MultimediaModel;
 
@@ -22,4 +24,6 @@ public interface MultimediaService {
 	public abstract Multimedia loadMultimediaById(int id);
 
 	public abstract List<MultimediaModel> listAllMultimediabyIdTeam(int idTeam);
+
+	void addImageMultimedia(Multimedia multimedia, MultipartFile multimediaFile, String direfichero);
 }

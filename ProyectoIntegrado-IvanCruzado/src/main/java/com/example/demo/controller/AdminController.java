@@ -163,27 +163,17 @@ public class AdminController {
 			@RequestParam("multimediaFile") MultipartFile multimediaFile) {
 		String direfichero = "src/main/resources/static/imgs/news/";
 		try {
-			// Verifica si se ha subido un archivo de escudo
-			if (multimediaFile != null && !multimediaFile.isEmpty()) {
-				// Guarda el archivo en el directorio especificado
-				Path rutalogo = Paths.get(direfichero + multimediaFile.getOriginalFilename());
-				Files.write(rutalogo, multimediaFile.getBytes());
-				System.out.println(multimediaFile.getOriginalFilename());
-				multimedia.setImage("/imgs/news/" + multimediaFile.getOriginalFilename());
-			}
-
-			// Guarda el equipo en la base de datos
+			multimediaService.addImageMultimedia(multimedia, multimediaFile, direfichero);
 			MultimediaModel m = multimediaService.transformMultimediaModel(multimedia);
 			multimediaService.addMultimedia(m);
-
-			flash.addFlashAttribute("success", "Multimedia registered successfully!");
+			flash.addFlashAttribute("success", "Noticia registrada satisfactoriamente!");
 		} catch (Exception e) {
 			flash.addFlashAttribute("error", "An error occurred while registering the team. Please try again.");
 			e.printStackTrace();
-			return "redirect:/registerteam"; // Redirige a la página de registro si hay un error
+			return "redirect:/admin/registermultimedia"; // Redirige a la página de registro si hay un error
 		}
 
-		return "redirect:/home/index"; // Redirige a la página principal después del registro exitoso
+		return "redirect:/admin/registermultimedia"; // Redirige a la página principal después del registro exitoso
 	}
 
 	@GetMapping("/registermultimediaVideo")
@@ -200,12 +190,11 @@ public class AdminController {
 	@PostMapping("/admin/registerNewMultimediaVideo")
 	public String registerNewMultimediaVideo(@ModelAttribute("multimedia") Multimedia multimedia,
 			RedirectAttributes flash) {
-		// Guarda el equipo en la base de datos
 		MultimediaModel m = multimediaService.transformMultimediaModel(multimedia);
 		multimediaService.addMultimedia(m);
-		flash.addFlashAttribute("success", "Multimedia registered successfully!");
+		flash.addFlashAttribute("success", "Noticia registrada satisfactoriamente!");
 
-		return "redirect:/home/index"; // Redirige a la página principal después del registro exitoso
+		return "redirect:/admin/registermultimediaVideo"; // Redirige a la página principal después del registro exitoso
 	}
 
 	@GetMapping("/registerusers")
@@ -229,8 +218,19 @@ public class AdminController {
 
 	@PostMapping("/registerusers/newUser")
 	public String register(@ModelAttribute User user, RedirectAttributes flash) {
-		userService.registrar(user);
-		flash.addFlashAttribute("success", "User registered successfully!");
+		try {
+			if (!userService.existsByUsername(user.getUsername())) {
+				userService.registrar(user);
+				flash.addFlashAttribute("success", "Usuario registrado satisfactoriamente!");
+			}else {		
+				flash.addFlashAttribute("error", "Usuario ya existente!");
+			}
+		} catch (Exception e) {
+			flash.addFlashAttribute("error", "An error occurred while registering the team. Please try again.");
+			e.printStackTrace();
+			return "redirect:/admin/registerusers/user"; // Redirige a la página de registro si hay un error
+		}
+	
 		return "redirect:/admin/registerusers/user";
 	}
 
@@ -249,7 +249,7 @@ public class AdminController {
 	public String registerPhysio(@ModelAttribute Physio user, RedirectAttributes flash) {
 		PhysioModel p = physioService.transformPhysioModel(user);
 		physioService.addPhysio(p);
-		flash.addFlashAttribute("success", "Physio registered successfully!");
+		flash.addFlashAttribute("success", "Fisio registrado satisfactoriamente!");
 		return "redirect:/admin/registerusers/physio";
 	}
 
@@ -268,7 +268,7 @@ public class AdminController {
 	public String registerDietist(@ModelAttribute Dietist user, RedirectAttributes flash) {
 		DietistModel d = dietistService.transformDietistModel(user);
 		dietistService.addDietist(d);
-		flash.addFlashAttribute("success", "Dietist registered successfully!");
+		flash.addFlashAttribute("success", "Dietista registrado satisfactoriamente!");
 		return "redirect:/admin/registerusers/dietist";
 	}
 
@@ -288,20 +288,12 @@ public class AdminController {
 			@RequestParam("photoFile") MultipartFile multimediaFile) {
 		String direfichero = "src/main/resources/static/imgs/coachs/";
 		try {
-			// Verifica si se ha subido un archivo de escudo
-			if (multimediaFile != null && !multimediaFile.isEmpty()) {
-				// Guarda el archivo en el directorio especificado
-				Path rutalogo = Paths.get(direfichero + multimediaFile.getOriginalFilename());
-				Files.write(rutalogo, multimediaFile.getBytes());
-				System.out.println(multimediaFile.getOriginalFilename());
-				coach.setPhoto("/imgs/coachs/" + multimediaFile.getOriginalFilename());
-			}
-
-			// Guarda el equipo en la base de datos
+			coachService.guardarImagen(coach,direfichero, multimediaFile, flash);
 			CoachModel c = coachService.transformCoachModel(coach);
-			coachService.addCoach(c);
-
-			flash.addFlashAttribute("success", "Coach registered successfully!");
+			if (!coachService.exists(c, flash)) {
+				coachService.addCoach(c);
+				flash.addFlashAttribute("success", "Entrenador registrado satisfactoriamente!");
+			}
 		} catch (Exception e) {
 			flash.addFlashAttribute("error", "An error occurred while registering the team. Please try again.");
 			e.printStackTrace();
@@ -330,14 +322,14 @@ public class AdminController {
 			@RequestParam("imageFile") MultipartFile multimediaFile) {
 		String direfichero = "src/main/resources/static/imgs/presidents/";
 		try {
-			if(presidentService.guardarImagen(presi,direfichero, multimediaFile, flash)) {
-				PresidentModel p = presidentService.transformPresidentModel(presi);
-				presidentService.addPresident(p);
-			}
-
-			flash.addFlashAttribute("success", "President registered successfully!");
+			presidentService.guardarImagen(presi,direfichero, multimediaFile, flash);
+			PresidentModel p = presidentService.transformPresidentModel(presi);
+			if (!presidentService.exists(p, flash)) {
+	            presidentService.addPresident(p);
+	            flash.addFlashAttribute("success", "Presidente registrado satisfactoriamente!");
+	        }
 		} catch (Exception e) {
-			flash.addFlashAttribute("error", "An error occurred while registering the team. Please try again.");
+			flash.addFlashAttribute("error", "An error occurred while registering the president. Please try again.");
 			e.printStackTrace();
 			return "redirect:/admin/registerusers/president"; // Redirige a la página de registro si hay un error
 		}

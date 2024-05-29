@@ -15,5 +15,5 @@ public class PresidentModel {
 	private String nacionality;
 	private String image;
 	private int arrival_year;
-	private int  idteampresident;
+	private int idteampresident;
 }

@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,5 +20,6 @@ public class Coach {
 	private String nacionality;
 	private String photo;
 	private String arrival_season;
-	private int  idteam_coach; 
+	@Column(name = "idteam_coach")
+	private int idteamcoach; 
 }

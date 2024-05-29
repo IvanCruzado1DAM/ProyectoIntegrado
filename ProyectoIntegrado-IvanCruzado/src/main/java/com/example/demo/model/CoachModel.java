@@ -13,5 +13,5 @@ public class CoachModel {
 	private String nacionality;
 	private String photo;
 	private String arrival_season;
-	private int  idteam_coach; 
+	private int idteamcoach; 
 }

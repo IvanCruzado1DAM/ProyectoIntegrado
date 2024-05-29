@@ -93,28 +93,35 @@ public class PresidentServiceImpl implements PresidentService{
 		 return presidentRepository.findByIdteampresident(id);
 	}
 
-	public boolean guardarImagen(President presi, String direfichero, MultipartFile multimediaFile, RedirectAttributes flash) {
+	public void guardarImagen(President presi, String direfichero, MultipartFile multimediaFile, RedirectAttributes flash) throws IOException {
+		Path directory = Paths.get(direfichero);
+        if (!Files.exists(directory)) {
+            Files.createDirectories(directory);
+        }
+		if (multimediaFile != null && !multimediaFile.isEmpty()) {
+	        // Guarda el archivo en el directorio especificado
+	        Path rutalogo = Paths.get(direfichero + multimediaFile.getOriginalFilename());
+	        try {
+	            Files.write(rutalogo, multimediaFile.getBytes());
+	            presi.setImage("/imgs/presidents/" + multimediaFile.getOriginalFilename());
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	            flash.addFlashAttribute("error", "An error occurred while saving the image. Please try again.");
+	        }
+	    } else {
+	        flash.addFlashAttribute("error", "No image file provided or file is empty.");
+	    }
+	}
+	
+	public boolean exists(PresidentModel presi, RedirectAttributes flash) {
 		TeamModel team = teamService.findById(presi.getIdteampresident());
 		President existingPresident = findByIdteam_president(team.getId_team());
 		if (existingPresident != null) {
-			flash.addFlashAttribute("error", "There is already a president for this team.");
+			flash.addFlashAttribute("error", "Ya existe un presidente para este equipo.");
+			return true;
+		}else {
 			return false;
 		}
-		// Verifica si se ha subido un archivo de escudo
-		if (multimediaFile != null && !multimediaFile.isEmpty()) {
-			// Guarda el archivo en el directorio especificado
-			Path rutalogo = Paths.get(direfichero + multimediaFile.getOriginalFilename());
-			try {
-				Files.write(rutalogo, multimediaFile.getBytes());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			presi.setImage("/imgs/presidents/" + multimediaFile.getOriginalFilename());
-			return true;
-		}
-		return false;
-		
 	}
 
 }

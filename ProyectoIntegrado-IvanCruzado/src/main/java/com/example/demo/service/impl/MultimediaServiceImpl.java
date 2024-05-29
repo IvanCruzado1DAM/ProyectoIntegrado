@@ -1,5 +1,9 @@
 package com.example.demo.service.impl;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.entity.Multimedia;
 import com.example.demo.model.MultimediaModel;
@@ -86,6 +91,22 @@ public class MultimediaServiceImpl implements MultimediaService {
 	public Multimedia loadMultimediaById(int id) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void addImageMultimedia(Multimedia multimedia, MultipartFile multimediaFile, String direfichero) {
+		if (multimediaFile != null && !multimediaFile.isEmpty()) {
+			// Guarda el archivo en el directorio especificado
+			Path rutalogo = Paths.get(direfichero + multimediaFile.getOriginalFilename());
+			try {
+				Files.write(rutalogo, multimediaFile.getBytes());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			multimedia.setImage("/imgs/news/" + multimediaFile.getOriginalFilename());
+		}
+		
 	}
 
 }

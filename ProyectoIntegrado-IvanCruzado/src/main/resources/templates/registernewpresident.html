@@ -81,12 +81,16 @@
 		<br>
 		<!-- Cuerpo -->
 		<div class="container form-container">
+			<div th:if="${success}" class="alert alert-success" role="alert">
+				<span th:text="${success}"></span>
+			</div>
 			<div th:if="${error}" class="error-message alert alert-danger" role="alert">
-                <p th:text="${error}"></p>
-            </div>
+				<p th:text="${error}"></p>
+			</div>
 			<h2 style="text-align: center; text-decoration:underline;">Registro de Presidente</h2>
 			<br>
-			<form th:action="@{/admin/registerusers/newPresident}" th:object="${president}" method="post" enctype="multipart/form-data">
+			<form th:action="@{/admin/registerusers/newPresident}" th:object="${president}" method="post"
+				enctype="multipart/form-data">
 				<input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 				<!-- Common fields -->
 				<div class="mb-3">
@@ -99,22 +103,22 @@
 				</div>
 				<div class="form-label-group">
 					<label for="image"><strong>Select Image: </strong></label>
-					<input style="margin-top: 1%;" type="file" id="imageFile" name="imageFile" accept=".png, .jpg, .jpeg" onchange="updateHiddenField()"
-						class="form-control">
+					<input style="margin-top: 1%;" type="file" id="imageFile" name="imageFile"
+						accept=".png, .jpg, .jpeg" onchange="updateHiddenField()" class="form-control">
 				</div>
-				<div><input type="hidden" id="image" name="image" th:field="*{image}"> </div>		
+				<div><input type="hidden" id="image" name="image" th:field="*{image}"> </div>
 				<div class="mb-3">
 					<label for="arrival_year" class="form-label">Arrival Season:</label>
 					<input type="number" class="form-control" id="arrival_year" name="arrival_year">
 				</div>
 				<div class="form-label-group">
 					<label for="idteampresident">Favourite Team:</label>
-					<select  class="form-control" id="idteampresident" name="idteampresident">
+					<select class="form-control" id="idteampresident" name="idteampresident">
 						<option th:field="*{idteampresident}" th:each="team : ${teams}" th:value="${team.id_team}"
 							th:text="${team.name}">Team</option>
 					</select>
 				</div>
-				
+
 				<br>
 				<button type="submit" class="btn btn-primary">Registrar</button>
 			</form>
@@ -142,17 +146,29 @@
 	</div>
 </body>
 <script>
-  // Obtener el elemento de mensaje de error
-  var errorMessage = document.querySelector('.error-message');
+	// Obtener el elemento de mensaje de error
+	 var errorMessage = document.querySelector('.error-message');
+    var successMessage = document.querySelector('.alert-success');
 
-  // Mostrar el mensaje de error si tiene texto
-  if (errorMessage.textContent.trim() !== '') {
-    errorMessage.style.display = 'block';
-  }
-  
-  setTimeout(function() {
-    errorMessage.style.display = 'none';
-  }, 5000);
+    // Mostrar el mensaje de error si tiene texto
+    if (errorMessage && errorMessage.textContent.trim() !== '') {
+        errorMessage.style.display = 'block';
+    }
+
+    // Mostrar el mensaje de éxito si tiene texto
+    if (successMessage && successMessage.textContent.trim() !== '') {
+        successMessage.style.display = 'block';
+    }
+
+    // Ocultar los mensajes después de 5 segundos
+    setTimeout(function () {
+        if (errorMessage) {
+            errorMessage.style.display = 'none';
+        }
+        if (successMessage) {
+            successMessage.style.display = 'none';
+        }
+    }, 5000);
 </script>
 
 </html>

@@ -26,4 +26,6 @@ public interface UserService {
 	
 	public abstract User loadUserById(int id);
 
+	boolean existsByUsername(String username);
+
 }

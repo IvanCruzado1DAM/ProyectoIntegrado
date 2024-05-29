@@ -83,6 +83,9 @@
 		<div class="form-container">
 			<form th:action="@{admin/registerNewMultimedia}" th:object="${multimedia}" method="post"
 				enctype="multipart/form-data">
+				<div th:if="${success}" class="alert alert-success" role="alert">
+					<span th:text="${success}"></span>
+				</div>
 				<div class="mb-3">
 					<label class="form-label">Selecciona el tipo de contenido:</label>
 					<div class="form-check">
@@ -118,7 +121,8 @@
 					<div><input type="hidden" id="image" name="image" th:field="*{image}"> </div>
 				</div>
 				<br>
-				<select style="margin-top: 2%;" class="form-control" id="idteammultimedia" name="idteammultimedia">
+				<label for="idteammultimedia"><strong>Equipo: </strong></label>
+				<select style="margin-top: 1%;" class="form-control" id="idteammultimedia" name="idteammultimedia">
 					<option th:field="*{idteammultimedia}" th:each="team : ${teams}" th:value="${team.id_team}"
 						th:text="${team.name}">Equipo</option>
 				</select>
@@ -138,17 +142,17 @@
 					logoNameInput.value = fileName;
 				}
 			}
-			// Función para mostrar los campos correspondientes según la selección del radio button
+			
+			var successMessage = document.querySelector('.alert-success');
 
-			document.addEventListener('DOMContentLoaded', function () {
-				const videoRadio = document.getElementById('video');
+			// Mostrar el mensaje de error si tiene texto
+			if (successMessage.textContent.trim() !== '') {
+				successMessage.style.display = 'block';
+			}
 
-				videoRadio.addEventListener('change', function () {
-					if (this.checked) {
-						window.location.href = '/admin/registermultimediaVideo'; // Cambia esta URL por la que desees
-					}
-				});
-			});
+			setTimeout(function () {
+				successMessage.style.display = 'none';
+			}, 5000);
 		</script>
 		<br>
 		<!-- Footer -->

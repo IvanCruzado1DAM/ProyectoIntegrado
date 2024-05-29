@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.demo.entity.Coach;
 import com.example.demo.entity.Player;
+import com.example.demo.entity.President;
 import com.example.demo.model.CoachModel;
 import com.example.demo.model.PlayerModel;
 
@@ -23,4 +24,5 @@ public interface CoachService {
 
 	public abstract Coach loadCoachById(int id);
 	
+	public abstract Coach findByIdteam_coach(int id);
 }

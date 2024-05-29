@@ -81,6 +81,9 @@
 		<br>
 		<!-- Cuerpo -->
 		<div class="container form-container">
+			<div th:if="${success}" class="alert alert-success" role="alert">
+				<span th:text="${success}"></span>
+			</div>
 			<div th:if="${error}" class="error-message alert alert-danger" role="alert">
 				<p th:text="${error}"></p>
 			</div>
@@ -223,6 +226,29 @@
 			logoNameInput.value = fileName;
 		}
 	}
+	
+	var errorMessage = document.querySelector('.error-message');
+			var successMessage = document.querySelector('.alert-success');
+
+			// Mostrar el mensaje de error si tiene texto
+			if (errorMessage && errorMessage.textContent.trim() !== '') {
+				errorMessage.style.display = 'block';
+			}
+
+			// Mostrar el mensaje de éxito si tiene texto
+			if (successMessage && successMessage.textContent.trim() !== '') {
+				successMessage.style.display = 'block';
+			}
+
+			// Ocultar los mensajes después de 5 segundos
+			setTimeout(function () {
+				if (errorMessage) {
+					errorMessage.style.display = 'none';
+				}
+				if (successMessage) {
+					successMessage.style.display = 'none';
+				}
+			}, 5000);
 </script>
 
 </html>
