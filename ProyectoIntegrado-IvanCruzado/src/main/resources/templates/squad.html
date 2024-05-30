@@ -117,7 +117,7 @@
 		<!-- Cuerpo -->
 		<div>
 			<div class="position-group">
-				<h3>Porteros</h3>
+				<h3 style="text-decoration: underline;">Porteros</h3>
 				<div class="player-container">
 					<th:block th:each="player : ${players}">
 						<div th:if="${player.position == 'Portero'}" class="player-item">
@@ -132,7 +132,7 @@
 
 			<!-- Jugadores Defensas -->
 			<div class="position-group">
-				<h3>Defensas</h3>
+				<h3 style="text-decoration: underline;">Defensas</h3>
 				<div class="player-container">
 					<th:block th:each="player : ${players}">
 						<div th:if="${player.position == 'Defensa'}" class="player-item">
@@ -147,7 +147,7 @@
 
 			<!-- Jugadores Centrocampistas -->
 			<div class="position-group">
-				<h3>Centrocampistas</h3>
+				<h3 style="text-decoration: underline;">Centrocampistas</h3>
 				<div class="player-container">
 					<th:block th:each="player : ${players}">
 						<div th:if="${player.position == 'Centrocampista'}" class="player-item">
@@ -162,7 +162,7 @@
 
 			<!-- Jugadores Delanteros -->
 			<div class="position-group">
-				<h3>Delanteros</h3>
+				<h3 style="text-decoration: underline;">Delanteros</h3>
 				<div class="player-container">
 					<th:block th:each="player : ${players}">
 						<div th:if="${player.position == 'Delantero'}" class="player-item">
@@ -178,7 +178,7 @@
 
 
 		<!-- Footer -->
-		<footer class="bg-body-tertiary text-center text-lg-start">
+		<footer class="bg-body-tertiary text-center text-lg-start" style="margin-top: 2%;">
 			<div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
 				© 2024 Copyright: FOOTBALLZONE
 			</div>
