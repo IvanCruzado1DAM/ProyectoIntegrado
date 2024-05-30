@@ -55,16 +55,17 @@ import com.example.demo.service.impl.UserServiceImpl;
 public class AdminController {
 
 	private static final String REGISTERUSERS_VIEW = "registerallusers";
-	private static final String REGISTERTEAM_VIEW = "registerteam";
-	private static final String REGISTERMULTIMEDIA_VIEW = "registermultimedia";
-	private static final String REGISTERMULTIMEDIAVIDEO_VIEW = "registermultimediaVideo";
-	private static final String REGISTERNEWUSER_VIEW = "registernewuser";
-	private static final String REGISTERNEWPHYSIO_VIEW = "registernewphysio";
-	private static final String REGISTERNEWDIETIST_VIEW = "registernewdietist";
-	private static final String REGISTERNEWCOACH_VIEW = "registernewcoach";
-	private static final String REGISTERNEWPRESIDENT_VIEW = "registernewpresident";
-	private static final String REGISTERNEWGAME_VIEW = "registernewgame";
-	private static final String REGISTERNEWPLAYER_VIEW = "registernewplayer";
+	private static final String REGISTERTEAM_VIEW = "/adminadd/registerteam";
+	private static final String REGISTERMULTIMEDIA_VIEW = "/adminadd/registermultimedia";
+	private static final String REGISTERMULTIMEDIAVIDEO_VIEW = "/adminadd/registermultimediaVideo";
+	private static final String REGISTERNEWUSER_VIEW = "/adminadd/registernewuser";
+	private static final String REGISTERNEWPHYSIO_VIEW = "/adminadd/registernewphysio";
+	private static final String REGISTERNEWDIETIST_VIEW = "/adminadd/registernewdietist";
+	private static final String REGISTERNEWCOACH_VIEW = "/adminadd/registernewcoach";
+	private static final String REGISTERNEWPRESIDENT_VIEW = "/adminadd/registernewpresident";
+	private static final String REGISTERNEWGAME_VIEW = "/adminadd/registernewgame";
+	private static final String REGISTERNEWPLAYER_VIEW = "/adminadd/registernewplayer";
+
 
 	@Autowired
 	@Qualifier("userService")
@@ -124,27 +125,21 @@ public class AdminController {
 			@RequestParam("badgeFile") MultipartFile badgeFile) {
 		String direfichero = "src/main/resources/static/imgs/escudos/";
 		try {
-			// Verifica si se ha subido un archivo de escudo
-			if (!badgeFile.isEmpty()) {
-				// Guarda el archivo en el directorio especificado
-				Path rutalogo = Paths.get(direfichero + badgeFile.getOriginalFilename());
-				Files.write(rutalogo, badgeFile.getBytes());
-				System.out.println(badgeFile.getOriginalFilename());
-				team.setBadge("/imgs/escudos/" + badgeFile.getOriginalFilename());
-			}
-
-			// Guarda el equipo en la base de datos
+			teamService.addBadge(team, badgeFile, direfichero);
 			TeamModel t = teamService.transformTeamModel(team);
-			teamService.addTeam(t);
-
-			flash.addFlashAttribute("success", "Team registered successfully!");
+			if(!teamService.exists(t)) {
+				teamService.addTeam(t);
+				flash.addFlashAttribute("success", "Equipo registrado satisfactoriamente!");
+			}else {
+				flash.addFlashAttribute("error", "Equipo ya existente!");
+			}
 		} catch (Exception e) {
 			flash.addFlashAttribute("error", "An error occurred while registering the team. Please try again.");
 			e.printStackTrace();
 			return "redirect:/registerteam"; // Redirige a la página de registro si hay un error
 		}
 
-		return "redirect:/home/index"; // Redirige a la página principal después del registro exitoso
+		return "redirect:/admin/registerteam"; // Redirige a la página principal después del registro exitoso
 	}
 
 	@GetMapping("/registermultimedia")
@@ -349,14 +344,18 @@ public class AdminController {
 	}
 	
 	@PostMapping("/registerusers/newGame")
-	public String registerNewGame(@ModelAttribute Game game, RedirectAttributes flash,@RequestParam("date") String dateString, RedirectAttributes redirectAttributes) throws ParseException {
+	public String registerNewGame(@ModelAttribute Game game, RedirectAttributes flash,@RequestParam("date") String dateString) throws ParseException {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
         Date parsedDate = dateFormat.parse(dateString);
         Timestamp timestamp = new Timestamp(parsedDate.getTime());
         game.setDate(timestamp);
 		GameModel g = gameService.transformGameModel(game);
-		gameService.addGame(g);
-		flash.addFlashAttribute("success", "Game registered successfully!");
+		if(gameService.Verificarequipos(game)) {
+			gameService.addGame(g);
+			flash.addFlashAttribute("success", "Partido registrado satisfactoriamente!");
+		}else {
+			flash.addFlashAttribute("error", "Los dos equipos no pueden coincidir!");
+		}
 		return "redirect:/admin/registerusers/game";
 	}
 	
@@ -375,33 +374,18 @@ public class AdminController {
 	public String registerNewPlayer(@ModelAttribute("player") Player player, RedirectAttributes flash,
 			@RequestParam("imageFile") MultipartFile multimediaFile, @RequestParam(value = "injured", required = false, defaultValue = "false") boolean injured,
             @RequestParam(value = "sancionated", required = false, defaultValue = "false") boolean sancionated) {
-		String direfichero = "src/main/resources/static/imgs/players/sevillafc/";
+		String direfichero = "src/main/resources/static/imgs/players/";
 		try {
-			 Path directory = Paths.get(direfichero);
-	         if (!Files.exists(directory)) {
-	             Files.createDirectories(directory);
-	         }
-			/*TeamModel team = teamService.findById(player.getIdteampresident());
-			President existingPresident = presidentService.findByIdteam_president(team.getId_team());
-			if (existingPresident != null) {
-				flash.addFlashAttribute("error", "There is already a president for this team.");
-				return "redirect:/admin/registerusers/president";
-			}*/
-			// Verifica si se ha subido un archivo de escudo
-			if (multimediaFile != null && !multimediaFile.isEmpty()) {
-				// Guarda el archivo en el directorio especificado
-				Path rutalogo = Paths.get(direfichero + multimediaFile.getOriginalFilename());
-				Files.write(rutalogo, multimediaFile.getBytes());
-				player.setImage("/imgs/players/sevillafc/" + multimediaFile.getOriginalFilename());
-			}
-
-			// Guarda el equipo en la base de datos
+			playerService.addImagenPlayer(player, direfichero, multimediaFile, flash);
 			player.set_injured(injured);
 	        player.set_sancionated(sancionated);
 			PlayerModel p = playerService.transformPlayerModel(player);
-			playerService.addPlayer(p);
-
-			flash.addFlashAttribute("success", "President registered successfully!");
+			if(!playerService.existsInThisClub(player.getDorsal(), player.getId_team())) {
+				playerService.addPlayer(p);
+				flash.addFlashAttribute("success", "Jugador registrado satisfactoriamente!");
+			}else {
+				flash.addFlashAttribute("error", "Ya hay un jugador con este dorsal en este equipo!");
+			}
 		} catch (Exception e) {
 			flash.addFlashAttribute("error", e.getMessage());
 			e.printStackTrace();

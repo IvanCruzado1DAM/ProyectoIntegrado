@@ -17,4 +17,6 @@ public interface GameService {
 	public abstract Game transformGame(GameModel dietistModel);
 
 	public abstract GameModel transformGameModel(Game dietist);
+
+	boolean Verificarequipos(Game game);
 }

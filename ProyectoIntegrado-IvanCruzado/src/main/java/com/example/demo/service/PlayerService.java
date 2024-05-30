@@ -2,6 +2,9 @@ package com.example.demo.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.example.demo.entity.Player;
 import com.example.demo.entity.Team;
 import com.example.demo.model.MultimediaModel;
@@ -24,4 +27,6 @@ public interface PlayerService {
 	public abstract Player loadPlayerById(int id);
 	
 	public abstract List<PlayerModel> listAllPlayersbyIdTeam(int idTeam);
+
+	void addImagenPlayer(Player player, String direfichero, MultipartFile multimediaFile, RedirectAttributes flash);
 }

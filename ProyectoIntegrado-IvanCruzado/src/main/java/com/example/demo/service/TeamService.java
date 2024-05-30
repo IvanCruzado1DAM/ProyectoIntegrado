@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.example.demo.entity.Team;
 import com.example.demo.model.TeamModel;
 
@@ -22,4 +24,8 @@ public interface TeamService {
 	public abstract Team loadTeamById(int id);
 
 	public abstract TeamModel findById(int idteam_president);
+
+	void addBadge(Team team, MultipartFile badgeFile, String direfichero);
+
+	boolean exists(TeamModel t);
 }

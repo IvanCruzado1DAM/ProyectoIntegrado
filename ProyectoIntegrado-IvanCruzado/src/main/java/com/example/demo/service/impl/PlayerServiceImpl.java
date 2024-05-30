@@ -1,5 +1,9 @@
 package com.example.demo.service.impl;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,11 +11,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.demo.entity.Multimedia;
 import com.example.demo.entity.Player;
-import com.example.demo.model.MultimediaModel;
-import com.example.demo.model.PhysioModel;
 import com.example.demo.model.PlayerModel;
 import com.example.demo.repository.PlayerRepository;
 import com.example.demo.service.PlayerService;
@@ -103,6 +106,43 @@ public class PlayerServiceImpl implements PlayerService {
 				.collect(Collectors.toList());
 		return filtredplayersList;
 		
+	}
+
+	@Override
+	public void addImagenPlayer(Player player, String direfichero, MultipartFile multimediaFile,
+			RedirectAttributes flash) {
+		Path directory = Paths.get(direfichero);
+        if (!Files.exists(directory)) {
+            try {
+				Files.createDirectories(directory);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+	
+		if (multimediaFile != null && !multimediaFile.isEmpty()) {
+			// Guarda el archivo en el directorio especificado
+			Path rutalogo = Paths.get(direfichero + multimediaFile.getOriginalFilename());
+			try {
+				Files.write(rutalogo, multimediaFile.getBytes());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			player.setImage("/imgs/players/" + multimediaFile.getOriginalFilename());
+		}
+		
+	}
+
+	public boolean existsInThisClub(int dorsal, int id_team) {
+		List<PlayerModel> players=listAllPlayers();
+		for (PlayerModel player : players) {
+            if (player.getDorsal() == dorsal && player.getId_team() == id_team) {
+                return true; 
+            }
+        }
+        return false; 
 	}
 
 }

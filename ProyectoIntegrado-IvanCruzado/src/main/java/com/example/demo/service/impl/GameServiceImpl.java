@@ -87,4 +87,13 @@ public class GameServiceImpl implements GameService{
 		return modelMapper.map(game, GameModel.class);
 	}
 
+
+	@Override
+	public boolean Verificarequipos(Game game) {
+		if(game.getIdLocalTeam() != game.getIdVisitantTeam()) {
+			return true;
+		}else
+			return false;
+	}
+
 }
