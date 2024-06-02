@@ -42,57 +42,57 @@
 			vertical-align: middle;
 		}
 	</style>
-	<script>
-	document.addEventListener("DOMContentLoaded", function() {
-		function filterPhysios() {
-			var input = document.getElementById("physioFilter");
-			var filter = input.value.toUpperCase();
-			var teamFilter = document.getElementById("teamFilter");
-			var selectedTeamId = teamFilter.value.toUpperCase();
-			var table = document.getElementById("physiosTable");
-			var tr = table.getElementsByTagName("tr");
-
-			for (var i = 1; i < tr.length; i++) {
-				var teamId = tr[i].getAttribute("data-teamid");
-				var tdName = tr[i].getElementsByTagName("td")[0];
-
-				if (tdName) {
-					var txtValue = tdName.textContent || tdName.innerText;
-					if ((txtValue.toUpperCase().indexOf(filter) > -1) && (selectedTeamId === "" || selectedTeamId === teamId)) {
-						tr[i].style.display = "";
-					} else {
-						tr[i].style.display = "none";
+		<script>
+		document.addEventListener("DOMContentLoaded", function() {
+			function filterPhysios() {
+				var input = document.getElementById("physioFilter");
+				var filter = input.value.toUpperCase();
+				var teamFilter = document.getElementById("teamFilter");
+				var selectedTeamId = teamFilter.value.toUpperCase();
+				var table = document.getElementById("physiosTable");
+				var tr = table.getElementsByTagName("tr");
+	
+				for (var i = 1; i < tr.length; i++) {
+					var teamId = tr[i].getAttribute("data-teamid");
+					var tdName = tr[i].getElementsByTagName("td")[0];
+	
+					if (tdName) {
+						var txtValue = tdName.textContent || tdName.innerText;
+						if ((txtValue.toUpperCase().indexOf(filter) > -1) && (selectedTeamId === "" || selectedTeamId === teamId)) {
+							tr[i].style.display = "";
+						} else {
+							tr[i].style.display = "none";
+						}
 					}
 				}
 			}
-		}
-		var errorMessage = document.querySelector('.error-message');
-        var successMessage = document.querySelector('.alert-success');
-
-        // Mostrar el mensaje de error si tiene texto
-        if (errorMessage && errorMessage.textContent.trim() !== '') {
-            errorMessage.style.display = 'block';
-        }
-
-        // Mostrar el mensaje de éxito si tiene texto
-        if (successMessage && successMessage.textContent.trim() !== '') {
-            successMessage.style.display = 'block';
-        }
-
-        // Ocultar los mensajes después de 5 segundos
-        setTimeout(function () {
-            if (errorMessage) {
-                errorMessage.style.display = 'none';
-            }
-            if (successMessage) {
-                successMessage.style.display = 'none';
-            }
-        }, 5000);
-        // Añadir evento de filtrado
-        document.getElementById("physioFilter").addEventListener("keyup", filterPhysios);
-        document.getElementById("teamFilter").addEventListener("change", filterPhysios);
-    });
-	</script>
+				var errorMessage = document.querySelector('.error-message');
+		        var successMessage = document.querySelector('.alert-success');
+		
+		        // Mostrar el mensaje de error si tiene texto
+		        if (errorMessage && errorMessage.textContent.trim() !== '') {
+		            errorMessage.style.display = 'block';
+		        }
+		
+		        // Mostrar el mensaje de éxito si tiene texto
+		        if (successMessage && successMessage.textContent.trim() !== '') {
+		            successMessage.style.display = 'block';
+		        }
+		
+		        // Ocultar los mensajes después de 5 segundos
+		        setTimeout(function () {
+		            if (errorMessage) {
+		                errorMessage.style.display = 'none';
+		            }
+		            if (successMessage) {
+		                successMessage.style.display = 'none';
+		            }
+		        }, 5000);
+	        // Añadir evento de filtrado
+	        document.getElementById("physioFilter").addEventListener("keyup", filterPhysios);
+	        document.getElementById("teamFilter").addEventListener("change", filterPhysios);
+	    });
+		</script>
 </head>
 
 <body>

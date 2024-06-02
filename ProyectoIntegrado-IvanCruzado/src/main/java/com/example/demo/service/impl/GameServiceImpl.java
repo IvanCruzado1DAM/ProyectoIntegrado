@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Team;
 import com.example.demo.entity.Game;
+import com.example.demo.entity.Physio;
 import com.example.demo.model.GameModel;
 import com.example.demo.model.PresidentModel;
 import com.example.demo.model.TeamModel;
@@ -106,6 +107,14 @@ public class GameServiceImpl implements GameService{
 			return true;
 		}else
 			return false;
+	}
+	
+	public boolean exists(int id) {
+		Game g=gameRepository.findById(id);
+		if( g != null) {
+			return true;
+		}
+		return false;
 	}
 
 }

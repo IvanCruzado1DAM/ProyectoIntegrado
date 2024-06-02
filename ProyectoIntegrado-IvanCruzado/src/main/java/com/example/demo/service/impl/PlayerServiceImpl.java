@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.entity.Physio;
 import com.example.demo.entity.Player;
 import com.example.demo.model.PlayerModel;
 import com.example.demo.repository.PlayerRepository;
@@ -61,8 +63,18 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	public int removePlayer(int id) {
-		// TODO Auto-generated method stub
-		return 0;
+		String photoFileName = playerRepository.findById(id).getImage();
+	    
+	    // Borra el archivo de la imagen del escudo del sistema de archivos
+	    if (photoFileName != null && !photoFileName.isEmpty()) {
+	        String filePath = "src/main/resources/static" + photoFileName;
+	        File file = new File(filePath);
+	        if (file.exists()) {
+	            file.delete();
+	        }
+	    }
+		playerRepository.deleteById(id);
+		return id;
 	}
 
 	@Override
@@ -143,6 +155,14 @@ public class PlayerServiceImpl implements PlayerService {
             }
         }
         return false; 
+	}
+	
+	public boolean exists(int id) {
+		Player p=playerRepository.findById(id);
+		if( p != null) {
+			return true;
+		}
+		return false;
 	}
 
 }

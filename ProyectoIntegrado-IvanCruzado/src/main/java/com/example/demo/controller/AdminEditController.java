@@ -91,6 +91,17 @@ public class AdminEditController {
 		return mav;
 	}
 	
+	@GetMapping("/deleteUser/{id}")
+	public String deleteUser(@PathVariable("id") int id, RedirectAttributes flash) {
+		if(userService.exists(userService.loadUserById(id).getId_user())) {
+			userService.removeUser(id);
+			flash.addFlashAttribute("success", "User delete successfully!");
+		}else {
+			flash.addFlashAttribute("error", "Fail removing this user!");
+		}
+		return "redirect:/adminedit/showUsers";
+	}
+	
 	@GetMapping("/showTeams")
 	public ModelAndView showTeams(Model model) {
 		String userName = userService.getCurrentUsername();
@@ -174,6 +185,19 @@ public class AdminEditController {
 		return mav;
 	}
 	
+	@GetMapping("/deleteMatch/{id}")
+	public String deleteMatch(@PathVariable("id") int id, RedirectAttributes flash) {
+		if(gameService.exists(id)) {
+			gameService.removeGame(id);
+			flash.addFlashAttribute("success", "Game delete successfully!");
+		}else {
+			flash.addFlashAttribute("error", "Fail removing this game!");
+		}
+		return "redirect:/adminedit/showMatchs";
+	}
+	
+	
+	
 	@GetMapping("/showCoachs")
 	public ModelAndView showCoachs(Model model) {
 		String userName = userService.getCurrentUsername();
@@ -208,6 +232,17 @@ public class AdminEditController {
 		mav.addObject("teams", teams);
 		mav.addObject("players", players);
 		return mav;
+	}
+	
+	@GetMapping("/deletePlayer/{id}")
+	public String deletePlayer(@PathVariable("id") int id, RedirectAttributes flash) {
+		if(playerService.exists(id)) {
+			playerService.removePlayer(id);
+			flash.addFlashAttribute("success", "Player delete successfully!");
+		}else {
+			flash.addFlashAttribute("error", "Fail removing this player!");
+		}
+		return "redirect:/adminedit/showPlayers";
 	}
 	
 	

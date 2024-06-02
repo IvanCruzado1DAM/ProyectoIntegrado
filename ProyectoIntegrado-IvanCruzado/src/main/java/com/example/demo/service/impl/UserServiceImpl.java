@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.entity.Physio;
 import com.example.demo.entity.Team;
 import com.example.demo.entity.User;
 import com.example.demo.model.UserModel;
@@ -167,6 +168,16 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	public boolean existsByUsername(String username) {
 		User user=userRepository.findByUsername(username);
 		if( user != null) {
+			return true;
+		}
+		return false;
+	}
+
+
+
+	public boolean exists(int id) {
+		User u=userRepository.findById(id);
+		if( u != null) {
 			return true;
 		}
 		return false;
