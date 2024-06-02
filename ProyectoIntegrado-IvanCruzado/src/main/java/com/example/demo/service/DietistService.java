@@ -22,5 +22,7 @@ public interface DietistService {
 	public abstract Dietist loadDietistById(int id);
 	
 	public abstract List<DietistModel> listAllDietistsbyIdTeam(int idTeam);
+
+	boolean exists(int id);
 	
 }

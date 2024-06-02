@@ -19,18 +19,17 @@ import com.example.demo.entity.President;
 import com.example.demo.model.CoachModel;
 import com.example.demo.model.TeamModel;
 import com.example.demo.repository.CoachRepository;
+import com.example.demo.repository.TeamRepository;
 import com.example.demo.service.CoachService;
 
 @Service("coachService")
 public class CoachServiceImpl implements CoachService {
-
+	
 	@Autowired
 	@Qualifier("coachRepository")
 	private CoachRepository coachRepository;
 	
-	@Autowired
-	@Qualifier("teamService")
-	private TeamServiceImpl teamService;
+	
 	
 	@Override
 	public List<CoachModel> listAllCoachs() {
@@ -115,15 +114,24 @@ public class CoachServiceImpl implements CoachService {
 	}
 
 	public boolean exists(CoachModel c, RedirectAttributes flash) {
-		TeamModel team = teamService.findById(c.getIdteamcoach());
-		Coach existingCoach = findByIdteam_coach(team.getId_team());
-		if (existingCoach != null) {
-			flash.addFlashAttribute("error", "Ya existe un entrenador para este equipo.");
-			return true;
-		}else {
-			return false;
-		}
+		int teamId = c.getIdteamcoach();
+	    
+	    // Obtiene todos los entrenadores
+	    List<CoachModel> coaches = listAllCoachs();
+	    
+	    // Recorre la lista de entrenadores para verificar si ya existe un entrenador para el equipo
+	    for (CoachModel coach : coaches) {
+	        if (teamId !=9 && coach.getIdteamcoach() == teamId) {
+	            flash.addFlashAttribute("error", "Ya existe un entrenador para este equipo.");
+	            return true;
+	        }
+	    }
+	    
+	    return false;
+
 	}
+
+	
 
 
 }

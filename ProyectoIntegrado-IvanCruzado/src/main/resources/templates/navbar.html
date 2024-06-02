@@ -7,7 +7,7 @@
 
 <body>
     <nav class="navbar navbar-expand-sm navbar-light" th:fragment="navbarFragment"
-         style="background-color: rgb(37, 150, 190); width: 98%;">
+         style="background-color: rgb(37, 150, 190); width: 100%;">
         <div class="container">
             <div class="d-flex justify-content-between w-100">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -31,7 +31,7 @@
 							style="white-space: nowrap; color: white;">Registrar Equipo</a>
 					</li>
 					<li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
-						<a class="nav-link" href="#" style="white-space: nowrap; color: white;">Editar</a>
+						<a class="nav-link" href="/admin/editusers" style="white-space: nowrap; color: white;">Editar</a>
 					</li>
 					<li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
 						<a class="nav-link" href="/admin/registermultimedia" style="white-space: nowrap; color: white;">Redactar Noticia</a>

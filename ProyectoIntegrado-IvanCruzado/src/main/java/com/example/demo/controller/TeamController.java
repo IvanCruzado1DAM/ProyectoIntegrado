@@ -54,7 +54,7 @@ public class TeamController {
 		String userName = userService.getCurrentUsername();
 		int idUserTeam = userService.getCurrentUserTeamId(userName);
 		List<TeamModel> teams=  teamService.listAllTeams();
-		List<GameModel> games=  gameService.listAllGames(idUserTeam);	
+		List<GameModel> games=  gameService.listAllGamesByTeam(idUserTeam);	
 		ModelAndView mav = new ModelAndView(CALENDAR_VIEW);
 		mav.addObject("games", games);
 		mav.addObject("teams", teams);

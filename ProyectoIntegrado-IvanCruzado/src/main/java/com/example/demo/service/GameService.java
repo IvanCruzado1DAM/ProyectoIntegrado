@@ -6,7 +6,7 @@ import com.example.demo.entity.Game;
 import com.example.demo.model.GameModel;
 
 public interface GameService {
-	public abstract List<GameModel> listAllGames(int idTeam);
+	public abstract List<GameModel> listAllGames();
 	
 	public abstract Game addGame(GameModel dietistModel);
 
@@ -19,4 +19,6 @@ public interface GameService {
 	public abstract GameModel transformGameModel(Game dietist);
 
 	boolean Verificarequipos(Game game);
+
+	public abstract List<GameModel> listAllGamesByTeam(int idTeam);
 }

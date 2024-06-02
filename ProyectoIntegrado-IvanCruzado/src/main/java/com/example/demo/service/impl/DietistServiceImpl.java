@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Dietist;
 import com.example.demo.entity.Physio;
+import com.example.demo.entity.Team;
 import com.example.demo.model.DietistModel;
 import com.example.demo.model.PhysioModel;
+import com.example.demo.model.TeamModel;
 import com.example.demo.repository.DietistRepository;
 import com.example.demo.service.DietistService;
 
@@ -41,8 +43,8 @@ public class DietistServiceImpl implements DietistService {
 
 	@Override
 	public int removeDietist(int id) {
-		// TODO Auto-generated method stub
-		return 0;
+		dietistRepository.deleteById(id);
+		return id;
 	}
 
 	@Override
@@ -86,6 +88,15 @@ public class DietistServiceImpl implements DietistService {
 				.map(p -> modelMapper.map(p, DietistModel.class))
 				.collect(Collectors.toList());
 		return filtreddietistsList;
+	}
+	
+	@Override
+	public boolean exists(int id) {
+		Dietist d=dietistRepository.findById(id);
+		if( d != null) {
+			return true;
+		}
+		return false;
 	}
 
 }

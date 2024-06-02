@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>All Players</title>
+    <style>
+        body,
+        html {
+            margin: 7%;
+            margin-top: 15%;
+            padding: 0;
+            height: 175%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('/imgs/fondo.jpg');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .container {
+            width: 100%;
+        }
+
+        .content-wrapper {
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .fa {
+            margin-left: 10px;
+        }
+
+        td {
+            vertical-align: middle;
+        }
+    </style>
+    <script>
+        var currentPage = 1;
+        var rowsPerPage = 10;
+        var visibleRows = [];
+
+        function filterPlayers() {
+            var input = document.getElementById("playerFilter");
+            var filter = input.value.toUpperCase();
+            var teamFilter = document.getElementById("teamFilter");
+            var selectedTeamId = teamFilter.value.toUpperCase();
+            var table = document.getElementById("playersTable");
+            var tr = table.getElementsByTagName("tr");
+
+            visibleRows = [];
+            for (var i = 1; i < tr.length; i++) {
+                var teamId = tr[i].getAttribute("data-teamid");
+                var tdName = tr[i].getElementsByTagName("td")[0];
+
+                if (tdName) {
+                    var txtValue = tdName.textContent || tdName.innerText;
+                    if ((txtValue.toUpperCase().indexOf(filter) > -1) && (selectedTeamId === "" || selectedTeamId === teamId)) {
+                        visibleRows.push(tr[i]);
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+            updatePagination();
+        }
+
+        function updatePagination() {
+            var pagination = document.getElementById("pagination");
+            var totalPages = Math.ceil(visibleRows.length / rowsPerPage);
+            pagination.innerHTML = "";
+
+            for (var i = 1; i <= totalPages; i++) {
+                var pageButton = document.createElement("button");
+                pageButton.innerText = i;
+                pageButton.className = "btn btn-primary m-1";
+                pageButton.setAttribute("onclick", "showPage(" + i + ")");
+                if (i === currentPage) {
+                    pageButton.classList.add("active");
+                }
+                pagination.appendChild(pageButton);
+            }
+
+            showPage(currentPage);
+        }
+
+        function showPage(page) {
+            currentPage = page;
+            var start = (currentPage - 1) * rowsPerPage;
+            var end = start + rowsPerPage;
+
+            for (var i = 0; i < visibleRows.length; i++) {
+                if (i >= start && i < end) {
+                    visibleRows[i].style.display = "";
+                } else {
+                    visibleRows[i].style.display = "none";
+                }
+            }
+
+            var paginationButtons = document.getElementById("pagination").getElementsByTagName("button");
+            for (var i = 0; i < paginationButtons.length; i++) {
+                paginationButtons[i].classList.remove("active");
+                if (parseInt(paginationButtons[i].innerText) === currentPage) {
+                    paginationButtons[i].classList.add("active");
+                }
+            }
+        }
+
+        window.onload = function() {
+            filterPlayers();
+        };
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="row">
+                <a href="/home/index">
+                    <img src="/imgs/banner.png" alt="Banner" />
+                </a>
+            </div>
+        </div>
+        <br>
+        <div class="row align-items-center">
+            <div class="col text-center" style="width: 100%;">
+                <div th:replace="~{navbar :: navbarFragment}"></div>
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="content-wrapper">
+            <div class="row">
+                <div class="col">
+                    <h2 style="text-align: center;">All Players</h2>
+                    <br>
+                    <div class="row align-items-center">
+                        <div class="col-md-6 mb-3">
+                            <input type="text" id="playerFilter" onkeyup="filterPlayers()"
+                                placeholder="Filter by player's name" class="form-control">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <select id="teamFilter" onchange="filterPlayers()" class="form-control">
+                                <option value="">All Teams</option>
+                                <option th:each="team : ${teams}" th:value="${team.id_team}"
+                                    th:if="${team.name != 'Agentes Libres'}" th:text="${team.name}">Team Name
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <table id="playersTable" class="table table-bordered">
+                        <thead style="background-color: #007bff;">
+                            <tr>
+                                <th>Name</th>
+                                <th>Position</th>
+                                <th>Age</th>
+                                <th>Image</th>
+                                <th>Team</th>
+                                <th>Dorsal</th>
+                                <th>Value (€)</th>
+                                <th>Goals</th>
+                                <th>Assists</th>
+                                <th>Yellow Cards</th>
+                                <th>Red Cards</th>
+                                <th>Contract</th>
+                                <th>Injured?</th>
+                                <th>Sancionated?</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="player : ${players}" th:data-teamid="${player.id_team}">
+                                <td th:text="${player.name}">Name</td>
+                                <td th:text="${player.position}">Position</td>
+                                <td th:text="${player.age}">Age</td>
+                                <td>
+                                    <img style="max-width: 80px; max-height: 80px;"
+                                        src="'../static/' + ${player.image}" th:src="@{${player.image}}"
+                                        alt="Player Image" />
+                                </td>
+                                <td th:each="team : ${teams}" th:if="${team.id_team == player.id_team}"
+                                    th:text="${team.name}">Team
+                                </td>
+                                <td th:text="${player.dorsal}">Dorsal</td>
+                                <td th:text="${player.market_value}">Market Value;</td>    
+                                <td th:text="${player.goals}">Goals</td>
+                                <td th:text="${player.assists}">Assists</td>
+                                <td th:text="${player.yc}">Yellow Cards</td>
+                                <td th:text="${player.rc}">Red Cards</td>
+                                <td th:text="${player.contract}">Contract</td>
+                                <td>
+                                    <span th:if="${player.is_injured==true}">
+                                        <img src="../static/imgs/tickverde.png" th:src="@{/imgs/tickverde.png}" width="25"
+                                            height="25" style="border-radius: 10px;">
+                                    </span>
+                                    <span th:if="${player.is_injured==false}">
+                                        <img src="../static/imgs/cruzroja.png" th:src="@{/imgs/cruzroja.png}" width="35"
+                                            height="35" style="border-radius: 10px;">
+                                    </span>
+                                </td>
+                                <td>
+                                    <span th:if="${player.is_sancionated==true}">
+                                        <img src="../static/imgs/tickverde.png" th:src="@{/imgs/tickverde.png}" width="25"
+                                            height="25" style="border-radius: 10px;">
+                                    </span>
+                                    <span th:if="${player.is_sancionated==false}">
+                                        <img src="../static/imgs/cruzroja.png" th:src="@{/imgs/cruzroja.png}" width="35"
+                                            height="35" style="border-radius: 10px;">
+                                    </span>
+                                </td>
+                                <td>
+                                    <i class="fa fa-wrench"></i>
+                                    <i class="fa fa-trash"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="pagination" class="text-center"></div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+        <footer class="bg-body-tertiary text-center text-lg-start">
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+                © 2024 Copyright: FOOTBALLZONE
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>

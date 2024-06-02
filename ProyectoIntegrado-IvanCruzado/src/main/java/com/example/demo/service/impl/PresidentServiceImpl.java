@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entity.President;
+import com.example.demo.model.CoachModel;
 import com.example.demo.model.PresidentModel;
 import com.example.demo.model.TeamModel;
 import com.example.demo.repository.PresidentRepository;
@@ -27,9 +28,6 @@ public class PresidentServiceImpl implements PresidentService{
 	@Qualifier("presidentRepository")
 	private PresidentRepository presidentRepository;
 	
-	@Autowired
-	@Qualifier("teamService")
-	private TeamServiceImpl teamService;
 	
 	@Override
 	public List<PresidentModel> listAllPresidents() {
@@ -114,14 +112,20 @@ public class PresidentServiceImpl implements PresidentService{
 	}
 	
 	public boolean exists(PresidentModel presi, RedirectAttributes flash) {
-		TeamModel team = teamService.findById(presi.getIdteampresident());
-		President existingPresident = findByIdteam_president(team.getId_team());
-		if (existingPresident != null) {
-			flash.addFlashAttribute("error", "Ya existe un presidente para este equipo.");
-			return true;
-		}else {
-			return false;
-		}
+		int teamId = presi.getIdteampresident();
+	    
+	    // Obtiene todos los entrenadores
+	    List<PresidentModel> presidents = listAllPresidents();
+	    
+	    // Recorre la lista de entrenadores para verificar si ya existe un entrenador para el equipo
+	    for (PresidentModel president : presidents) {
+	        if (teamId != 9 && president.getIdteampresident() == teamId) {
+	            flash.addFlashAttribute("error", "Ya existe un presidente para este equipo.");
+	            return true;
+	        }
+	    }
+	    
+	    return false;
 	}
 
 }

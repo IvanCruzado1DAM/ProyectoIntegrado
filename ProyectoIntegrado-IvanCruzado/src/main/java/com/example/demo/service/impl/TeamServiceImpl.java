@@ -10,14 +10,18 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.entity.Coach;
+import com.example.demo.entity.President;
 import com.example.demo.entity.Team;
-import com.example.demo.entity.User;
+import com.example.demo.model.GameModel;
+import com.example.demo.model.PlayerModel;
 import com.example.demo.model.TeamModel;
-import com.example.demo.model.UserModel;
+import com.example.demo.repository.CoachRepository;
+import com.example.demo.repository.PlayerRepository;
+import com.example.demo.repository.PresidentRepository;
 import com.example.demo.repository.TeamRepository;
 import com.example.demo.service.TeamService;
 
@@ -26,6 +30,36 @@ public class TeamServiceImpl implements TeamService {
 	@Autowired
 	@Qualifier("teamRepository")
 	private TeamRepository teamRepository;
+	
+	@Autowired
+	@Qualifier("playerRepository")
+	private PlayerRepository playerRepository;
+	
+	@Autowired
+	@Qualifier("coachRepository")
+	private CoachRepository coachRepository;
+	
+	@Autowired
+	@Qualifier("presidentRepository")
+	private PresidentRepository presidentRepository;
+	
+	@Autowired
+	@Qualifier("playerService")
+	private PlayerServiceImpl playerService;
+	
+	@Autowired
+	@Qualifier("gameService")
+	private GameServiceImpl gameService;
+	
+	@Autowired
+	@Qualifier("coachService")
+	private CoachServiceImpl coachService;
+	
+	@Autowired
+	@Qualifier("presidentService")
+	private PresidentServiceImpl presidentService;
+	
+	
 	
 	@Override
 	public List<TeamModel> listAllTeams() {
@@ -48,17 +82,56 @@ public class TeamServiceImpl implements TeamService {
 		teamModel.setCity(teamModel.getCity());	
 		teamModel.setId_president(teamModel.getId_president());	
 		teamModel.setStadium(teamModel.getStadium());	
-		teamModel.setId_coach(teamModel.getId_coach());	
+		teamModel.setId_coach(teamModel.getId_coach());
+		
 		teamModel.setCapital(teamModel.getCapital());	
 		teamModel.setOccupation(teamModel.getOccupation());	
-		Team t = transformTeam(teamModel);
-		return teamRepository.save(t);
+		// Crear un nuevo equipo usando el modelo proporcionado
+	    Team team = transformTeam(teamModel);
+	    
+	    // Guardar el equipo en la base de datos para obtener el ID
+	    Team savedTeam = teamRepository.save(team);
+	    
+	    // Obtener el ID del equipo recién creado
+	    int teamId = savedTeam.getId_team();
+
+	    // Cargar y actualizar el coach con el ID del equipo
+	    Coach coach = coachService.loadCoachById(teamModel.getId_coach());
+	    coach.setIdteamcoach(teamId);
+	    coachRepository.save(coach);
+
+	    // Cargar y actualizar el presidente con el ID del equipo
+	    President president = presidentService.loadPresidentById(teamModel.getId_president());
+	    president.setIdteampresident(teamId);
+	    presidentRepository.save(president);
+	    
+	    // Devolver el equipo guardado
+	    return savedTeam;
 	}
 
 	@Override
 	public int removeTeam(int id) {
-		// TODO Auto-generated method stub
-		return 0;
+		List<PlayerModel> playersTeam = playerService.listAllPlayersbyIdTeam(id);
+		for(PlayerModel p: playersTeam) {			
+			p.setId_team(teamRepository.findByName("Agentes Libres").getId_team());
+			playerRepository.save(playerService.transformPlayer(p));
+		}
+		List<GameModel> games=gameService.listAllGamesByTeam(id);
+		for(GameModel g: games) {			
+			gameService.removeGame(g.getId_game());
+		}
+		
+		System.out.println(id);
+		Coach c =coachService.findByIdteam_coach(id);
+		System.out.println(c);
+		c.setIdteamcoach(teamRepository.findByName("Agentes Libres").getId_team());
+		coachRepository.save(c);
+		
+		President p =presidentService.findByIdteam_president(id);
+		p.setIdteampresident(teamRepository.findByName("Agentes Libres").getId_team());
+		presidentRepository.save(p);
+		teamRepository.deleteById(id);
+		return id;
 	}
 
 	@Override

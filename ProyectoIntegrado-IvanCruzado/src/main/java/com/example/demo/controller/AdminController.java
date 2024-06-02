@@ -55,6 +55,7 @@ import com.example.demo.service.impl.UserServiceImpl;
 public class AdminController {
 
 	private static final String REGISTERUSERS_VIEW = "registerallusers";
+	private static final String EDITUSERS_VIEW = "editallusers";
 	private static final String REGISTERTEAM_VIEW = "/adminadd/registerteam";
 	private static final String REGISTERMULTIMEDIA_VIEW = "/adminadd/registermultimedia";
 	private static final String REGISTERMULTIMEDIAVIDEO_VIEW = "/adminadd/registermultimediaVideo";
@@ -82,10 +83,6 @@ public class AdminController {
 	@Autowired
 	@Qualifier("presidentService")
 	private PresidentServiceImpl presidentService;
-
-	@Autowired
-	@Qualifier("userRepository")
-	private UserRepository userRepository;
 
 	@Autowired
 	@Qualifier("teamService")
@@ -199,6 +196,14 @@ public class AdminController {
 		mav.addObject("usuario", userName);
 		return mav;
 	}
+	
+	@GetMapping("/editusers")
+	public ModelAndView editusers() {
+		String userName = userService.getCurrentUsername();
+		ModelAndView mav = new ModelAndView(EDITUSERS_VIEW);
+		mav.addObject("usuario", userName);
+		return mav;
+	}
 
 	@GetMapping("/registerusers/user")
 	public ModelAndView registerUser() {
@@ -290,7 +295,7 @@ public class AdminController {
 				flash.addFlashAttribute("success", "Entrenador registrado satisfactoriamente!");
 			}
 		} catch (Exception e) {
-			flash.addFlashAttribute("error", "An error occurred while registering the team. Please try again.");
+			flash.addFlashAttribute("error", "An error occurred while registering the team. Please try again."  + e.getMessage());
 			e.printStackTrace();
 			return "redirect:/admin/registerusers/coach"; // Redirige a la página de registro si hay un error
 		}

@@ -25,7 +25,19 @@ public class GameServiceImpl implements GameService{
 	
 	
 	@Override
-	public List<GameModel> listAllGames(int idTeam) {
+	public List<GameModel> listAllGames() {
+		ModelMapper modelMapper = new ModelMapper();
+        List<Game> gameList = gameRepository.findAll();
+        
+        // Filtrar los juegos basados en si el idTeam coincide con id_local_team o id_visitant_team
+        List<GameModel> filteredGames = gameList.stream()
+                .map(game -> modelMapper.map(game, GameModel.class))
+                .collect(Collectors.toList());
+        
+        return filteredGames;
+	}
+	@Override
+	public List<GameModel> listAllGamesByTeam(int idTeam) {
 		ModelMapper modelMapper = new ModelMapper();
         List<Game> gameList = gameRepository.findAll();
         
@@ -54,8 +66,8 @@ public class GameServiceImpl implements GameService{
 
 	@Override
 	public int removeGame(int id) {
-		// TODO Auto-generated method stub
-		return 0;
+		gameRepository.deleteById(id);
+		return id;
 	}
 
 
