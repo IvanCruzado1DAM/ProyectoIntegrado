@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.entity.Dietist;
 import com.example.demo.entity.Physio;
 import com.example.demo.entity.Player;
 import com.example.demo.entity.Team;
@@ -43,8 +44,8 @@ public class PhysioServiceImpl implements PhysioService {
 
 	@Override
 	public int removePhysio(int id) {
-		// TODO Auto-generated method stub
-		return 0;
+		physioRepository.deleteById(id);
+		return id;
 	}
 
 	@Override
@@ -88,6 +89,14 @@ public class PhysioServiceImpl implements PhysioService {
 				.map(p -> modelMapper.map(p, PhysioModel.class))
 				.collect(Collectors.toList());
 		return filtredphysiosList;
+	}
+
+	public boolean exists(int id) {
+		Physio p=physioRepository.findById(id);
+		if( p != null) {
+			return true;
+		}
+		return false;
 	}
 
 }

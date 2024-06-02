@@ -128,6 +128,17 @@ public class AdminEditController {
 		return mav;
 	}
 	
+	@GetMapping("/deletePhysio/{id}")
+	public String deletePhysio(@PathVariable("id") int id, RedirectAttributes flash) {
+		if(physioService.exists(id)) {
+			physioService.removePhysio(id);
+			flash.addFlashAttribute("success", "Physio delete successfully!");
+		}else {
+			flash.addFlashAttribute("error", "Fail removing this physio!");
+		}
+		return "redirect:/adminedit/showPhysios";
+	}
+	
 	@GetMapping("/showDietists")
 	public ModelAndView showDietists(Model model) {
 		String userName = userService.getCurrentUsername();

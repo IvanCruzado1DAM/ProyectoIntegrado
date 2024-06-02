@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -121,15 +122,25 @@ public class TeamServiceImpl implements TeamService {
 			gameService.removeGame(g.getId_game());
 		}
 		
-		System.out.println(id);
 		Coach c =coachService.findByIdteam_coach(id);
-		System.out.println(c);
 		c.setIdteamcoach(teamRepository.findByName("Agentes Libres").getId_team());
 		coachRepository.save(c);
 		
 		President p =presidentService.findByIdteam_president(id);
 		p.setIdteampresident(teamRepository.findByName("Agentes Libres").getId_team());
 		presidentRepository.save(p);
+		
+		
+		String badgeFileName = teamRepository.findById(id).getBadge();
+	    
+	    // Borra el archivo de la imagen del escudo del sistema de archivos
+	    if (badgeFileName != null && !badgeFileName.isEmpty()) {
+	        String filePath = "src/main/resources/static" + badgeFileName;
+	        File file = new File(filePath);
+	        if (file.exists()) {
+	            file.delete();
+	        }
+	    }
 		teamRepository.deleteById(id);
 		return id;
 	}
