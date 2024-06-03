@@ -11,4 +11,6 @@ public interface TeamRepository extends JpaRepository <Team, Integer> {
 	public abstract Team findByName(String name);
 	
 	public abstract Team findById(int id);
+	
+	public abstract Team findByIdCoach(int IdCoach);
 }

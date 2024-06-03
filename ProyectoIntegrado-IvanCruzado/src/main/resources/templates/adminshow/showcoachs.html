@@ -44,6 +44,7 @@
     }
 	</style>
 	<script>
+		document.addEventListener("DOMContentLoaded", function() {
 		function filterCoachs() {
 			var input = document.getElementById("coachFilter");
 			var filter = input.value.toUpperCase();
@@ -66,6 +67,32 @@
 				}
 			}
 		}
+		var errorMessage = document.querySelector('.error-message');
+		        var successMessage = document.querySelector('.alert-success');
+		
+		        // Mostrar el mensaje de error si tiene texto
+		        if (errorMessage && errorMessage.textContent.trim() !== '') {
+		            errorMessage.style.display = 'block';
+		        }
+		
+		        // Mostrar el mensaje de éxito si tiene texto
+		        if (successMessage && successMessage.textContent.trim() !== '') {
+		            successMessage.style.display = 'block';
+		        }
+		
+		        // Ocultar los mensajes después de 5 segundos
+		        setTimeout(function () {
+		            if (errorMessage) {
+		                errorMessage.style.display = 'none';
+		            }
+		            if (successMessage) {
+		                successMessage.style.display = 'none';
+		            }
+		        }, 5000);
+	        // Añadir evento de filtrado
+	        document.getElementById("coachFilter").addEventListener("keyup", filterCoachs);
+	        document.getElementById("teamFilter").addEventListener("change", filterCoachs);
+	    });
 	</script>
 </head>
 
@@ -92,6 +119,12 @@
 		<div class="content-wrapper">
 			<div class="row">
 				<div class="col">
+					<div th:if="${success}" class="alert alert-success" role="alert">
+						<span th:text="${success}"></span>
+					</div>
+					<div th:if="${error}" class="error-message alert alert-danger" role="alert">
+						<p th:text="${error}"></p>
+					</div>
 					<h2 style="text-align: center;">All Coachs</h2>
 					<br>
 					<div class="row align-items-center">
@@ -119,7 +152,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr th:each="coach : ${coachs}" th:data-teamid="${coach.idteamcoach}">
+							<tr th:each="coach : ${coachs}" th:data-teamid="${coach.idteamcoach}" th:if="${coach.name != 'Null'}">
 								<td th:text="${coach.name}">Name</td>
 								<td th:text="${coach.nacionality}">Nacionality</td>
 								<td>
@@ -131,7 +164,9 @@
 								<td th:text="${coach.arrival_season}">Arrival Season</td>
 								<td>
 									<i class="fa fa-wrench"></i>
-									<i class="fa fa-trash"></i>
+									<a class="fa fa-trash"
+										th:href="@{/adminedit/deleteCoach/{id}(id=${coach.id_coach})}"
+										th:onclick="return confirm('¿Are you sure you want to delete this coach?');"></a>
 								</td>
 							</tr>
 						</tbody>

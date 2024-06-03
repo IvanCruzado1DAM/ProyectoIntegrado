@@ -21,7 +21,8 @@ public class Team {
 	private String name;
 	private String city;
 	private String badge;
-	private int id_coach;
+	@Column(name = "id_coach")
+	private int idCoach;
 	private String stadium;
 	private int id_president;
 	private int capital;

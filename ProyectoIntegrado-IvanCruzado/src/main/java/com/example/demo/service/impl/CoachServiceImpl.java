@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,7 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entity.Coach;
+import com.example.demo.entity.Physio;
 import com.example.demo.entity.President;
+import com.example.demo.entity.Team;
 import com.example.demo.model.CoachModel;
 import com.example.demo.model.TeamModel;
 import com.example.demo.repository.CoachRepository;
@@ -28,6 +31,10 @@ public class CoachServiceImpl implements CoachService {
 	@Autowired
 	@Qualifier("coachRepository")
 	private CoachRepository coachRepository;
+	
+	@Autowired
+	@Qualifier("teamRepository")
+	private TeamRepository teamRepository;
 	
 	
 	
@@ -52,8 +59,22 @@ public class CoachServiceImpl implements CoachService {
 
 	@Override
 	public int removeCoach(int id) {
-		// TODO Auto-generated method stub
-		return 0;
+		if(coachRepository.findById(id).getIdteamcoach()!=teamRepository.findByName("Agentes Libres").getId_team()) {
+			Team t = teamRepository.findByIdCoach(id);
+			t.setIdCoach(coachRepository.findByName("Null").getId_coach());
+			teamRepository.save(t);
+		}
+		String coachFileName = coachRepository.findById(id).getPhoto();
+	    // Borra el archivo de la imagen del escudo del sistema de archivos
+	    if (coachFileName != null && !coachFileName.isEmpty()) {
+	        String filePath = "src/main/resources/static" + coachFileName;
+	        File file = new File(filePath);
+	        if (file.exists()) {
+	            file.delete();
+	        }
+	    }
+		coachRepository.deleteById(id);
+		return id;
 	}
 
 	@Override
@@ -129,6 +150,14 @@ public class CoachServiceImpl implements CoachService {
 	    
 	    return false;
 
+	}
+
+	public boolean exists(int id) {
+		Coach c=coachRepository.findById(id);
+		if( c != null) {
+			return true;
+		}
+		return false;
 	}
 
 	
