@@ -232,6 +232,17 @@ public class AdminEditController {
 		return mav;
 	}
 	
+	@GetMapping("/deletePresident/{id}")
+	public String deletePresident(@PathVariable("id") int id, RedirectAttributes flash) {
+		if(presidentService.exists(id)) {
+			presidentService.removePresident(id);
+			flash.addFlashAttribute("success", "President delete successfully!");
+		}else {
+			flash.addFlashAttribute("error", "Fail removing this president!");
+		}
+		return "redirect:/adminedit/showPresidents";
+	}
+	
 	@GetMapping("/showPlayers")
 	public ModelAndView showPlayers(Model model) {
 		String userName = userService.getCurrentUsername();

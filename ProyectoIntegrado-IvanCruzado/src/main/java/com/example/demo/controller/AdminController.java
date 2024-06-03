@@ -109,11 +109,15 @@ public class AdminController {
 		String userName = userService.getCurrentUsername();
 		List<CoachModel> coachs = coachService.listAllCoachs();
 		List<PresidentModel> presidents = presidentService.listAllPresidents();
+		int idcoachAgenteLibre=coachService.obtenerIdCoachAgenteLibre();
+		int idpresidentAgenteLibre=presidentService.obtenerIdPresidentAgenteLibre();
 		ModelAndView mav = new ModelAndView(REGISTERTEAM_VIEW);
 		mav.addObject("team", new Team());
 		mav.addObject("coachs", coachs);
 		mav.addObject("presidents", presidents);
 		mav.addObject("usuario", userName);
+		mav.addObject("idcoachAgenteLibre", idcoachAgenteLibre);
+		mav.addObject("idpresidentAgenteLibre", idpresidentAgenteLibre);
 		return mav;
 	}
 

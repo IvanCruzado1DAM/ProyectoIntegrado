@@ -160,6 +160,11 @@ public class CoachServiceImpl implements CoachService {
 		return false;
 	}
 
+	public int obtenerIdCoachAgenteLibre() {
+		int idAgenteLibre=coachRepository.findByName("Null").getIdteamcoach();
+		return idAgenteLibre;
+	}
+
 	
 
 

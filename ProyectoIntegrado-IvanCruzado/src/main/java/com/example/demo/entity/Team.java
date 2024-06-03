@@ -24,7 +24,8 @@ public class Team {
 	@Column(name = "id_coach")
 	private int idCoach;
 	private String stadium;
-	private int id_president;
+	@Column(name = "id_president")
+	private int idPresident;
 	private int capital;
 	private int occupation;
 	
