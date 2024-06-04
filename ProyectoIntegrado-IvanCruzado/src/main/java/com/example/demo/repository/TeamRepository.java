@@ -12,7 +12,4 @@ public interface TeamRepository extends JpaRepository <Team, Integer> {
 	
 	public abstract Team findById(int id);
 	
-	public abstract Team findByIdCoach(int IdCoach);
-	
-	public abstract Team findByIdPresident(int IdPresident);
 }

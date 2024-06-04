@@ -99,29 +99,11 @@
 				<div class="mb-3">
 					<label for="city" class="form-label">Ciudad:</label>
 					<input type="text" class="form-control" id="city" name="city">
-				</div>
-				<div class="mb-3">
-					<div class="form-label-group">
-						<label for="id_president"><strong>Presidente:</strong></label>
-						<select style="margin-top: 1%;" class="form-control" id="id_president" name="id_president">
-							<option th:field="*{IdPresident}" th:each="c : ${presidents}" th:if="${c.idteampresident} == ${idpresidentAgenteLibre} and ${c.name} != 'Null'" th:value="${c.id_president}"
-								th:text="${c.name}">Equipo</option>
-						</select>
-					</div>
-				</div>
+				</div>				
 				<div class="mb-3">
 					<label for="stadium" class="form-label">Estadio:</label>
 					<input type="text" class="form-control" id="stadium" name="stadium">
-				</div>
-				<div class="mb-3">
-					<div class="form-label-group">
-						<label for="id_coach"><strong>Entrenador:</strong></label>
-						<select style="margin-top: 1%;" class="form-control" id="id_coach" name="id_coach">
-							<option th:field="*{idCoach}" th:each="c : ${coachs}" th:if="${c.idteamcoach} == ${idcoachAgenteLibre} and ${c.name} != 'Null'" th:value="${c.id_coach}"
-								th:text="${c.name}">Equipo</option>
-						</select>
-					</div>
-				</div>
+				</div>				
 				<div class="mb-3">
 					<label for="capital" class="form-label">Capital (€):</label>
 					<input type="number" class="form-control" id="capital" name="capital">

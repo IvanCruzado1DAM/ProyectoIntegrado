@@ -81,9 +81,7 @@ public class TeamServiceImpl implements TeamService {
 	public Team addTeam(TeamModel teamModel) {
 		teamModel.setName(teamModel.getName());	
 		teamModel.setCity(teamModel.getCity());	
-		teamModel.setId_president(teamModel.getId_president());	
 		teamModel.setStadium(teamModel.getStadium());	
-		teamModel.setId_coach(teamModel.getId_coach());
 		
 		teamModel.setCapital(teamModel.getCapital());	
 		teamModel.setOccupation(teamModel.getOccupation());	
@@ -93,19 +91,8 @@ public class TeamServiceImpl implements TeamService {
 	    // Guardar el equipo en la base de datos para obtener el ID
 	    Team savedTeam = teamRepository.save(team);
 	    
-	    // Obtener el ID del equipo recién creado
-	    int teamId = savedTeam.getId_team();
-
-	    // Cargar y actualizar el coach con el ID del equipo
-	    Coach coach = coachService.loadCoachById(teamModel.getId_coach());
-	    coach.setIdteamcoach(teamId);
-	    coachRepository.save(coach);
-
-	    // Cargar y actualizar el presidente con el ID del equipo
-	    President president = presidentService.loadPresidentById(teamModel.getId_president());
-	    president.setIdteampresident(teamId);
-	    presidentRepository.save(president);
 	    
+
 	    // Devolver el equipo guardado
 	    return savedTeam;
 	}

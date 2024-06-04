@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PresidentModel {
 
-	private int id_president;
+	private int IdPresident;
 	private String name;
 	private String nacionality;
 	private String image;

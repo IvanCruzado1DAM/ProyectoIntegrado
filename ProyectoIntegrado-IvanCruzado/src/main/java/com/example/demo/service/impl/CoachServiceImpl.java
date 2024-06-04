@@ -59,11 +59,6 @@ public class CoachServiceImpl implements CoachService {
 
 	@Override
 	public int removeCoach(int id) {
-		if(coachRepository.findById(id).getIdteamcoach()!=teamRepository.findByName("Agentes Libres").getId_team()) {
-			Team t = teamRepository.findByIdCoach(id);
-			t.setIdCoach(coachRepository.findByName("Null").getId_coach());
-			teamRepository.save(t);
-		}
 		String coachFileName = coachRepository.findById(id).getPhoto();
 	    // Borra el archivo de la imagen del escudo del sistema de archivos
 	    if (coachFileName != null && !coachFileName.isEmpty()) {

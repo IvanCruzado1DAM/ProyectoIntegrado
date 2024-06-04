@@ -57,11 +57,6 @@ public class PresidentServiceImpl implements PresidentService{
 
 	@Override
 	public int removePresident(int id) {
-		if(presidentRepository.findById(id).getIdteampresident()!=teamRepository.findByName("Agentes Libres").getId_team()) {
-			Team t = teamRepository.findByIdPresident(id);
-			t.setIdPresident(presidentRepository.findByName("Null").getId_president());
-			teamRepository.save(t);
-		}
 		String presiFileName = presidentRepository.findById(id).getImage();
 	    // Borra el archivo de la imagen del escudo del sistema de archivos
 	    if (presiFileName != null && !presiFileName.isEmpty()) {

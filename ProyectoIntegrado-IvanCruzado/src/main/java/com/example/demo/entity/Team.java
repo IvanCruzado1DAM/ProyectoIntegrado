@@ -20,12 +20,8 @@ public class Team {
 	@Column(unique = true) 
 	private String name;
 	private String city;
-	private String badge;
-	@Column(name = "id_coach")
-	private int idCoach;
+	private String badge;	
 	private String stadium;
-	@Column(name = "id_president")
-	private int idPresident;
 	private int capital;
 	private int occupation;
 	
