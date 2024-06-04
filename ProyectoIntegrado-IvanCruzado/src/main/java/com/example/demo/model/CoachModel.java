@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CoachModel {
 	
-	private int idCoach;
+	private int id_coach;
 	private String name;
 	private String nacionality;
 	private String photo;

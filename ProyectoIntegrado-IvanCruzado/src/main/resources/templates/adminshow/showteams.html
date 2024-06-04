@@ -133,9 +133,9 @@
 								<th>Name</th>
 								<th>City</th>
 								<th>Badge</th>
-								<th>Coach</th>
+								
 								<th>Stadium</th>
-								<th>President</th>
+		
 								<th>Capital (€)</th>
 								<th>Occupation</th>
 								<th>Actions</th>
@@ -147,12 +147,8 @@
 								<td th:text="${team.city}">City</td>
 								<td>
 									<img style="max-width: 50px; max-height: 50px;" src="'../static/' + ${team.badge}" th:src="@{${team.badge}}" alt="Team Badge" />
-								</td>
-								<td th:each="coach : ${coachs}" th:if="${team.id_coach == coach.id_coach}"
-									th:text="${coach.name}">Coach</td>
-								<td th:text="${team.stadium}">Stadium</td>
-								<td th:each="presi : ${presidents}" th:if="${team.id_president == presi.id_president}"
-									th:text="${presi.name}">Coach</td>
+								</td>								
+								<td th:text="${team.stadium}">Stadium</td>								
 								<td th:text="${team.capital}">Capital</td>
 								<td th:text="${team.occupation}">Occupation</td>
 								<td>

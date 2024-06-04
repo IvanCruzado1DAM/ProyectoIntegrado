@@ -143,6 +143,16 @@
 				}
 			}
 			
+			document.addEventListener('DOMContentLoaded', function () {
+				const videoRadio = document.getElementById('video');
+
+				videoRadio.addEventListener('change', function () {
+					if (this.checked) {
+						window.location.href = '/admin/registermultimediaVideo'; // Cambia esta URL por la que desees
+					}
+				});
+			});
+			
 			var successMessage = document.querySelector('.alert-success');
 
 			// Mostrar el mensaje de error si tiene texto
