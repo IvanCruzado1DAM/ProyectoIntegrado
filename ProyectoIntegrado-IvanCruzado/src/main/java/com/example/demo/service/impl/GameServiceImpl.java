@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Team;
+import com.example.demo.entity.Dietist;
 import com.example.demo.entity.Game;
 import com.example.demo.entity.Physio;
 import com.example.demo.model.GameModel;
@@ -73,8 +74,17 @@ public class GameServiceImpl implements GameService{
 
 
 	@Override
-	public Game updateGame(GameModel gameModel) {
-		// TODO Auto-generated method stub
+	public Game updateGame(int id, GameModel gameModel) {
+		Game game = gameRepository.findById(id);
+		if (game != null) {
+			game.setIdLocalTeam(gameModel.getIdLocalTeam());
+			game.setIdVisitantTeam(gameModel.getIdVisitantTeam());
+			game.setNumberGame(gameModel.getNumberGame());
+			game.setDate(gameModel.getDate());
+			game.setScore(gameModel.getScore());
+			game.setTickets(gameModel.getTickets());
+			return gameRepository.save(game);
+		}
 		return null;
 	}
 
@@ -115,6 +125,12 @@ public class GameServiceImpl implements GameService{
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public Game loadGameById(int id) {
+		Game g = gameRepository.findById(id);
+		return g;
 	}
 
 }

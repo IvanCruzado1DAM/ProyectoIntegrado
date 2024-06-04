@@ -14,7 +14,7 @@ public interface PhysioService {
 
 	public abstract int removePhysio(int id);
 
-	public abstract Physio updatePhysio(PhysioModel physioModel);
+	public abstract Physio updatePhysio(int id,PhysioModel physioModel);
 
 	public abstract Physio transformPhysio(PhysioModel physioModel);
 

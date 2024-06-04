@@ -49,8 +49,15 @@ public class PhysioServiceImpl implements PhysioService {
 	}
 
 	@Override
-	public Physio updatePhysio(PhysioModel physioModel) {
-		// TODO Auto-generated method stub
+	public Physio updatePhysio(int id, PhysioModel physioModel) {
+		Physio physio = physioRepository.findById(id);
+		if (physio != null) {
+			physio.setName(physioModel.getName());
+			physio.setAge(physioModel.getAge());
+			physio.setIdteam_physio(physioModel.getIdteam_physio());
+
+			return physioRepository.save(physio);
+		}
 		return null;
 	}
 

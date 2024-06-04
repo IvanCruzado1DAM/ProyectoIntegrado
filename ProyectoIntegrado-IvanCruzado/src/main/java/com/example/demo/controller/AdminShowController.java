@@ -81,6 +81,9 @@ public class AdminShowController {
 	@Qualifier("playerService")
 	private PlayerServiceImpl playerService;
 	
+	
+	//Users
+	
 	@GetMapping("/showUsers")
 	public ModelAndView showUsers(Model model) {
 		String userName = userService.getCurrentUsername();
@@ -101,8 +104,10 @@ public class AdminShowController {
 		}else {
 			flash.addFlashAttribute("error", "Fail removing this user!");
 		}
-		return "redirect:/adminedit/showUsers";
+		return "redirect:/adminshow/showUsers";
 	}
+	
+	//Teams
 	
 	@GetMapping("/showTeams")
 	public ModelAndView showTeams(Model model) {
@@ -126,8 +131,10 @@ public class AdminShowController {
 		}else {
 			flash.addFlashAttribute("error", "Fail removing this team!");
 		}
-		return "redirect:/adminedit/showTeams";
+		return "redirect:/adminshow/showTeams";
 	}
+	
+	//Physios
 	
 	@GetMapping("/showPhysios")
 	public ModelAndView showPhysio(Model model) {
@@ -149,8 +156,10 @@ public class AdminShowController {
 		}else {
 			flash.addFlashAttribute("error", "Fail removing this physio!");
 		}
-		return "redirect:/adminedit/showPhysios";
+		return "redirect:/adminshow/showPhysios";
 	}
+	
+	//Dietists
 	
 	@GetMapping("/showDietists")
 	public ModelAndView showDietists(Model model) {
@@ -172,20 +181,10 @@ public class AdminShowController {
 		}else {
 			flash.addFlashAttribute("error", "Fail removing this dietist!");
 		}
-		return "redirect:/adminedit/showDietists";
+		return "redirect:/adminshow/showDietists";
 	}
 	
-	@GetMapping("/updateDietist/{id}")
-	public ModelAndView updateDietist(@PathVariable("id") int id, RedirectAttributes flash) {
-		String userName = userService.getCurrentUsername();
-		List<TeamModel> teams=teamService.listAllTeams();
-		Dietist dietist=dietistService.loadDietistById(id);
-		ModelAndView mav = new ModelAndView(EDITDIETISTS_VIEW);
-		mav.addObject("usuario", userName);
-		mav.addObject("dietist", dietist);
-		mav.addObject("teams", teams);
-		return mav;
-	}
+	//Matchs
 	
 	@GetMapping("/showMatchs")
 	public ModelAndView showGames(Model model) {
@@ -207,10 +206,10 @@ public class AdminShowController {
 		}else {
 			flash.addFlashAttribute("error", "Fail removing this game!");
 		}
-		return "redirect:/adminedit/showMatchs";
+		return "redirect:/adminshow/showMatchs";
 	}
 	
-	
+	//Coachs
 	
 	@GetMapping("/showCoachs")
 	public ModelAndView showCoachs(Model model) {
@@ -232,8 +231,11 @@ public class AdminShowController {
 		}else {
 			flash.addFlashAttribute("error", "Fail removing this coach!");
 		}
-		return "redirect:/adminedit/showCoachs";
+		return "redirect:/adminshow/showCoachs";
 	}
+	
+	//Presidents
+	
 	@GetMapping("/showPresidents")
 	public ModelAndView showPresidents(Model model) {
 		String userName = userService.getCurrentUsername();
@@ -254,8 +256,10 @@ public class AdminShowController {
 		}else {
 			flash.addFlashAttribute("error", "Fail removing this president!");
 		}
-		return "redirect:/adminedit/showPresidents";
+		return "redirect:/adminshow/showPresidents";
 	}
+	
+	//Players
 	
 	@GetMapping("/showPlayers")
 	public ModelAndView showPlayers(Model model) {
@@ -277,7 +281,7 @@ public class AdminShowController {
 		}else {
 			flash.addFlashAttribute("error", "Fail removing this player!");
 		}
-		return "redirect:/adminedit/showPlayers";
+		return "redirect:/adminshow/showPlayers";
 	}
 	
 	

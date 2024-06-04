@@ -12,7 +12,7 @@ public interface GameService {
 
 	public abstract int removeGame(int id);
 
-	public abstract Game updateGame(GameModel dietistModel);
+	public abstract Game updateGame(int id, GameModel dietistModel);
 
 	public abstract Game transformGame(GameModel dietistModel);
 
@@ -21,4 +21,6 @@ public interface GameService {
 	boolean Verificarequipos(Game game);
 
 	public abstract List<GameModel> listAllGamesByTeam(int idTeam);
+
+	Game loadGameById(int id);
 }

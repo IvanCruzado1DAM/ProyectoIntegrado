@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import com.example.demo.entity.Dietist;
 import com.example.demo.entity.Physio;
@@ -48,8 +49,15 @@ public class DietistServiceImpl implements DietistService {
 	}
 
 	@Override
-	public Dietist updateDietist(DietistModel dietistModel) {
-		// TODO Auto-generated method stub
+	public Dietist updateDietist(int id, DietistModel model) {
+		Dietist dietist = dietistRepository.findById(id);
+		if (dietist != null) {
+			dietist.setName(model.getName());
+			dietist.setAge(model.getAge());
+			dietist.setIdteam_dietist(model.getIdteam_dietist());
+
+			return dietistRepository.save(dietist);
+		}
 		return null;
 	}
 

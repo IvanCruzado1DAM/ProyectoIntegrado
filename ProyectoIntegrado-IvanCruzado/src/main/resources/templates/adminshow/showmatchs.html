@@ -87,7 +87,7 @@
 	                successMessage.style.display = 'none';
 	            }
 	        }, 5000);
-	        document.getElementById("teamFilter").addEventListener("change", filterPhysios);
+	        document.getElementById("teamFilter").addEventListener("change", filterMatchs);
     });
 </script>
 
@@ -160,7 +160,7 @@
 								<td th:text="${match.score}">Score</td>
 								<td th:text="${match.tickets}">Tickets</td>
 								<td>
-									<i class="fa fa-wrench"></i>
+									<a class="fa fa-wrench" th:href="@{/adminedit/updateGame/{id}(id=${match.id_game})}"></a>
 									<a class="fa fa-trash"
 										th:href="@{/adminshow/deleteMatch/{id}(id=${match.id_game})}"
 										th:onclick="return confirm('¿Are you sure you want to delete this match?');"></a>

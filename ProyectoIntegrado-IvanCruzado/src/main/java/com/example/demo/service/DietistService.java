@@ -13,7 +13,7 @@ public interface DietistService {
 
 	public abstract int removeDietist(int id);
 
-	public abstract Dietist updateDietist(DietistModel dietistModel);
+	public abstract Dietist updateDietist(int id, DietistModel model);
 
 	public abstract Dietist transformDietist(DietistModel dietistModel);
 
@@ -24,5 +24,8 @@ public interface DietistService {
 	public abstract List<DietistModel> listAllDietistsbyIdTeam(int idTeam);
 
 	boolean exists(int id);
+
+	
+
 	
 }
