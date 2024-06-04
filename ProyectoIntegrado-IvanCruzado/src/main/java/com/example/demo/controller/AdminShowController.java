@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.entity.Dietist;
 import com.example.demo.model.CoachModel;
 import com.example.demo.model.DietistModel;
 import com.example.demo.model.GameModel;
@@ -31,8 +32,8 @@ import com.example.demo.service.impl.TeamServiceImpl;
 import com.example.demo.service.impl.UserServiceImpl;
 
 @Controller
-@RequestMapping("/adminedit")
-public class AdminEditController {
+@RequestMapping("/adminshow")
+public class AdminShowController {
 	
 	private static final String SHOWUSERS_VIEW="/adminshow/showusers";
 	private static final String SHOWPLAYERS_VIEW="/adminshow/showplayers";
@@ -42,6 +43,7 @@ public class AdminEditController {
 	private static final String SHOWGAMES_VIEW="/adminshow/showmatchs";
 	private static final String SHOWPHYSIOS_VIEW="/adminshow/showphysios";
 	private static final String SHOWDIETISTS_VIEW="/adminshow/showdietists";
+	private static final String EDITDIETISTS_VIEW="/adminedit/showdietists";
 
 	@Autowired
 	@Qualifier("userService")
@@ -171,6 +173,18 @@ public class AdminEditController {
 			flash.addFlashAttribute("error", "Fail removing this dietist!");
 		}
 		return "redirect:/adminedit/showDietists";
+	}
+	
+	@GetMapping("/updateDietist/{id}")
+	public ModelAndView updateDietist(@PathVariable("id") int id, RedirectAttributes flash) {
+		String userName = userService.getCurrentUsername();
+		List<TeamModel> teams=teamService.listAllTeams();
+		Dietist dietist=dietistService.loadDietistById(id);
+		ModelAndView mav = new ModelAndView(EDITDIETISTS_VIEW);
+		mav.addObject("usuario", userName);
+		mav.addObject("dietist", dietist);
+		mav.addObject("teams", teams);
+		return mav;
 	}
 	
 	@GetMapping("/showMatchs")
