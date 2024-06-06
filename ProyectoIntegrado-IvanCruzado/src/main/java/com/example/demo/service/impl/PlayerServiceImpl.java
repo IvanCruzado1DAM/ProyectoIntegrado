@@ -12,13 +12,18 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.entity.Coach;
 import com.example.demo.entity.Physio;
 import com.example.demo.entity.Player;
+import com.example.demo.entity.Team;
+import com.example.demo.model.CoachModel;
 import com.example.demo.model.PlayerModel;
 import com.example.demo.repository.PlayerRepository;
+import com.example.demo.repository.TeamRepository;
 import com.example.demo.service.PlayerService;
 
 @Service("playerService")
@@ -27,6 +32,10 @@ public class PlayerServiceImpl implements PlayerService {
 	@Autowired
 	@Qualifier("playerRepository")
 	private PlayerRepository playerRepository;
+	
+	@Autowired
+	@Qualifier("teamRepository")
+	private TeamRepository teamRepository;
 	
 	@Override
 	public List<PlayerModel> listAllPlayers() {
@@ -78,9 +87,67 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	@Override
-	public Player updatePlayer(PlayerModel playerModel) {
-		// TODO Auto-generated method stub
-		return null;
+	public Player updatePlayer(int id, PlayerModel playerModel ,MultipartFile multimediaFile, 
+			RedirectAttributes flash, @RequestParam(value = "injured", required = false, defaultValue = "false") boolean injured,
+            @RequestParam(value = "sancionated", required = false, defaultValue = "false") boolean sancionated) {
+		Player player = playerRepository.findById(id);
+	    if (player != null) {
+	        int newDorsal = playerModel.getDorsal();
+	        int team = playerModel.getId_team();
+	        List<Player> existingPlayers = playerRepository.findAll();
+
+	        for (Player existingPlayer : existingPlayers) {
+	            if (existingPlayer.getDorsal() == newDorsal 
+	                    && (existingPlayer.getId_team() == team 
+	                    && existingPlayer.getId_player() != id
+	                    )) {
+	                flash.addFlashAttribute("error", "This team already have a number "+existingPlayer.getDorsal());
+	                return null;
+	            }
+	        }
+	        player.setName(playerModel.getName());
+	        player.setPosition(playerModel.getPosition());
+	        player.setAge(playerModel.getAge());
+	        player.setId_team(playerModel.getId_team());
+	        player.setDorsal(playerModel.getDorsal());
+	        player.setNationality(playerModel.getNationality());
+	        player.setMarket_value(playerModel.getMarket_value());
+	        player.setSalary(playerModel.getSalary());
+	        player.setGoals(playerModel.getGoals());
+	        player.setAssists(playerModel.getAssists());
+	        player.setYc(playerModel.getYc());
+	        player.setRc(playerModel.getRc());
+	        player.setContract(playerModel.getContract());
+	        player.setFootballaspects(playerModel.getFootballaspects());
+	        player.setDiet(playerModel.getDiet());
+	        player.setTransfer_status(playerModel.getTransfer_status());
+	        player.set_injured(injured);
+	        player.set_sancionated(sancionated);
+	        
+	        String baseDirectory = "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static";
+	        String photosDirectory = File.separator + "imgs" + File.separator + "players" + File.separator;
+	        String newPhotoTempPath = playerModel.getImage();
+
+	        if (newPhotoTempPath != null && !newPhotoTempPath.isEmpty()) {
+	            File newPhotoTempFile = new File(baseDirectory + photosDirectory + newPhotoTempPath).getAbsoluteFile();
+
+	                String oldPhotoPath = player.getImage();
+
+	                if (oldPhotoPath != null && !oldPhotoPath.isEmpty() && multimediaFile != null && !multimediaFile.isEmpty() ) {
+	                    File oldPhoto = new File(baseDirectory + oldPhotoPath);
+	                    System.out.println(oldPhoto);
+	                    if (oldPhoto.exists()) {
+	                        oldPhoto.delete();
+	                    }
+	                }
+
+	             addImagenPlayer(player,(baseDirectory+photosDirectory) ,multimediaFile,flash);   
+	        }
+
+	        flash.addFlashAttribute("success", "Player updated successfully!");
+	        return playerRepository.save(player);
+	    }
+	    return null;
 	}
 
 	@Override
@@ -157,7 +224,7 @@ public class PlayerServiceImpl implements PlayerService {
         return false; 
 	}
 	
-	public boolean exists(int id) {
+	public boolean exists(int id, RedirectAttributes flash) {
 		Player p=playerRepository.findById(id);
 		if( p != null) {
 			return true;

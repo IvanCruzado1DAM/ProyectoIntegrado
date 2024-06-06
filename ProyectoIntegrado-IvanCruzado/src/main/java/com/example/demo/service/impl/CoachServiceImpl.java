@@ -1,10 +1,14 @@
 package com.example.demo.service.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entity.Coach;
+import com.example.demo.entity.Dietist;
 import com.example.demo.entity.Physio;
 import com.example.demo.entity.President;
 import com.example.demo.entity.Team;
@@ -73,9 +78,52 @@ public class CoachServiceImpl implements CoachService {
 	}
 
 	@Override
-	public Coach updateCoach(CoachModel coachModel) {
-		// TODO Auto-generated method stub
-		return null;
+	public Coach updateCoach(int id, CoachModel coachModel,MultipartFile multimediaFile, RedirectAttributes flash) {
+	    Coach coach = coachRepository.findById(id);
+	    if (coach != null) {
+	        int newTeamId = coachModel.getIdteamcoach();
+	        List<Coach> existingCoaches = coachRepository.findAll();
+
+	        for (Coach existingCoach : existingCoaches) {
+	            if (existingCoach.getIdteamcoach() == newTeamId && existingCoach.getId_coach() != id && newTeamId !=9 ) {
+	                flash.addFlashAttribute("error", "Este equipo ya tiene entrenador");
+	                return null;
+	            }
+	        }
+	        coach.setName(coachModel.getName());
+	        coach.setNacionality(coachModel.getNacionality());
+	        coach.setArrival_season(coachModel.getArrival_season());
+	        coach.setIdteamcoach(coachModel.getIdteamcoach());
+
+	        String baseDirectory = "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static";
+	        String photosDirectory = File.separator + "imgs" + File.separator + "coachs" + File.separator;
+	        String newPhotoTempPath = coachModel.getPhoto();
+
+	        if (newPhotoTempPath != null && !newPhotoTempPath.isEmpty()) {
+	            File newPhotoTempFile = new File(baseDirectory + photosDirectory + newPhotoTempPath).getAbsoluteFile();
+
+	        
+	                String oldPhotoPath = coach.getPhoto();
+
+	                if (oldPhotoPath != null && !oldPhotoPath.isEmpty() && multimediaFile != null && !multimediaFile.isEmpty() ) {
+	                    File oldPhoto = new File(baseDirectory + oldPhotoPath);
+	                    if (oldPhoto.exists()) {
+	                        oldPhoto.delete();
+	                    }
+	                }
+
+	             try {
+					guardarImagen(coach,(baseDirectory+photosDirectory) ,multimediaFile,flash);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}   
+	        }
+
+	        flash.addFlashAttribute("success", "Coach updated successfully!");
+	        return coachRepository.save(coach);
+	    }
+	    return null;
 	}
 
 	@Override
@@ -144,6 +192,15 @@ public class CoachServiceImpl implements CoachService {
 	    }
 	    
 	    return false;
+
+	}
+	
+	public boolean existsById(int id, RedirectAttributes flash) {
+		Coach c=coachRepository.findById(id);
+		if( c != null) {
+			return true;
+		}
+		return false;
 
 	}
 

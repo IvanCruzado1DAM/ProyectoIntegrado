@@ -152,7 +152,7 @@
 								<td th:text="${team.capital}">Capital</td>
 								<td th:text="${team.occupation}">Occupation</td>
 								<td>
-									<i class="fa fa-wrench"></i>
+									<a class="fa fa-wrench" th:href="@{/adminedit/updateTeam/{id}(id=${team.id_team})}"></a>
 									<a class="fa fa-trash"
 									th:href="@{/adminshow/deleteTeam/{id}(id=${team.id_team})}"
 										th:onclick="return confirm('¿Are you sure you want to delete this team?');"></a>

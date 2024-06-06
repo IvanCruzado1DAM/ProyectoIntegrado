@@ -2,6 +2,9 @@ package com.example.demo.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.example.demo.entity.Coach;
 import com.example.demo.entity.Player;
 import com.example.demo.entity.President;
@@ -16,7 +19,7 @@ public interface CoachService {
 
 	public abstract int removeCoach(int id);
 
-	public abstract Coach updateCoach(CoachModel coachModel);
+	public abstract Coach updateCoach(int id, CoachModel coachModel,MultipartFile multimediaFile,RedirectAttributes flash);
 
 	public abstract Coach transformCoach(CoachModel coachModel);
 
@@ -25,4 +28,6 @@ public interface CoachService {
 	public abstract Coach loadCoachById(int id);
 	
 	public abstract Coach findByIdteam_coach(int id);
+
+	
 }

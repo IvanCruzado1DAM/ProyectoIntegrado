@@ -71,9 +71,52 @@ public class PresidentServiceImpl implements PresidentService{
 	}
 
 	@Override
-	public President updatePresident(PresidentModel presidentModel) {
-		// TODO Auto-generated method stub
-		return null;
+	public President updatePresident(int id, PresidentModel presidentModel,MultipartFile multimediaFile, RedirectAttributes flash) {
+		President presi = presidentRepository.findById(id);
+	    if (presi != null) {
+	        int newTeamId = presidentModel.getIdteampresident();
+	        List<President> existingPresis = presidentRepository.findAll();
+
+	        for (President existingPresi : existingPresis) {
+	            if (existingPresi.getIdteampresident() == newTeamId && existingPresi.getId_president() != id && newTeamId !=9 ) {
+	                flash.addFlashAttribute("error", "Este equipo ya tiene entrenador");
+	                return null;
+	            }
+	        }
+	        presi.setName(presidentModel.getName());
+	        presi.setNacionality(presidentModel.getNacionality());
+	        presi.setArrival_year(presidentModel.getArrival_year());
+	        presi.setIdteampresident(presidentModel.getIdteampresident());
+
+	        String baseDirectory = "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static";
+	        String photosDirectory = File.separator + "imgs" + File.separator + "presidents" + File.separator;
+	        String newPhotoTempPath = presidentModel.getImage();
+
+	        if (newPhotoTempPath != null && !newPhotoTempPath.isEmpty()) {
+	            File newPhotoTempFile = new File(baseDirectory + photosDirectory + newPhotoTempPath).getAbsoluteFile();
+
+	        
+	                String oldPhotoPath = presi.getImage();
+
+	                if (oldPhotoPath != null && !oldPhotoPath.isEmpty() && multimediaFile != null && !multimediaFile.isEmpty() ) {
+	                    File oldPhoto = new File(baseDirectory + oldPhotoPath);
+	                    if (oldPhoto.exists()) {
+	                        oldPhoto.delete();
+	                    }
+	                }
+
+	             try {
+					guardarImagen(presi,(baseDirectory+photosDirectory) ,multimediaFile,flash);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}   
+	        }
+
+	        flash.addFlashAttribute("success", "President updated successfully!");
+	        return presidentRepository.save(presi);
+	    }
+	    return null;
 	}
 
 	@Override
@@ -149,7 +192,9 @@ public class PresidentServiceImpl implements PresidentService{
 		return idAgenteLibre;
 	}
 	
-	public boolean exists(int id) {
+	
+
+	public boolean existsById(int id, RedirectAttributes flash) {
 		President p=presidentRepository.findById(id);
 		if( p != null) {
 			return true;

@@ -3,8 +3,10 @@ package com.example.demo.service;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entity.Team;
+import com.example.demo.model.CoachModel;
 import com.example.demo.model.TeamModel;
 
 public interface TeamService {
@@ -15,7 +17,7 @@ public interface TeamService {
 
 	public abstract int removeTeam(int id);
 
-	public abstract Team updateTeam(TeamModel teamModel);
+	public abstract Team updateTeam(int id, TeamModel teamModel,MultipartFile multimediaFile, RedirectAttributes flash);
 
 	public abstract Team transformTeam(TeamModel teamModel);
 

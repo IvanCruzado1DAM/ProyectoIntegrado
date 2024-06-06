@@ -7,6 +7,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entity.Player;
 import com.example.demo.entity.Team;
+import com.example.demo.model.CoachModel;
 import com.example.demo.model.MultimediaModel;
 import com.example.demo.model.PlayerModel;
 
@@ -18,7 +19,7 @@ public interface PlayerService {
 
 	public abstract int removePlayer(int id);
 
-	public abstract Player updatePlayer(PlayerModel playerModel);
+	public abstract Player updatePlayer(int id, PlayerModel playerModel,MultipartFile multimediaFile, RedirectAttributes flash, boolean injured, boolean sancionated);
 
 	public abstract Player transformPlayer(PlayerModel playerModel);
 

@@ -135,7 +135,7 @@
 						<div class="col-md-6 mb-3">
 							<select id="teamFilter" onchange="filterCoachs()" class="form-control">
 								<option value="">All Teams</option>
-								<option th:each="team : ${teams}" th:value="${team.id_team}" th:if="${team.name != 'Agentes Libres'}" th:text="${team.name}">Team
+								<option th:each="team : ${teams}" th:value="${team.id_team}" th:text="${team.name}">Team
 									Name</option>
 							</select>
 						</div>
@@ -163,7 +163,7 @@
 								</td>								
 								<td th:text="${coach.arrival_season}">Arrival Season</td>
 								<td>
-									<i class="fa fa-wrench"></i>
+									<a class="fa fa-wrench" th:href="@{/adminedit/updateCoach/{id}(id=${coach.id_coach})}"></a>
 									<a class="fa fa-trash"
 										th:href="@{/adminshow/deleteCoach/{id}(id=${coach.id_coach})}"
 										th:onclick="return confirm('¿Are you sure you want to delete this coach?');"></a>

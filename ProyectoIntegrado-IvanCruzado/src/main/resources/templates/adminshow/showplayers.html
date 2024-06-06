@@ -254,7 +254,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <i class="fa fa-wrench"></i>
+                                    <a class="fa fa-wrench" th:href="@{/adminedit/updatePlayer/{id}(id=${player.id_player})}"></a>
                                     <a class="fa fa-trash"
 										th:href="@{/adminshow/deletePlayer/{id}(id=${player.id_player})}"
 										th:onclick="return confirm('¿Are you sure you want to delete this player?');"></a>

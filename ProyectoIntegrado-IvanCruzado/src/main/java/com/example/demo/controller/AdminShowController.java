@@ -43,7 +43,6 @@ public class AdminShowController {
 	private static final String SHOWGAMES_VIEW="/adminshow/showmatchs";
 	private static final String SHOWPHYSIOS_VIEW="/adminshow/showphysios";
 	private static final String SHOWDIETISTS_VIEW="/adminshow/showdietists";
-	private static final String EDITDIETISTS_VIEW="/adminedit/showdietists";
 
 	@Autowired
 	@Qualifier("userService")
@@ -250,7 +249,7 @@ public class AdminShowController {
 	
 	@GetMapping("/deletePresident/{id}")
 	public String deletePresident(@PathVariable("id") int id, RedirectAttributes flash) {
-		if(presidentService.exists(id)) {
+		if(presidentService.existsById(id, flash)) {
 			presidentService.removePresident(id);
 			flash.addFlashAttribute("success", "President delete successfully!");
 		}else {
@@ -275,7 +274,7 @@ public class AdminShowController {
 	
 	@GetMapping("/deletePlayer/{id}")
 	public String deletePlayer(@PathVariable("id") int id, RedirectAttributes flash) {
-		if(playerService.exists(id)) {
+		if(playerService.exists(id, flash)) {
 			playerService.removePlayer(id);
 			flash.addFlashAttribute("success", "Player delete successfully!");
 		}else {

@@ -163,7 +163,7 @@
 								</td>								
 								<td th:text="${presi.arrival_year}">Arrival Year</td>
 								<td>
-									<i class="fa fa-wrench"></i>
+									<a class="fa fa-wrench" th:href="@{/adminedit/updatePresident/{id}(id=${presi.id_president})}"></a>
 									<a class="fa fa-trash"
 										th:href="@{/adminshow/deletePresident/{id}(id=${presi.id_president})}"
 										th:onclick="return confirm('¿Are you sure you want to delete this president?');"></a>

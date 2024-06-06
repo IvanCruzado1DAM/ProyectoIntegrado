@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entity.Coach;
 import com.example.demo.entity.President;
@@ -109,13 +110,6 @@ public class TeamServiceImpl implements TeamService {
 			gameService.removeGame(g.getId_game());
 		}
 		
-		Coach c =coachService.findByIdteam_coach(id);
-		c.setIdteamcoach(teamRepository.findByName("Agentes Libres").getId_team());
-		coachRepository.save(c);
-		
-		President p =presidentService.findByIdteam_president(id);
-		p.setIdteampresident(teamRepository.findByName("Agentes Libres").getId_team());
-		presidentRepository.save(p);
 		
 		
 		String badgeFileName = teamRepository.findById(id).getBadge();
@@ -133,9 +127,49 @@ public class TeamServiceImpl implements TeamService {
 	}
 
 	@Override
-	public Team updateTeam(TeamModel teamModel) {
-		// TODO Auto-generated method stub
-		return null;
+	public Team updateTeam(int id, TeamModel teamModel,MultipartFile multimediaFile, RedirectAttributes flash) {
+		Team team = teamRepository.findById(id);
+		
+	    if (team != null) {	 
+	        List<Team> existingTeams = teamRepository.findAll();
+	        String newTeamName = teamModel.getName();
+	        for (Team existingteam : existingTeams) {
+	            if (existingteam.getName().equalsIgnoreCase(newTeamName)) {
+	                flash.addFlashAttribute("error", "This team is already registered");
+	                return null;
+	            }
+	        }
+	    	team.setName(teamModel.getName());
+	    	team.setCity(teamModel.getCity());
+	    	team.setCapital(teamModel.getCapital());
+	    	team.setStadium(teamModel.getStadium());
+	    	team.setOccupation(teamModel.getOccupation());
+	      
+
+	        String baseDirectory = "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static";
+	        String photosDirectory = File.separator + "imgs" + File.separator + "escudos" + File.separator;
+	        String newPhotoTempPath = teamModel.getBadge();
+
+	        if (newPhotoTempPath != null && !newPhotoTempPath.isEmpty()) {
+	            File newPhotoTempFile = new File(baseDirectory + photosDirectory + newPhotoTempPath).getAbsoluteFile();
+
+	        
+	                String oldPhotoPath = team.getBadge();
+
+	                if (oldPhotoPath != null && !oldPhotoPath.isEmpty() && multimediaFile != null && !multimediaFile.isEmpty() ) {
+	                    File oldPhoto = new File(baseDirectory + oldPhotoPath);
+	                    if (oldPhoto.exists()) {
+	                        oldPhoto.delete();
+	                    }
+	                }
+
+	             addBadge(team,multimediaFile,(baseDirectory+photosDirectory));   
+	        }
+
+	        flash.addFlashAttribute("success", "Team updated successfully!");
+	        return teamRepository.save(team);
+	    }
+	    return null;
 	}
 
 	@Override
