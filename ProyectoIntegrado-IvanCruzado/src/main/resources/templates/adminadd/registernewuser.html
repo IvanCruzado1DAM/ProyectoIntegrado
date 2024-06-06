@@ -119,9 +119,20 @@
 				</div>
 				<div class="form-label-group">
 					<label for="id_team_user"><strong>Equipo favorito: </strong></label>
-					<select  class="form-control" id="id_team_user" name="id_team_user">
+					<select class="form-control" id="id_team_user" name="id_team_user">
 						<option th:field="*{id_team_user}" th:each="team : ${teams}" th:value="${team.id_team}"
 							th:text="${team.name}">Equipo</option>
+					</select>
+				</div>
+				<div class="form-label-group">
+					<label for="role"><strong>Role User:</strong></label>
+					<select class="form-control" id="role" name="role" th:field="*{role}">
+						<option value="ROLE_USER">ROLE_USER</option>
+						<option value="ROLE_PLAYER">ROLE_PLAYER</option>
+						<option value="ROLE_PRESIDENT">ROLE_PRESIDENT</option>
+						<option value="ROLE_COACH">ROLE_COACH</option>
+						<option value="ROLE_PHYSIO">ROLE_PHYSIO</option>
+						<option value="ROLE_DIETIST">ROLE_DIETIST</option>
 					</select>
 				</div>
 				<br>

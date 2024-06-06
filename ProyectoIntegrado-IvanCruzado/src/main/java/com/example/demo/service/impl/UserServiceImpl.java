@@ -65,7 +65,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	public com.example.demo.entity.User registrar(com.example.demo.entity.User user){
 		
 		user.setPassword(passwordEncoder().encode(user.getPassword()));		
-		user.setRole("ROLE_USER");
+		user.setRole(user.getRole());
 		user.setUsername(user.getUsername());
 		user.setName(user.getName());
 		return userRepository.save(user);
