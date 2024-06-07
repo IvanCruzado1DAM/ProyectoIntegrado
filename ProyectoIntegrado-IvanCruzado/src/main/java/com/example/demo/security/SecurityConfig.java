@@ -31,6 +31,7 @@ public class SecurityConfig {
 				.requestMatchers("/adminedit/**").hasAuthority("ROLE_ADMIN")
 				.requestMatchers("/home/index").permitAll()          
 				.requestMatchers("/home/**").hasAuthority("ROLE_USER")
+				.requestMatchers("/api/**").permitAll()
 	            .requestMatchers("/", "/home/**", "/imgs/**", "/auth/**", "/css/**", "/files/**","/webjars/**", "/error/**").permitAll() // Agregar la ruta de registroForm a las rutas permitidas
 	            .anyRequest().authenticated()
 	        )
