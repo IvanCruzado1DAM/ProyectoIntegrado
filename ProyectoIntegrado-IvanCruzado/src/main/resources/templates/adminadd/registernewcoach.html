@@ -6,7 +6,7 @@
 	<link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
 	<!--<link th:href="@{/webjars/font-awesome/6.4.2/css/font-awesome.css}" rel="stylesheet">-->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<title>Home</title>
+	<title>Register Coach</title>
 	<style>
 		body,
 		html {
@@ -87,7 +87,7 @@
 			<div th:if="${error}" class="error-message alert alert-danger" role="alert">
 				<p th:text="${error}"></p>
 			</div>
-			<h2 style="text-align: center; text-decoration:underline;">Registro de Entrenador</h2>
+			<h2 style="text-align: center; text-decoration:underline;">Register Coach</h2>
 			<br>
 			<form th:action="@{/admin/registerusers/newCoach}" th:object="${coach}" method="post"
 				enctype="multipart/form-data">
@@ -120,7 +120,7 @@
 				</div>
 
 				<br>
-				<button type="submit" class="btn btn-primary">Registrar</button>
+				<button type="submit" class="btn btn-primary">Register</button>
 			</form>
 		</div>
 		<script>

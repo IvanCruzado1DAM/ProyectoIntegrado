@@ -113,13 +113,13 @@
 					<input type="number" th:field="*{occupation}" class="form-control" id="occupation" name="occupation">
 				</div>
 				<div class="form-label-group">
-					<label for="badge"><strong>Seleccionar Escudo: </strong></label>
+					<label for="badge"><strong>Select Badge: </strong></label>
 					<input style="margin-top: 1%;" type="file" id="badgeFile" name="badgeFile"
 						accept=".png, .jpg, .jpeg" onchange="updateHiddenField()" class="form-control">
 				</div>
 				<div><input type="hidden" id="badge" name="badge" th:field="*{badge}"> </div>
 				<br>
-				<button type="submit" class="btn btn-primary">Registrar</button>
+				<button type="submit" class="btn btn-primary">Edit</button>
 			</form>
 		</div>
 		<script>

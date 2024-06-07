@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="ISO-8859-1">
-	<title>Insert title here</title>
+	<title>Edit Profile</title>
 	<style>
 		body {
 			font-family: Arial, sans-serif;
@@ -84,34 +84,34 @@
 		<form th:action="@{/home/editUser/edit/{id_user}(id_user=${id_user})}" th:object="${usuario}" method="post">
 			<input type="hidden" name="id_user" th:value="${usuario.id_user}">
 			<div class="form-label-group">
-				<label>Name:</label>
+				<label><strong>Name:</strong></label>
 				<input type="text" th:field="*{name}" class="form-control" placeholder="Nombre" name="name" required />
 			</div>
 			<div class="form-label-group">
-				<label>Username:</label>
+				<label><strong>Username:</strong></label>
 				<input type="text" th:field="*{username}" class="form-control" placeholder="Usuario" name="username"
 					required />
 			</div>
 			<div class="form-label-group">
-				<label>Password:</label>
+				<label><strong>Password:</strong></label>
 				<input type="password" th:field="*{password}" class="form-control" placeholder="Password"
 					name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}"
-					title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una mayúscula, una minúscula, un número y un carácter especial."
+					title="The password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, one number, and one special character."
 					oninput="passwordConfirmation.setCustomValidity(''); checkPasswordMatch();">
 
 			</div>
 
 			<div class="form-label-group">
-				<label>Repetir Password:</label>
+				<label><strong>Repeat Password:</strong></label>
 				<input type="password" class="form-control" placeholder="Repetir Password" name="passwordConfirmation"
-					 title="Las contraseñas no coinciden" oninput="checkPasswordMatch();">
-				<div id="passwordMatchError" style="color: red; display: none;">Las contraseñas no coinciden</div>
+					 title="Passwords do not match" oninput="checkPasswordMatch();">
+				<div id="passwordMatchError" style="color: red; display: none;">Passwords do not match</div>
 			</div>
 			<div class="form-label-group">
-				<label for="id_team_user">Equipo favorito:</label>
+				<label for="id_team_user"><strong>Favourite Team:</strong></label>
 				<br>
 				<select style="margin-top: 2%;" class="form-control" id="id_team_user" name="id_team_user">
-					<option value="">Selecciona un equipo</option>
+					<option value="">Select a Team</option>
 					<option th:field="*{id_team_user}" th:each="team : ${teams}" th:value="${team.id_team}"
 						th:text="${team.name}">Equipo</option>
 				</select>

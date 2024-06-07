@@ -6,7 +6,7 @@
 	<link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
 	<!--<link th:href="@{/webjars/font-awesome/6.4.2/css/font-awesome.css}" rel="stylesheet">-->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<title>Home</title>
+	<title>Register User</title>
 	<style>
 		body,
 		html {
@@ -87,22 +87,22 @@
 			<div th:if="${error}" class="error-message alert alert-danger" role="alert">
 				<p th:text="${error}"></p>
 			</div>
-			<h2 style="text-align: center; text-decoration:underline;">Registro de Usuario</h2>
+			<h2 style="text-align: center; text-decoration:underline;">Register User</h2>
 			<br>
 			<form th:action="@{/admin/registerusers/newUser}" th:object="${user}" method="post">
 				<input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 				<div class="form-label-group">
-					<label><strong>Nombre:</strong></label>
-					<input type="text" th:field="*{name}" class="form-control" placeholder="Nombre" name="name"
+					<label><strong>Full Name:</strong></label>
+					<input type="text" th:field="*{name}" class="form-control" placeholder="Full Name" name="name"
 						required />
 				</div>
 				<div class="form-label-group">
-					<label><strong>Usuario:</strong></label>
-					<input type="text" th:field="*{username}" class="form-control" placeholder="Usuario" name="username"
+					<label><strong>Username:</strong></label>
+					<input type="text" th:field="*{username}" class="form-control" placeholder="Username" name="username"
 						required />
 				</div>
 				<div class="form-label-group">
-					<label><strong>Contraseña:</strong></label>
+					<label><strong>Password:</strong></label>
 					<input type="password" th:field="*{password}" class="form-control" placeholder="Password"
 						name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}"
 						title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una mayúscula, una minúscula, un número y un carácter especial."
@@ -111,14 +111,14 @@
 				</div>
 
 				<div class="form-label-group">
-					<label><strong>Repetir Contraseña:</strong></label>
-					<input type="password" class="form-control" placeholder="Repetir Password"
-						name="passwordConfirmation" title="Las contraseñas no coinciden"
+					<label><strong>Repeat Password:</strong></label>
+					<input type="password" class="form-control" placeholder="Repeat Password"
+						name="passwordConfirmation" title="Passwords do not match"
 						oninput="checkPasswordMatch();">
-					<div id="passwordMatchError" style="color: red; display: none;">Las contraseñas no coinciden</div>
+					<div id="passwordMatchError" style="color: red; display: none;">Passwords do not match</div>
 				</div>
 				<div class="form-label-group">
-					<label for="id_team_user"><strong>Equipo favorito: </strong></label>
+					<label for="id_team_user"><strong>Favourite Team: </strong></label>
 					<select class="form-control" id="id_team_user" name="id_team_user">
 						<option th:field="*{id_team_user}" th:each="team : ${teams}" th:value="${team.id_team}"
 							th:text="${team.name}">Equipo</option>
@@ -137,7 +137,7 @@
 				</div>
 				<br>
 				<input class="btn btn-lg btn-primary btn-block text-uppercase" id="boton" type="submit"
-					value="Registrar" />
+					value="Register" />
 			</form>
 		</div>
 		<br>

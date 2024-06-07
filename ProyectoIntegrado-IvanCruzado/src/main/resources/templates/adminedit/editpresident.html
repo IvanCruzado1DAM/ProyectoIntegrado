@@ -112,7 +112,7 @@
 					<input type="number" th:field="*{arrival_year}" class="form-control" id="arrival_year" name="arrival_year">
 				</div>
 				<div class="form-label-group">
-					<label for="idteampresident">Favourite Team:</label>
+					<label for="idteampresident">Team:</label>
 					<select class="form-control" id="idteampresident" name="idteampresident">
 						<option th:field="*{idteampresident}" th:each="team : ${teams}" th:value="${team.id_team}"
 							th:text="${team.name}">Team</option>
@@ -120,7 +120,7 @@
 				</div>
 
 				<br>
-				<button type="submit" class="btn btn-primary">Registrar</button>
+				<button type="submit" class="btn btn-primary">Edit</button>
 			</form>
 		</div>
 		<script>

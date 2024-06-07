@@ -99,13 +99,13 @@
                     <input type="text" th:field="*{arrival_season}" class="form-control" id="arrival_season" name="arrival_season">
                 </div>
                 <div class="form-label-group">
-                    <label for="idteamcoach"><strong>Favourite Team: </strong></label>
+                    <label for="idteamcoach"><strong>Team: </strong></label>
                     <select class="form-control" id="idteamcoach" name="idteamcoach">
                         <option th:field="*{idteamcoach}" th:each="team : ${teams}" th:value="${team.id_team}" th:text="${team.name}">Team</option>
                     </select>
                 </div>
                 <br>
-                <button type="submit" class="btn btn-primary">Editar</button>
+                <button type="submit" class="btn btn-primary">Edit</button>
             </form>
         </div>
         <script>

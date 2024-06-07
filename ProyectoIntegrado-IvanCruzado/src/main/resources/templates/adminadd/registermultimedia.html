@@ -6,7 +6,7 @@
 	<link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
 	<!--<link th:href="@{/webjars/font-awesome/6.4.2/css/font-awesome.css}" rel="stylesheet">-->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<title>Home</title>
+	<title>Register Multimedia</title>
 	<style>
 		body,
 		html {
@@ -87,12 +87,12 @@
 					<span th:text="${success}"></span>
 				</div>
 				<div class="mb-3">
-					<label class="form-label">Selecciona el tipo de contenido:</label>
+					<label class="form-label">Select the type of content:</label>
 					<div class="form-check">
 						<input class="form-check-input" type="radio" name="contentType" id="texto" value="texto"
 							checked>
 						<label class="form-check-label" for="texto">
-							Texto
+							Text
 						</label>
 					</div>
 					<div class="form-check">
@@ -105,29 +105,29 @@
 
 				<div id="textoFields">
 					<div class="mb-3">
-						<label class="form-label" for="title_new">Título:</label>
+						<label class="form-label" for="title_new">Title:</label>
 						<input type="text" class="form-control" id="title_new" name="title_new" required>
 					</div>
 					<div class="mb-3">
-						<label class="form-label" for="description_new">Descripción:</label>
+						<label class="form-label" for="description_new">Description:</label>
 						<textarea class="form-control" id="description_new" name="description_new" rows="3"
 							required></textarea>
 					</div>
 					<div class="form-label-group">
-						<label for="image"><strong>Imagen Noticia: </strong></label>
+						<label for="image"><strong>New's Image: </strong></label>
 						<input style="margin-top: 1%;" type="file" id="multimediaFile" name="multimediaFile"
 							accept=".png, .jpg, .jpeg" onchange="updateHiddenField()" class="form-control">
 					</div>
 					<div><input type="hidden" id="image" name="image" th:field="*{image}"> </div>
 				</div>
 				<br>
-				<label for="idteammultimedia"><strong>Equipo: </strong></label>
+				<label for="idteammultimedia"><strong>Team: </strong></label>
 				<select style="margin-top: 1%;" class="form-control" id="idteammultimedia" name="idteammultimedia">
 					<option th:field="*{idteammultimedia}" th:each="team : ${teams}" th:value="${team.id_team}"
 						th:text="${team.name}">Equipo</option>
 				</select>
 				<br>
-				<button type="submit" class="btn btn-primary">Guardar</button>
+				<button type="submit" class="btn btn-primary">Register</button>
 			</form>
 		</div>
 

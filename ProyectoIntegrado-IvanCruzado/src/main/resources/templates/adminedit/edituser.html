@@ -6,7 +6,7 @@
 	<link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
 	<!--<link th:href="@{/webjars/font-awesome/6.4.2/css/font-awesome.css}" rel="stylesheet">-->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<title>Edit Physio</title>
+	<title>Edit User</title>
 	<style>
 		body,
 		html {
@@ -92,36 +92,36 @@
 			<form th:action="@{'/adminedit/updateUser/update/' + ${id}}" th:object="${user}" method="post">
 			<input type="hidden" name="id_user" th:value="${user.id_user}">
 			<div class="form-label-group">
-				<label>Name:</label>
+				<label><strong>Name:</strong></label>
 				<input type="text" th:field="*{name}" class="form-control" placeholder="Nombre" name="name" required />
 			</div>
 			<div class="form-label-group">
-				<label>Username:</label>
+				<label><strong>Username:</strong></label>
 				<input type="text" th:field="*{username}" class="form-control" placeholder="Usuario" name="username"
 					required />
 			</div>
 			<div class="form-label-group">
-				<label>Password:</label>
+				<label><strong>Password:</strong></label>
 				<input type="password" th:field="*{password}" class="form-control" placeholder="Password"
 					name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}"
-					title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una mayúscula, una minúscula, un número y un carácter especial."
+					title="The password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, one number, and one special character."
 					oninput="passwordConfirmation.setCustomValidity(''); checkPasswordMatch();">
 
 			</div>
 
 			<div class="form-label-group">
-				<label>Repetir Password:</label>
+				<label><strong>Repeat Password:</strong></label>
 				<input type="password" class="form-control" placeholder="Repetir Password" name="passwordConfirmation"
-					 title="Las contraseñas no coinciden" oninput="checkPasswordMatch();">
-				<div id="passwordMatchError" style="color: red; display: none;">Las contraseñas no coinciden</div>
+					 title="Passwords do not match" oninput="checkPasswordMatch();">
+				<div id="passwordMatchError" style="color: red; display: none;">Passwords do not match</div>
 			</div>
 			<div class="form-label-group">
-				<label for="id_team_user">Equipo favorito:</label>
+				<label for="id_team_user"><strong>Favourite Team:</strong></label>
 				<br>
-				<select style="margin-top: 2%;" class="form-control" id="id_team_user" name="id_team_user">
-					<option value="">Selecciona un equipo</option>
+				<select style="margin-top: 1%;" class="form-control" id="id_team_user" name="id_team_user">
+					<option value="">Select a Team</option>
 					<option th:field="*{id_team_user}" th:each="team : ${teams}" th:value="${team.id_team}"
-						th:text="${team.name}">Equipo</option>
+						th:text="${team.name}">Team</option>
 				</select>
 			</div>
 			<br>
