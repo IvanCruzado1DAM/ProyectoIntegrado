@@ -22,32 +22,34 @@
                         <a class="nav-link" href="/admin/registerusers" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false"
                            style="white-space: nowrap; color: white;">
-                            Registrar
+                            Register
                         </a>
                         
                     </li>
                     <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
 						<a class="nav-link" href="/admin/registerteam"
-							style="white-space: nowrap; color: white;">Registrar Equipo</a>
+							style="white-space: nowrap; color: white;">Register Team</a>
 					</li>
 					<li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
-						<a class="nav-link" href="/admin/editusers" style="white-space: nowrap; color: white;">Editar</a>
+						<a class="nav-link" href="/admin/editusers" style="white-space: nowrap; color: white;">Edit</a>
 					</li>
 					<li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
-						<a class="nav-link" href="/admin/registermultimedia" style="white-space: nowrap; color: white;">Redactar Noticia</a>
+						<a class="nav-link" href="/admin/registermultimedia" style="white-space: nowrap; color: white;">Redact New</a>
+					</li>
+					
+					<li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
+						<a class="nav-link" href="/admin/registermultimedia" style="white-space: nowrap; color: white;">Edit New</a>
 					</li>
                     <!-- Elementos siempre visibles -->
                     <li sec:authorize="!hasRole('ROLE_ADMIN')" class="nav-item active">
-                        <a class="nav-link" href="/home/yourteam" style="white-space: nowrap; color: white;">Tu
-                            Equipo</a>
+                        <a class="nav-link" href="/home/yourteam" style="white-space: nowrap; color: white;">Your Team</a>
                     </li>
                     <li sec:authorize="!hasRole('ROLE_ADMIN')" class="nav-item active">
-                        <a class="nav-link" href="/home/aboutus" style="white-space: nowrap; color: white;">Sobre
-                            nosotros</a>
+                        <a class="nav-link" href="/home/aboutus" style="white-space: nowrap; color: white;">About us</a>
                     </li>
                     <li sec:authorize="!hasRole('ROLE_ADMIN')" class="nav-item active">
                         <a class="nav-link" href="/home/contactus"
-                           style="white-space: nowrap; color: white;">Contáctanos</a>
+                           style="white-space: nowrap; color: white;">Contact</a>
                     </li>
 
                     <!-- Elementos para usuarios no autenticados -->
@@ -68,7 +70,7 @@
                     </li>
                     <li sec:authorize="hasRole('ROLE_USER')" class="nav-item active">
                         <a class="nav-link editar" type="submit" href="/home/editUser"
-                           style="color: white; height: 50px; width: 105px;">Editar Perfil</a>
+                           style="color: white; height: 50px; width: 105px;">Edit Profile</a>
                     </li>
                     <li sec:authorize="isAuthenticated()" class="nav-item">
                         <form th:action="@{/logout}" method="post">
