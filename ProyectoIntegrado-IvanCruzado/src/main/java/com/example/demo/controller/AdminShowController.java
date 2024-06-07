@@ -16,6 +16,7 @@ import com.example.demo.entity.Dietist;
 import com.example.demo.model.CoachModel;
 import com.example.demo.model.DietistModel;
 import com.example.demo.model.GameModel;
+import com.example.demo.model.MultimediaModel;
 import com.example.demo.model.PhysioModel;
 import com.example.demo.model.PlayerModel;
 import com.example.demo.model.PresidentModel;
@@ -43,6 +44,7 @@ public class AdminShowController {
 	private static final String SHOWGAMES_VIEW="/adminshow/showmatchs";
 	private static final String SHOWPHYSIOS_VIEW="/adminshow/showphysios";
 	private static final String SHOWDIETISTS_VIEW="/adminshow/showdietists";
+	private static final String SHOWMULTIMEDIAS_VIEW="/adminshow/showmultimedias";
 
 	@Autowired
 	@Qualifier("userService")
@@ -79,6 +81,11 @@ public class AdminShowController {
 	@Autowired
 	@Qualifier("playerService")
 	private PlayerServiceImpl playerService;
+	
+	@Autowired
+	@Qualifier("multiService")
+	private MultimediaServiceImpl multiService;
+	
 	
 	
 	//Users
@@ -283,6 +290,29 @@ public class AdminShowController {
 		return "redirect:/adminshow/showPlayers";
 	}
 	
+	//Multimedia
+	@GetMapping("/showMultimedias")
+	public ModelAndView showMultimedias(Model model) {
+		String userName = userService.getCurrentUsername();
+		List<MultimediaModel> multimedias=multiService.listAllMultimedia();
+		List<TeamModel> teams=teamService.listAllTeams();
+		ModelAndView mav = new ModelAndView(SHOWMULTIMEDIAS_VIEW);
+		mav.addObject("usuario", userName);
+		mav.addObject("teams", teams);
+		mav.addObject("multimedias", multimedias);
+		return mav;
+	}
+	
+	@GetMapping("/deleteMultimedia/{id}")
+	public String deleteMultimedia(@PathVariable("id") int id, RedirectAttributes flash) {
+		if(multiService.exists(id)) {
+			multiService.removeMultimedia(id);
+			flash.addFlashAttribute("success", "New delete successfully!");
+		}else {
+			flash.addFlashAttribute("error", "Fail removing this new!");
+		}
+		return "redirect:/adminshow/showMultimedias";
+	}
 	
 	
 	

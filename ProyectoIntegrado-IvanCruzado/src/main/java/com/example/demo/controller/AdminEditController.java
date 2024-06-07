@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.demo.entity.Coach;
 import com.example.demo.entity.Dietist;
 import com.example.demo.entity.Game;
+import com.example.demo.entity.Multimedia;
 import com.example.demo.entity.Physio;
 import com.example.demo.entity.Player;
 import com.example.demo.entity.President;
@@ -26,6 +27,7 @@ import com.example.demo.entity.User;
 import com.example.demo.model.CoachModel;
 import com.example.demo.model.DietistModel;
 import com.example.demo.model.GameModel;
+import com.example.demo.model.MultimediaModel;
 import com.example.demo.model.PhysioModel;
 import com.example.demo.model.PlayerModel;
 import com.example.demo.model.PresidentModel;
@@ -53,6 +55,7 @@ public class AdminEditController {
 	private static final String EDITGAMES_VIEW="/adminedit/editgame";
 	private static final String EDITPHYSIOS_VIEW="/adminedit/editphysio";
 	private static final String EDITDIETISTS_VIEW="/adminedit/editdietist";
+	private static final String EDITMULTIMEDIAS_VIEW="/adminedit/editmultimedia";
 
 	@Autowired
 	@Qualifier("userService")
@@ -284,6 +287,32 @@ public class AdminEditController {
 			flash.addFlashAttribute("error", "Fail updating this dietist!");
 		}
 		return "redirect:/adminshow/showDietists";
+	}
+	
+	//Multimedia
+	@GetMapping("/updateMultimedia/{id}")
+	public ModelAndView updateMultimedia(@PathVariable("id") int id, RedirectAttributes flash) {
+		String userName = userService.getCurrentUsername();
+		Multimedia multimedia=multimediaService.loadMultimediaById(id);
+		ModelAndView mav = new ModelAndView(EDITMULTIMEDIAS_VIEW);
+		mav.addObject("usuario", userName);
+		mav.addObject("multimedia", multimedia);
+		return mav;
+	}
+	
+	@PostMapping("/updateMultimedia/update/{id}")
+	public String updateeditMultimedia(@PathVariable("id") int id, RedirectAttributes flash, @RequestParam(value= "multimediaFile", required = false) MultipartFile multimediaFile,  @ModelAttribute MultimediaModel model) {
+		if(multimediaService.exists(id) && multimediaFile !=null) { 
+			multimediaService.updateMultimedia(id, flash, multimediaFile,model);
+			flash.addFlashAttribute("success", "New update successfully!");
+		}else if(multimediaService.exists(id) && multimediaFile==null){
+			multimediaService.updateMultimediaWithoutFile(id, flash, model);
+			flash.addFlashAttribute("success", "New update successfully!");
+		}
+		else {
+			flash.addFlashAttribute("error", "Fail updating this new!");
+		}
+		return "redirect:/adminshow/showMultimedias";
 	}
 	
 	

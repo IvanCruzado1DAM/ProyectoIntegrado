@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,9 +12,16 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.entity.Coach;
+import com.example.demo.entity.Dietist;
 import com.example.demo.entity.Multimedia;
+import com.example.demo.model.CoachModel;
 import com.example.demo.model.MultimediaModel;
 import com.example.demo.repository.MultimediaRepository;
 import com.example.demo.service.MultimediaService;
@@ -58,14 +66,66 @@ public class MultimediaServiceImpl implements MultimediaService {
 
 	@Override
 	public int removeMultimedia(int id) {
-		// TODO Auto-generated method stub
-		return 0;
+		String multimediaFileName = multiRepository.findById(id).getImage();
+	    // Borra el archivo de la imagen del escudo del sistema de archivos
+	    if (multimediaFileName != null && !multimediaFileName.isEmpty()) {
+	        String filePath = "src/main/resources/static" + multimediaFileName;
+	        File file = new File(filePath);
+	        if (file.exists()) {
+	            file.delete();
+	        }
+	    }
+		multiRepository.deleteById(id);
+		return id;
 	}
 
 	@Override
-	public Multimedia updateMultimedia(MultimediaModel multimediaModel) {
-		// TODO Auto-generated method stub
-		return null;
+	public Multimedia updateMultimedia(int id, RedirectAttributes flash, MultipartFile multimediaFile,  MultimediaModel model) {
+		Multimedia multi = multiRepository.findById(id);
+	    if (multi != null) {
+	        
+	    	multi.setTitle_new(model.getTitle_new());
+	    	multi.setDescription_new(model.getDescription_new());
+	    	multi.setTitle_video(model.getTitle_video());
+	    	multi.setVideo(model.getVideo());
+
+	        String baseDirectory = "src" + File.separator + "main" + File.separator + "resources" + File.separator + "static";
+	        String photosDirectory = File.separator + "imgs" + File.separator + "news" + File.separator;
+	        String newPhotoTempPath = model.getImage();
+
+	        if (newPhotoTempPath != null && !newPhotoTempPath.isEmpty()) {
+	            File newPhotoTempFile = new File(baseDirectory + photosDirectory + newPhotoTempPath).getAbsoluteFile();
+
+	        
+	                String oldPhotoPath = multi.getImage();
+
+	                if (oldPhotoPath != null && !oldPhotoPath.isEmpty() && multimediaFile != null && !multimediaFile.isEmpty() ) {
+	                    File oldPhoto = new File(baseDirectory + oldPhotoPath);
+	                    if (oldPhoto.exists()) {
+	                        oldPhoto.delete();
+	                    }
+	                }
+
+	             addImageMultimedia(multi,multimediaFile,(baseDirectory+photosDirectory));   
+	        }
+
+	        flash.addFlashAttribute("success", "New updated successfully!");
+	        return multiRepository.save(multi);
+	    }
+	    return null;
+	}
+	
+	@Override
+	public Multimedia updateMultimediaWithoutFile(int id, RedirectAttributes flash, MultimediaModel model) {
+		Multimedia multi = multiRepository.findById(id);
+	    if (multi != null) {
+	    	multi.setTitle_video(model.getTitle_video());
+	    	multi.setVideo(model.getVideo());
+	    	flash.addFlashAttribute("success", "New updated successfully!");
+	        return multiRepository.save(multi);
+	    }    
+	    
+	    return null;
 	}
 
 	@Override
@@ -89,8 +149,8 @@ public class MultimediaServiceImpl implements MultimediaService {
 
 	@Override
 	public Multimedia loadMultimediaById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		Multimedia multi = multiRepository.findById(id);
+		return multi;
 	}
 
 	@Override
@@ -107,6 +167,14 @@ public class MultimediaServiceImpl implements MultimediaService {
 			multimedia.setImage("/imgs/news/" + multimediaFile.getOriginalFilename());
 		}
 		
+	}
+
+	public boolean exists(int id) {
+		Multimedia m=multiRepository.findById(id);
+		if( m != null) {
+			return true;
+		}
+		return false;
 	}
 
 }
