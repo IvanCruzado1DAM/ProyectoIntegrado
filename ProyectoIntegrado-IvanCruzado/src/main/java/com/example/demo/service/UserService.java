@@ -28,4 +28,8 @@ public interface UserService {
 
 	boolean existsByUsername(String username);
 
+	boolean checkPassword(String rawPassword, String encodedPassword);
+
+	User findUserByUsername(String username);
+
 }

@@ -149,39 +149,42 @@
 			</div>
 		</footer>
 	</div>
+	<script>
+        // Obtener el elemento de mensaje de error
+        var errorMessage = document.querySelector('.error-message');
+
+        // Mostrar el mensaje de error si tiene texto
+        if (errorMessage.textContent.trim() !== '') {
+            errorMessage.style.display = 'block';
+        }
+
+        // Ocultar el mensaje de error después de 5 segundos
+        setTimeout(function () {
+            errorMessage.style.display = 'none';
+        }, 5000);
+
+        // Función para verificar la coincidencia de contraseñas
+        function checkPasswordMatch() {
+            var password = document.querySelector('input[name=password]').value;
+            var confirmPassword = document.querySelector('input[name=passwordConfirmation]').value;
+            var passwordMatchError = document.getElementById('passwordMatchError');
+            var submitButton = document.getElementById('boton');
+
+            if (password !== confirmPassword) {
+                passwordMatchError.style.display = 'block';
+                submitButton.disabled = true;
+                submitButton.style.color = 'black';
+                submitButton.style.fontWeight = 'bold';
+                submitButton.style.backgroundColor = 'lightgrey';
+            } else {
+                passwordMatchError.style.display = 'none';
+                submitButton.disabled = false;
+                submitButton.style.color = 'white';
+                submitButton.style.backgroundColor = '#007bff';
+            }
+        }
+    </script>
 </body>
-<script>
-	// Obtener el elemento de mensaje de error
-	var errorMessage = document.querySelector('.error-message');
-
-	// Mostrar el mensaje de error si tiene texto
-	if (errorMessage.textContent.trim() !== '') {
-		errorMessage.style.display = 'block';
-	}
-
-	setTimeout(function () {
-		errorMessage.style.display = 'none';
-	}, 5000);
-
-	function checkPasswordMatch() {
-		var password = document.querySelector('input[name=password]').value;
-		var confirmPassword = document.querySelector('input[name=passwordConfirmation]').value;
-		var passwordMatchError = document.getElementById('passwordMatchError');
-		var submitButton = document.getElementById('boton');
-
-		if (password !== confirmPassword) {
-			passwordMatchError.style.display = 'block';
-			submitButton.disabled = true;
-			submitButton.style.color = 'black';
-			submitButton.style.fontWeight = 'bold';
-			submitButton.style.backgroundColor = 'lightgrey';
-		} else {
-			passwordMatchError.style.display = 'none';
-			submitButton.disabled = false;
-			submitButton.style.color = 'white';
-			submitButton.style.backgroundColor = '#007bff';
-		}
-	}
-</script>
+	
 
 </html>

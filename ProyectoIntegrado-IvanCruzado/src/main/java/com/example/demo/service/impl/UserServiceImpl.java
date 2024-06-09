@@ -38,6 +38,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	@Qualifier("userRepository")
 	private UserRepository userRepository;
 
+	private PasswordEncoder passwordEncoder;
+	
+    public UserServiceImpl() {
+        this.passwordEncoder = new BCryptPasswordEncoder();
+    }
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -63,6 +68,15 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	}
 
 	public com.example.demo.entity.User registrar(com.example.demo.entity.User user){
+		
+		user.setPassword(passwordEncoder().encode(user.getPassword()));		
+		user.setRole("ROLE_USER");
+		user.setUsername(user.getUsername());
+		user.setName(user.getName());
+		return userRepository.save(user);
+	}
+	
+	public com.example.demo.entity.User adminregistrar(com.example.demo.entity.User user){
 		
 		user.setPassword(passwordEncoder().encode(user.getPassword()));		
 		user.setRole(user.getRole());
@@ -145,7 +159,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		return "redirect:/adminAlumno/admin";
 	}
 
-
+	@Override
+	public User findUserByUsername(String username) {
+		User user = userRepository.findByUsername(username);
+		return user;
+	}
 
 
 
@@ -182,6 +200,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		}
 		return false;
 	}
+
+	@Override
+    public boolean checkPassword(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
 
 
 

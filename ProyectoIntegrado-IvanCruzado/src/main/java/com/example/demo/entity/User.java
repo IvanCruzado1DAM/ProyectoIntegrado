@@ -17,6 +17,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -35,7 +36,9 @@ public class User implements UserDetails {
 	private String password;
 	private int id_team_user;
 	private String role;
-
+	
+	@Transient
+    private String token;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

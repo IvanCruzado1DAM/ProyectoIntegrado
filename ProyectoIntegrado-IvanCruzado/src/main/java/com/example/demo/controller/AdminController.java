@@ -224,7 +224,7 @@ public class AdminController {
 	public String register(@ModelAttribute User user, RedirectAttributes flash) {
 		try {
 			if (!userService.existsByUsername(user.getUsername())) {
-				userService.registrar(user);
+				userService.adminregistrar(user);
 				flash.addFlashAttribute("success", "Usuario registrado satisfactoriamente!");
 			}else {		
 				flash.addFlashAttribute("error", "Usuario ya existente!");
