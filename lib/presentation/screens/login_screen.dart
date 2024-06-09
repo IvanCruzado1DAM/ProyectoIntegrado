@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:football_zone/services/user_services.dart';
 import 'register_screen.dart';
+import 'user_screen.dart';
+import 'player_screen.dart';
+import 'president_screen.dart';
+import 'physio_screen.dart';
+import 'dietist_screen.dart';
+import 'coach_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -48,7 +54,6 @@ class _ContentState extends State<Content> {
           const SizedBox(
             height: 5,
           ),
-         
           const SizedBox(
             height: 15,
           ),
@@ -59,9 +64,6 @@ class _ContentState extends State<Content> {
   }
 }
 
-
-
-
 class LoginForm extends StatefulWidget {
   const LoginForm({Key? key}) : super(key: key);
 
@@ -71,10 +73,54 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final UserService _userService = UserService(); // Instancia de UserService
-  
+
   String username = "";
   String password = "";
   bool isObscure = true;
+
+  void _navigateBasedOnRole(String? role) {
+    switch (role) {
+      case 'ROLE_USER':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const UserScreen()),
+        );
+        break;
+      case 'ROLE_PLAYER':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const PlayerScreen()),
+        );
+        break;
+      case 'ROLE_PRESIDENT':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const PresidentScreen()),
+        );
+        break;
+      case 'ROLE_PHYSIO':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const PhysioScreen()),
+        );
+        break;
+      case 'ROLE_DIETIST':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const DietistScreen()),
+        );
+        break;
+      case 'ROLE_COACH':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const CoachScreen()),
+        );
+        break;
+      default:
+        // Manejar roles desconocidos
+        print('Unknown role: $role');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -152,36 +198,37 @@ class _LoginFormState extends State<LoginForm> {
             width: double.infinity,
             height: 50,
             child: ElevatedButton(
-             onPressed: () {
-              _userService.login(username, password).then((result) {
-                if(result.error != null){
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Error'),
-                        content: Text('Credenciales Incorrectas'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: const Text('OK', style: TextStyle(color: Colors.white)),
-                            style: TextButton.styleFrom(
-                              backgroundColor: Colors.red,
+              onPressed: () {
+                _userService.login(username, password).then((result) {
+                  if (result.error != null) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Error'),
+                          content: const Text('Credenciales Incorrectas'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('OK', style: TextStyle(color: Colors.white)),
+                              style: TextButton.styleFrom(
+                                backgroundColor: Colors.red,
+                              ),
                             ),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                } else {
-                  print('User role: ${result.userData!.role}');
-                }
-              }).catchError((error) {
-                print("Error: $error"); 
-              });
-            },
+                          ],
+                        );
+                      },
+                    );
+                  } else {
+                    String? role = result.userData!.role;
+                    _navigateBasedOnRole(role);
+                  }
+                }).catchError((error) {
+                  print("Error: $error");
+                });
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xff142047),
               ),
@@ -197,29 +244,27 @@ class _LoginFormState extends State<LoginForm> {
             height: 20,
           ),
           GestureDetector(
-  onTap: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const RegisterScreen()),
-    );
-  },
-  child: const Center(
-    child: Text(
-      'Register',
-      style: TextStyle(
-        color: Colors.blue,
-        decoration: TextDecoration.underline,
-      ),
-    ),
-  ),
-),
-
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const RegisterScreen()),
+              );
+            },
+            child: const Center(
+              child: Text(
+                'Register',
+                style: TextStyle(
+                  color: Colors.blue,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 }
-
 
 class BackGround extends StatelessWidget {
   const BackGround({super.key});

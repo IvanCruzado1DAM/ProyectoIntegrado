@@ -1,3 +1,4 @@
+// file: lib/screens/register_screen.dart
 import 'package:flutter/material.dart';
 import 'package:football_zone/services/user_services.dart';
 import 'package:football_zone/models/team.dart';
@@ -30,7 +31,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         teams = fetchedTeams;
       });
     } catch (e) {
-      print('Failed to load teams: $e');
+      print('No se pudo cargar los equipos: $e');
     }
   }
 
@@ -41,7 +42,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('Error'),
-            content: const Text('Please select a team'),
+            content: const Text('Por favor selecciona un equipo'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
@@ -59,7 +60,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String username = _usernameController.text;
     String password = _passwordController.text;
     String name = _nameController.text;
-    
+
     try {
       Map<String, dynamic> result = await _userService.register(username, password, selectedTeamId!, name);
       if (result.containsKey('error')) {
@@ -81,17 +82,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
           },
         );
       } else {
-        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('User registered successfully, please wait for redirection'),
+            duration: const Duration(seconds: 5),
+          ),
+        );
+        Future.delayed(const Duration(seconds: 5), () {
+          Navigator.of(context).pop(); // Cerrar pantalla de registro
+        });
       }
     } catch (e) {
-      print('Registration failed: $e');
+      print('Registro fallido: $e');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Register')),
+      appBar: AppBar(title: const Text('Registrarse')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -99,7 +108,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             TextFormField(
               controller: _usernameController,
               decoration: const InputDecoration(
-                labelText: 'Username',
+                labelText: 'Usuario',
                 border: OutlineInputBorder(),
               ),
             ),
@@ -107,7 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             TextFormField(
               controller: _passwordController,
               decoration: const InputDecoration(
-                labelText: 'Password',
+                labelText: 'Contraseña',
                 border: OutlineInputBorder(),
               ),
               obscureText: true,
@@ -116,13 +125,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
             TextFormField(
               controller: _nameController,
               decoration: const InputDecoration(
-                labelText: 'Name',
+                labelText: 'Nombre',
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<int>(
-              hint: const Text('Select Team'),
+              hint: const Text('Selecciona un equipo'),
               items: teams.map((TeamModel team) {
                 return DropdownMenuItem<int>(
                   value: team.idTeam,
@@ -139,7 +148,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _register,
-              child: const Text('Register'),
+              child: const Text('Registrarse'),
             ),
           ],
         ),

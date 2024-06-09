@@ -1,3 +1,4 @@
+// file: lib/models/team.dart
 class TeamModel {
   int idTeam;
   String name;
@@ -16,63 +17,6 @@ class TeamModel {
     required this.capital,
     required this.occupation,
   });
-
-  //getters and setters
-  int? getidTeam() {
-    return idTeam;
-  }
-
-  void setidTeam(int value) {
-    idTeam = value;
-  }
-
-  String? getName() {
-    return name;
-  }
-
-  void setName(String value) {
-    name = value;
-  }
-
-  String? getCity() {
-    return city;
-  }
-
-  void setCity(String value) {
-    city = value;
-  }
-
-  String? getBadge() {
-    return badge;
-  }
-
-  void setBadge(String value) {
-    badge = value;
-  }
-
-  String? getStadium() {
-    return stadium;
-  }
-
-  void setStadium(String value) {
-    stadium = value;
-  }
-
-  int? getCapital() {
-    return capital;
-  }
-
-  void setCapital(int value) {
-    capital = value;
-  }
-
-  int? getOccupation() {
-    return occupation;
-  }
-
-  void setOccupation(int value) {
-    occupation = value;
-  }
 
   factory TeamModel.fromJson(Map<String, dynamic> json) {
     return TeamModel(
