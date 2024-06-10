@@ -158,7 +158,7 @@
                             <h5>
                                 <strong th:if="${player.position == 'Portero'}">Porterías a cero:</strong>
                                 <strong th:if="${player.position != 'Portero'}">Asistencias:</strong>
-                                <span th:if="${player.position == 'Portero'}">0</span>
+                                <span th:if="${player.position == 'Portero'}" th:text="${player.assists}"></span>
                                 <span th:if="${player.position != 'Portero'}" th:text="${player.assists}"></span>
                             </h5>
                             <h5><strong>Tarjetas Amarillas:</strong> <span th:text="${player.yc}"></span></h5>
