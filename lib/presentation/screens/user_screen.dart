@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class UserScreen extends StatefulWidget {
-  const UserScreen({Key? key}) : super(key: key);
+  final String token;
+
+  const UserScreen({Key? key, required this.token}) : super(key: key);
 
   @override
   _UserScreenState createState() => _UserScreenState();

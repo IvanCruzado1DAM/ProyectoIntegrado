@@ -34,6 +34,7 @@ class UserData {
   String? password;
   int? idTeamUser;
   String? role;
+  String? token; // Nuevo atributo token
 
   UserData(
       {this.idUser,
@@ -41,7 +42,8 @@ class UserData {
       this.username,
       this.password,
       this.idTeamUser,
-      this.role});
+      this.role,
+      this.token}); // Agregado token en el constructor
 
   //getters and setters
   int? getIdUser() {
@@ -92,6 +94,14 @@ class UserData {
     role = value;
   }
 
+  String? getToken() { // Nuevo getter para token
+    return token;
+  }
+
+  void setToken(String? value) { // Nuevo setter para token
+    token = value;
+  }
+
   UserData.fromJson(Map<String, dynamic> json) {
     idUser = json['id_user'];
     name = json['Name'];
@@ -99,6 +109,7 @@ class UserData {
     password = json['password'];
     idTeamUser = json['id_team_user'];
     role = json['role'];
+    token = json['token']; // Extraer token del JSON
   }
 
   Map<String, dynamic> toJson() {
@@ -109,6 +120,7 @@ class UserData {
     data['password'] = password;
     data['id_team_user'] = idTeamUser;
     data['role'] = role;
+    data['token'] = token; // Incluir token en el JSON
     return data;
   }
 }

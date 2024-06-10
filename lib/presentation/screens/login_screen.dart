@@ -7,9 +7,10 @@ import 'president_screen.dart';
 import 'physio_screen.dart';
 import 'dietist_screen.dart';
 import 'coach_screen.dart';
+import 'package:football_zone/models/users.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -18,7 +19,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [BackGround(), Content()],
@@ -28,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
 }
 
 class Content extends StatefulWidget {
-  const Content({super.key});
+  const Content({Key? key}) : super(key: key);
 
   @override
   _ContentState createState() => _ContentState();
@@ -78,46 +79,46 @@ class _LoginFormState extends State<LoginForm> {
   String password = "";
   bool isObscure = true;
 
-  void _navigateBasedOnRole(String? role) {
+  void _navigateBasedOnRole(UserData userData) {
+    String? role = userData.role;
     switch (role) {
       case 'ROLE_USER':
-        Navigator.push(
+        /*Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const UserScreen()),
-        );
+          MaterialPageRoute(builder: (context) => UserScreen(token: token)),
+        );*/
         break;
       case 'ROLE_PLAYER':
-        Navigator.push(
+        /*Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const PlayerScreen()),
-        );
+          MaterialPageRoute(builder: (context) => PlayerScreen(token: token)),
+        );*/
         break;
       case 'ROLE_PRESIDENT':
-        Navigator.push(
+        /*Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const PresidentScreen()),
-        );
+          MaterialPageRoute(builder: (context) => PresidentScreen(token: token)),
+        );*/
         break;
       case 'ROLE_PHYSIO':
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const PhysioScreen()),
+          MaterialPageRoute(builder: (context) => PhysioScreen(user: userData)),
         );
         break;
       case 'ROLE_DIETIST':
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const DietistScreen()),
+          MaterialPageRoute(builder: (context) => DietistScreen(user: userData)),
         );
         break;
       case 'ROLE_COACH':
-        Navigator.push(
+        /*Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const CoachScreen()),
-        );
+          MaterialPageRoute(builder: (context) => CoachScreen(token: token)),
+        );*/
         break;
       default:
-        // Manejar roles desconocidos
         print('Unknown role: $role');
     }
   }
@@ -221,9 +222,9 @@ class _LoginFormState extends State<LoginForm> {
                         );
                       },
                     );
-                  } else {
-                    String? role = result.userData!.role;
-                    _navigateBasedOnRole(role);
+                  } else {       
+                    UserData userData=result.userData!;    
+                    _navigateBasedOnRole(userData);
                   }
                 }).catchError((error) {
                   print("Error: $error");
@@ -267,7 +268,7 @@ class _LoginFormState extends State<LoginForm> {
 }
 
 class BackGround extends StatelessWidget {
-  const BackGround({super.key});
+  const BackGround({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
