@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
+    <!--<link th:href="@{/webjars/font-awesome/6.4.2/css/font-awesome.css}" rel="stylesheet">-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Home</title>
+    <style>
+        body,
+        html {
+            margin: 5%;
+            margin-top: 1%;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            padding: 0;
+            width: 100%;
+            height: 90%;
+            /* Ancho completo de la página */
+        }
+
+        .game-container {
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            padding: 10px;
+            width: 60%;
+            margin: auto;
+            margin-bottom: 20px; /* Espacio entre divs */
+        }
+        
+    </style>
+</head>
+
+<body
+    style="background-image: url('/imgs/fondo.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
+
+    <div class="container">
+        <!-- Encabezado -->
+        <div class="row align-items-center">
+            <div class="row">
+                <a href="/home/index">
+                    <img src="/imgs/banner.png" alt="Banner" />
+                </a>
+            </div>
+        </div>
+        <br>
+        <!-- Navegador -->
+        <div class="row align-items-center">
+            <div class="col text-center" style="width: 100%;">
+                <div th:replace="~{navbar :: navbarFragment}"></div>
+            </div>
+        </div>
+        <br>
+        <br>
+        <!-- Cuerpo -->
+        <h2 style="text-align: center;">Calendario de Partidos</h2>
+        <div>
+            <div th:each="game : ${games}" class="game-container">
+                <div style="display: flex; align-items: center; justify-content: center;">
+                    <!-- Imagen del escudo del equipo local -->
+                    <div th:each="team : ${teams}" th:if="${team.id_team == game.idLocalTeam}">
+                        <img th:src="${team.badge}" alt="Escudo Local"
+                            style="width: 100px; height: auto; border-radius: 50%;">
+                    </div>
+                    <!-- Versus -->
+                    <span style="margin: 0 10px;">VS</span>
+                    <!-- Imagen del escudo del equipo visitante -->
+                    <div th:each="team : ${teams}" th:if="${team.id_team == game.idVisitantTeam}">
+                        <img th:src="${team.badge}" alt="Escudo Visitante"
+                            style="width: 100px; height: auto; border-radius: 50%;">
+                    </div>
+                </div>
+                <!-- Fecha y resultado -->
+                <div style="text-align: center; margin-top: 10px;">
+                    <p th:if="${game.date != null}">Fecha: <span th:text="${#dates.format(game.date, 'dd/MM/yy HH:mm')}"></span></p>
+                    <p th:if="${game.score != null}">Resultado: <span th:text="${game.score}"></span></p>
+                    <p th:unless="${game.score != null}">Por jugar</p>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <br>
+        <!-- Footer -->
+        <footer class="bg-body-tertiary text-center text-lg-start">
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+                © 2024 Copyright: FOOTBALLZONE
+            </div>
+        </footer>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Home</title>
+    <style>
+        body,
+        html {
+            margin: 5%;
+            margin-top: 1%;
+            padding: 0;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .container {
+            padding: 0;
+            width: 100%;
+            height: 90%;
+        }
+
+        .game-container {
+            border-radius: 10px;
+            padding: 10px;
+            width: 30%;
+            margin: auto;
+            margin-bottom: 20px;
+        }
+
+        .carousel-inner {
+            border-radius: 10px;
+        }
+
+        .position-group {
+            margin-bottom: 20px;
+            align-items: center;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            margin: auto;
+            margin-left: 10px;
+            margin-right: 10px;
+           background-color: rgba(255, 255, 255, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .player-container {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin: auto;
+        }
+
+        .player-item {
+            width: 30%;
+           
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .player-item img {
+            width: 170px;
+            height: auto;
+        }
+
+        .player-item p {
+            border-radius: 20px;
+     
+            padding: 5px 10px;
+            margin: 10px;
+            text-align: center;
+            color: #333;
+            border: 3px solid mediumaquamarine;
+        }
+
+        .player-card {
+            border-radius: 10px;
+        }
+
+        .player-card img {
+            border-radius: 10px;
+            width: 50%;
+            height: auto;
+        }
+
+        .player-info p {
+            margin-bottom: 10px;
+        }
+
+        .player-info strong {
+            color: #007bff;
+        }
+
+        h3 {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body style="background-image: url('/imgs/fondo.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
+
+    <div class="container">
+        <!-- Encabezado -->
+        <div class="row align-items-center">
+            <div class="row">
+                <a href="/home/index">
+                    <img src="/imgs/banner.png" alt="Banner" />
+                </a>
+            </div>
+        </div>
+        <br>
+        <!-- Navegador -->
+        <div class="row align-items-center">
+            <div class="col text-center" style="width: 100%;">
+                <div th:replace="~{navbar :: navbarFragment}"></div>
+            </div>
+        </div>
+        <br>
+        <div class="col text-start">
+            <strong>
+                <a href="/yourteam/squad" class="btn btn-primary" style="text-decoration: none; color: inherit; color: white;">
+                    <span class="fa fa-arrow-left"></span>
+                    Volver a la Plantilla
+                </a>
+            </strong>
+        </div>
+                    <h3>Datos del Jugador</h3>
+            <br>
+        <div class="position-group">
+            <h4 style="text-decoration: underline;"><span th:text="${player.name}"></span></h4>
+            <br>
+            <div class="row">
+                <div class="col-md-8">
+                    <img th:src="${player.image}" alt="Imagen de jugador" class="img-fluid" width="50%;" height="50%;">
+                </div>
+                <div class="col-md-4 d-flex align-items-center">
+                    <div class="player-card">
+                        <div class="player-info" style="margin-left: -50%;">
+                            <h5><strong>Posición:</strong> <span th:text="${player.position}"></span></h5>
+                            <h5><strong>Nacionalidad:</strong> <span th:text="${player.nationality}"></span></h5>
+                            <h5><strong>Valor de Mercado:</strong> <span th:text="${player.market_value}"></span>€</h5>
+                            <h5>
+                                <strong th:if="${player.position == 'Portero'}">Goles encajados:</strong>
+                                <strong th:if="${player.position != 'Portero'}">Goles:</strong>
+                                <span th:text="${player.goals}"></span>
+                            </h5>
+                            <h5>
+                                <strong th:if="${player.position == 'Portero'}">Porterías a cero:</strong>
+                                <strong th:if="${player.position != 'Portero'}">Asistencias:</strong>
+                                <span th:if="${player.position == 'Portero'}" th:text="${player.assists}"></span>
+                                <span th:if="${player.position != 'Portero'}" th:text="${player.assists}"></span>
+                            </h5>
+                            <h5><strong>Tarjetas Amarillas:</strong> <span th:text="${player.yc}"></span></h5>
+                            <h5><strong>Tarjetas Rojas:</strong> <span th:text="${player.rc}"></span></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <!-- Footer -->
+        <footer class="bg-body-tertiary text-center text-lg-start">
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+                © 2024 Copyright: FOOTBALLZONE
+            </div>
+        </footer>
+    </div>
+
+    <script th:src="@{/webjars/bootstrap/5.3.2/js/bootstrap.bundle.min.js}"></script>
+</body>
+
+</html>

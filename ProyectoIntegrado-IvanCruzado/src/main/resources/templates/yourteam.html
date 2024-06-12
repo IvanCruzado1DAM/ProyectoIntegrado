@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
+	<!--<link th:href="@{/webjars/font-awesome/6.4.2/css/font-awesome.css}" rel="stylesheet">-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<title>Home</title>
+	<style>
+		body,
+		html {
+			margin: 5%;
+			margin-top: 7%;
+			padding: 0;
+			height: 100%;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.container {
+			width: 100%;
+			/* Ancho completo de la página */
+		}
+	</style>
+</head>
+
+<body
+	style="background-image: url('/imgs/fondo.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
+
+	<div class="container">
+		<!-- Encabezado -->
+		<div class="row align-items-center">
+			<div class="row">
+				<a href="/home/index">
+					<img src="/imgs/banner.png" alt="Banner" />
+				</a>
+			</div>
+		</div>
+		<br>
+		<!-- Navegador -->
+		<div class="row align-items-center">
+			<div class="col text-center" style="width: 100%;">
+				<div th:replace="~{navbar :: navbarFragment}"></div>
+			</div>
+		</div>
+		<br>
+		<br>
+		<!-- Cuerpo -->
+		<div class="row align-items-center justify-content-center">
+			<div class="row align-items-center justify-content-center">
+				<div style="display: flex; justify-content: center;">
+					<a href="/yourteam/calendar" class="col-md-6 text-center"
+						style="background-color: rgba(255, 255, 255, 0.7); border-radius: 20%; width: 300px; height: 300px; margin-right: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+						<h2 style="text-align: center; padding-top: 5%; margin-bottom: 2%;">Calendario</h2>
+						<img src="'../static/imgs/calendario.png'" th:src="@{/imgs/calendario.png}" alt="Badge"
+							style="max-width: 75%; max-height: 75%;">
+					</a>
+
+					<a href="/yourteam/squad" class="col-md-6 text-center"
+						style="background-color: rgba(255, 255, 255, 0.7); border-radius: 20%; width: 300px; height: 300px; display: flex; flex-direction: column; justify-content: center; align-items: center; ">
+						<h2 style="text-align: center; padding-top: 5%; margin-bottom: -5%;">Plantilla</h2>
+						<br>
+						<img src="'../static' + ${userTeam.badge}" th:src="@{${userTeam.badge}}" alt="Badge"
+							style="max-width: 75%; max-height: 75%;">
+					</a>
+
+					<a href="/yourteam/multimedia" class="col-md-6 text-center"
+						style="background-color: rgba(255, 255, 255, 0.7); border-radius: 20%; width: 300px; height: 300px; margin-left: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+						<h2 style="text-align: center; padding-top: 5%; margin-bottom: 2%;">Noticias</h2>
+						<img src="'../static/imgs/noticias.png'" th:src="@{/imgs/noticias.png}" alt="Badge"
+							style="max-width: 75%; max-height: 75%;">
+					</a>
+
+
+				</div>
+			</div>
+		</div>
+		<br>
+		<br>
+		<!-- Footer -->
+		<footer class="bg-body-tertiary text-center text-lg-start">
+			<div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+				© 2024 Copyright: FOOTBALLZONE
+			</div>
+		</footer>
+	</div>
+
+</body>
+
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
+	<!--<link th:href="@{/webjars/font-awesome/6.4.2/css/font-awesome.css}" rel="stylesheet">-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<title>Register Multimedia</title>
+	<style>
+		body,
+		html {
+			margin: 0;
+			padding: 0;
+			margin-top: 2%;
+			height: 160%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			background-image: url('/imgs/fondo.jpg');
+			background-size: cover;
+			background-position: center center;
+			background-repeat: no-repeat;
+			background-attachment: fixed;
+		}
+
+		.container {
+			width: 100%;
+		}
+
+		img {
+			width: 100%;
+			height: auto;
+		}
+
+		.additional-fields {
+			display: none;
+		}
+
+		.form-label {
+			font-weight: bold;
+		}
+
+		.form-control {
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			transition: box-shadow 0.3s ease;
+		}
+
+		.form-control:focus {
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		}
+
+		.form-container {
+			border: 1px solid black;
+			border-radius: 20px;
+			background-color: rgba(240, 248, 255, 0.6);
+			padding: 5%;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<!-- Encabezado -->
+		<div class="row align-items-center">
+			<div class="row">
+				<a href="/home/index">
+					<img src="/imgs/banner.png" alt="Banner" />
+				</a>
+			</div>
+		</div>
+		<br>
+		<!-- Navegador -->
+		<div class="row align-items-center">
+			<div class="col text-center" style="width: 100%;">
+				<div th:replace="~{navbar :: navbarFragment}"></div>
+			</div>
+		</div>
+		<br>
+		<br>
+		<!-- Cuerpo -->
+		<div class="form-container">
+			<form th:action="@{admin/registerNewMultimediaVideo}" th:object="${multimedia}" method="post"
+				enctype="multipart/form-data">
+				<div th:if="${success}" class="alert alert-success" role="alert">
+					<span th:text="${success}"></span>
+				</div>
+				<div class="mb-3">
+					<label class="form-label">Select the type of content:</label>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="contentType" id="texto" value="texto">
+						<label class="form-check-label" for="texto">
+							Text
+						</label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="contentType" id="video" value="video"
+							checked>
+						<label class="form-check-label" for="video">
+							Video
+						</label>
+					</div>
+				</div>
+
+				<div id="videoFields">
+					<div class="mb-3">
+						<label class="form-label" for="title_video">Title:</label>
+						<input type="text" class="form-control" id="title_video" name="title_video">
+					</div>
+					<div class="mb-3">
+						<label class="form-label" for="video">Video's link:</label>
+						<input type="text" class="form-control" id="video" name="video">
+					</div>
+				</div>
+				
+				<label for="idteammultimedia"><strong> Team: </strong></label>
+				<select style="margin-top:1%;" class="form-control" id="idteammultimedia" name="idteammultimedia">
+					<option th:field="*{idteammultimedia}" th:each="team : ${teams}" th:value="${team.id_team}"
+						th:text="${team.name}">Equipo</option>
+				</select>
+				<br>
+				<button type="submit" class="btn btn-primary">Register</button>
+			</form>
+		</div>
+
+		<script>
+			function updateHiddenField() {
+				// Obtén el nombre del archivo seleccionado
+				var logoInput = document.getElementById('multimediaFile');
+				var logoNameInput = document.getElementById('image');
+
+				if (logoInput.files.length > 0) {
+					var fileName = logoInput.files[0].name;
+					logoNameInput.value = fileName;
+				}
+			}
+			// Función para mostrar los campos correspondientes según la selección del radio button
+
+			document.addEventListener('DOMContentLoaded', function () {
+				const videoRadio = document.getElementById('texto');
+
+				videoRadio.addEventListener('change', function () {
+					if (this.checked) {
+						window.location.href = '/admin/registermultimedia'; // Cambia esta URL por la que desees
+					}
+				});
+			});
+
+
+			var successMessage = document.querySelector('.alert-success');
+
+			// Mostrar el mensaje de error si tiene texto
+			if (successMessage.textContent.trim() !== '') {
+				successMessage.style.display = 'block';
+			}
+
+			setTimeout(function () {
+				successMessage.style.display = 'none';
+			}, 5000);
+
+		</script>
+		<br>
+		<!-- Footer -->
+		<footer class="bg-body-tertiary text-center text-lg-start">
+			<div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
+				© 2024 Copyright: FOOTBALLZONE
+			</div>
+		</footer>
+	</div>
+</body>
+
+</html>
