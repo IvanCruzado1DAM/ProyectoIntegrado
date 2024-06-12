@@ -47,15 +47,15 @@ import com.example.demo.service.impl.UserServiceImpl;
 @RequestMapping("/adminedit")
 public class AdminEditController {
 	
-	private static final String EDITUSERS_VIEW="/adminedit/edituser";
-	private static final String EDITPLAYERS_VIEW="/adminedit/editplayer";
-	private static final String EDITTEAMS_VIEW="/adminedit/editteam";
-	private static final String EDITCOACHS_VIEW="/adminedit/editcoach";
-	private static final String EDITPRESIDENTS_VIEW="/adminedit/editpresident";
-	private static final String EDITGAMES_VIEW="/adminedit/editgame";
-	private static final String EDITPHYSIOS_VIEW="/adminedit/editphysio";
-	private static final String EDITDIETISTS_VIEW="/adminedit/editdietist";
-	private static final String EDITMULTIMEDIAS_VIEW="/adminedit/editmultimedia";
+	private static final String EDITUSERS_VIEW="edituser";
+	private static final String EDITPLAYERS_VIEW="editplayer";
+	private static final String EDITTEAMS_VIEW="editteam";
+	private static final String EDITCOACHS_VIEW="editcoach";
+	private static final String EDITPRESIDENTS_VIEW="editpresident";
+	private static final String EDITGAMES_VIEW="editgame";
+	private static final String EDITPHYSIOS_VIEW="editphysio";
+	private static final String EDITDIETISTS_VIEW="editdietist";
+	private static final String EDITMULTIMEDIAS_VIEW="editmultimedia";
 
 	@Autowired
 	@Qualifier("userService")

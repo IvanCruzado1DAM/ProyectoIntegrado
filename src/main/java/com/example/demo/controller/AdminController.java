@@ -56,16 +56,16 @@ public class AdminController {
 
 	private static final String REGISTERUSERS_VIEW = "registerallusers";
 	private static final String EDITUSERS_VIEW = "editallusers";
-	private static final String REGISTERTEAM_VIEW = "/adminadd/registerteam";
-	private static final String REGISTERMULTIMEDIA_VIEW = "/adminadd/registermultimedia";
-	private static final String REGISTERMULTIMEDIAVIDEO_VIEW = "/adminadd/registermultimediaVideo";
-	private static final String REGISTERNEWUSER_VIEW = "/adminadd/registernewuser";
-	private static final String REGISTERNEWPHYSIO_VIEW = "/adminadd/registernewphysio";
-	private static final String REGISTERNEWDIETIST_VIEW = "/adminadd/registernewdietist";
-	private static final String REGISTERNEWCOACH_VIEW = "/adminadd/registernewcoach";
-	private static final String REGISTERNEWPRESIDENT_VIEW = "/adminadd/registernewpresident";
-	private static final String REGISTERNEWGAME_VIEW = "/adminadd/registernewgame";
-	private static final String REGISTERNEWPLAYER_VIEW = "/adminadd/registernewplayer";
+	private static final String REGISTERTEAM_VIEW = "registerteam";
+	private static final String REGISTERMULTIMEDIA_VIEW = "registermultimedia";
+	private static final String REGISTERMULTIMEDIAVIDEO_VIEW = "registermultimediaVideo";
+	private static final String REGISTERNEWUSER_VIEW = "registernewuser";
+	private static final String REGISTERNEWPHYSIO_VIEW = "registernewphysio";
+	private static final String REGISTERNEWDIETIST_VIEW = "registernewdietist";
+	private static final String REGISTERNEWCOACH_VIEW = "registernewcoach";
+	private static final String REGISTERNEWPRESIDENT_VIEW = "registernewpresident";
+	private static final String REGISTERNEWGAME_VIEW = "registernewgame";
+	private static final String REGISTERNEWPLAYER_VIEW = "registernewplayer";
 
 
 	@Autowired

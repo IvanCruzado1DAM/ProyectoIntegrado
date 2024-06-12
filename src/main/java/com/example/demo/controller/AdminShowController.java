@@ -36,15 +36,15 @@ import com.example.demo.service.impl.UserServiceImpl;
 @RequestMapping("/adminshow")
 public class AdminShowController {
 	
-	private static final String SHOWUSERS_VIEW="/adminshow/showusers";
-	private static final String SHOWPLAYERS_VIEW="/adminshow/showplayers";
-	private static final String SHOWTEAMS_VIEW="/adminshow/showteams";
-	private static final String SHOWCOACHS_VIEW="/adminshow/showcoachs";
-	private static final String SHOWPRESIDENTS_VIEW="/adminshow/showpresidents";
-	private static final String SHOWGAMES_VIEW="/adminshow/showmatchs";
-	private static final String SHOWPHYSIOS_VIEW="/adminshow/showphysios";
-	private static final String SHOWDIETISTS_VIEW="/adminshow/showdietists";
-	private static final String SHOWMULTIMEDIAS_VIEW="/adminshow/showmultimedias";
+	private static final String SHOWUSERS_VIEW="showusers";
+	private static final String SHOWPLAYERS_VIEW="showplayers";
+	private static final String SHOWTEAMS_VIEW="showteams";
+	private static final String SHOWCOACHS_VIEW="showcoachs";
+	private static final String SHOWPRESIDENTS_VIEW="showpresidents";
+	private static final String SHOWGAMES_VIEW="showmatchs";
+	private static final String SHOWPHYSIOS_VIEW="showphysios";
+	private static final String SHOWDIETISTS_VIEW="showdietists";
+	private static final String SHOWMULTIMEDIAS_VIEW="showmultimedias";
 
 	@Autowired
 	@Qualifier("userService")
