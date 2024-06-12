@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:football_zone/models/users.dart';
 import 'package:football_zone/models/player.dart';
+import 'package:football_zone/models/renovationoffer.dart';
 import 'package:football_zone/services/player_services.dart';
 
 class PlayerScreen extends StatefulWidget {
@@ -69,6 +70,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   late Future<PlayerModel> futurePlayer;
   final PlayerService playerService = PlayerService();
+  final TextEditingController _yearController = TextEditingController(); // Añadir controlador
 
   @override
   void initState() {
@@ -77,106 +79,130 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   @override
+  void dispose() {
+    _yearController.dispose(); // Liberar el controlador
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-  body: SingleChildScrollView(
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        FutureBuilder<PlayerModel>(
-          future: futurePlayer,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else if (snapshot.hasData) {
-              final player = snapshot.data!;
-              Color backgroundColor;
-              String imagePath;
-              switch (player.position) {
-                case 'Portero':
-                  backgroundColor = Colors.blue.withOpacity(0.6);
-                  imagePath = 'assets/images/portero.png';
-                  break;
-                case 'Defensa':
-                  backgroundColor = Colors.green.withOpacity(0.6);
-                  imagePath = 'assets/images/defensa.png';
-                  break;
-                case 'Centrocampista':
-                  backgroundColor = Colors.yellow.withOpacity(0.6);
-                  imagePath = 'assets/images/centrocampista.png';
-                  break;
-                case 'Delantero':
-                  backgroundColor = Colors.red.withOpacity(0.6);
-                  imagePath = 'assets/images/delantero.png';
-                  break;
-                default:
-                  backgroundColor = Colors.grey.withOpacity(0.6);
-                  imagePath = 'assets/images/default.png';
-                  break;
-              }
-              return Container(
-                padding: EdgeInsets.all(16.0),
-                margin: EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 10,
-                      offset: Offset(0, 5),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            FutureBuilder<PlayerModel>(
+              future: futurePlayer,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (snapshot.hasData) {
+                  final player = snapshot.data!;
+                  Color backgroundColor;
+                  String imagePath;
+                  switch (player.position) {
+                    case 'Portero':
+                      backgroundColor = Colors.blue.withOpacity(0.6);
+                      imagePath = 'assets/images/portero.png';
+                      break;
+                    case 'Defensa':
+                      backgroundColor = Colors.green.withOpacity(0.6);
+                      imagePath = 'assets/images/defensa.png';
+                      break;
+                    case 'Centrocampista':
+                      backgroundColor = Colors.yellow.withOpacity(0.6);
+                      imagePath = 'assets/images/centrocampista.png';
+                      break;
+                    case 'Delantero':
+                      backgroundColor = Colors.red.withOpacity(0.6);
+                      imagePath = 'assets/images/delantero.png';
+                      break;
+                    default:
+                      backgroundColor = Colors.grey.withOpacity(0.6);
+                      imagePath = 'assets/images/default.png';
+                      break;
+                  }
+                  return Container(
+                    padding: EdgeInsets.all(16.0),
+                    margin: EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 10,
+                          offset: Offset(0, 5),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Center(
-                      child: Column(
-                        children: [
-                          CircleAvatar(
-                            backgroundImage: AssetImage(imagePath),
-                            backgroundColor: backgroundColor,
-                            radius: 50,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Center(
+                          child: Column(
+                            children: [
+                              CircleAvatar(
+                                backgroundImage: AssetImage(imagePath),
+                                backgroundColor: backgroundColor,
+                                radius: 50,
+                              ),
+                              SizedBox(height: 10),
+                              Text(
+                                player.name,
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                            ],
                           ),
-                          SizedBox(height: 10),
-                          Text(
-                            player.name,
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.underline,
+                        ),
+                        SizedBox(height: 20),
+                        _buildInfoRow('Position', player.position),
+                        _buildInfoRow('Dorsal', player.dorsal.toString()),
+                        _buildInfoRow('Age', player.age?.toString() ?? 'N/A'),
+                        _buildInfoRow('Nationality', player.nationality ?? 'N/A'),
+                        _buildInfoRow(player.position == 'Portero' ? 'Goals Conceded' : 'Goals', player.goals?.toString() ?? 'N/A'),
+                        _buildInfoRow(player.position == 'Portero' ? 'Unbeaten Matches' : 'Assists', player.assists?.toString() ?? 'N/A'),
+                        _buildInfoRow('Yellow Cards', player.yc?.toString() ?? 'N/A'),
+                        _buildInfoRow('Red Cards', player.rc?.toString() ?? 'N/A'),
+                        _buildInfoRow('Contract', player.contract?.toString() ?? 'N/A'),
+                        _buildInfoRow('Football Aspects', player.footballAspects ?? 'N/A'),
+                        _buildInfoRow('Diet', player.diet ?? 'No diet'),
+                        SizedBox(height: 20),
+                        Center(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _showRenovationDialog(context, player, widget.token);
+                            },
+                            child: Text('Request Renovation'),
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                        SizedBox(height: 20),
+                      ],
                     ),
-                    SizedBox(height: 20),
-                    _buildInfoRow('Position', player.position),
-                    _buildInfoRow('Dorsal', player.dorsal.toString()),
-                    _buildInfoRow('Age', player.age?.toString() ?? 'N/A'),
-                    _buildInfoRow('Nationality', player.nationality ?? 'N/A'),
-                    _buildInfoRow(player.position == 'Portero' ? 'Goals Conceded' : 'Goals', player.goals?.toString() ?? 'N/A'),
-                    _buildInfoRow(player.position == 'Portero' ? 'Unbeaten Matches' : 'Assists', player.assists?.toString() ?? 'N/A'),
-                    _buildInfoRow('Yellow Cards', player.yc?.toString() ?? 'N/A'),
-                    _buildInfoRow('Red Cards', player.rc?.toString() ?? 'N/A'),
-                    _buildInfoRow('Contract', player.contract?.toString() ?? 'N/A'),
-                    _buildInfoRow('Football Aspects', player.footballAspects ?? 'N/A'),
-                    _buildInfoRow('Diet', player.diet ?? 'No diet'),
-                  ],
-                ),
-              );
-            } else {
-              return Center(child: Text('No player data found'));
-            }
-          },
+                  );
+                } else {
+                  return Center(child: Text('No player data found'));
+                }
+              },
+            ),
+          ],
         ),
-        SizedBox(height: 20),
-        Center(
-          child: ElevatedButton(
-            onPressed: () {
+      ),
+    );
+  }
+
+  void _showRenovationDialog(BuildContext context, PlayerModel player, String token) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -186,13 +212,11 @@ class _ProfilePageState extends State<ProfilePage> {
               children: <Widget>[
                 Text('Enter the year for renovation:'),
                 TextFormField(
+                  controller: _yearController,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: 'Year',
                   ),
-                  onChanged: (value) {
-                    // Puedes validar el valor del año aquí si es necesario
-                  },
                 ),
               ],
             ),
@@ -205,11 +229,65 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Text('Cancel'),
             ),
             TextButton(
-              onPressed: () {
-                // Aquí puedes obtener el valor del año ingresado y realizar la validación
-                // Por ejemplo, puedes verificar si el año ingresado es mayor o igual al año de contrato del jugador
-                // Si la validación pasa, puedes realizar la acción de renovación
-                // Si no pasa, puedes mostrar un mensaje de error o simplemente no hacer nada
+              onPressed: () async {
+                final int enteredYear = int.tryParse(_yearController.text) ?? 0;
+                if (enteredYear < (player.contract ?? 0)) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: Text('Error: The entered year is earlier than your contract year.'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  try {
+                    await playerService.addRenovationoffer(player.idPlayer!, enteredYear, widget.token);
+                    Navigator.of(context).pop(); // Cierra el diálogo de introducir año
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: Text('Renovation offer sent!'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Cierra el diálogo de éxito
+                              },
+                              child: Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  } catch (e) {
+                    Navigator.of(context).pop(); // Cierra el diálogo de introducir año
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: Text('Renovation offer sent!'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Cierra el diálogo de error
+                              },
+                              child: Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                }
               },
               child: Text('Submit'),
             ),
@@ -217,22 +295,6 @@ class _ProfilePageState extends State<ProfilePage> {
         );
       },
     );
-  },
-  child: Text('Request Renovation'),
-  style: ElevatedButton.styleFrom(
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(20),
-    ),
-  ),
-            
-          ),
-        ),
-        SizedBox(height: 20),
-      ],
-    ),
-  ),
-);
-
   }
 
   Widget _buildInfoRow(String label, String value) {

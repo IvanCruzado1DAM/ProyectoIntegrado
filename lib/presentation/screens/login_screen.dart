@@ -95,10 +95,10 @@ class _LoginFormState extends State<LoginForm> {
         );
         break;
       case 'ROLE_PRESIDENT':
-        /*Navigator.push(
+        Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => PresidentScreen(token: token)),
-        );*/
+          MaterialPageRoute(builder: (context) => PresidentScreen(user: userData)),
+        );
         break;
       case 'ROLE_PHYSIO':
         Navigator.push(

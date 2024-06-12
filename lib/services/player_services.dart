@@ -22,13 +22,9 @@ class PlayerService{
   }
 
   Future<RenovationofferModel> addRenovationoffer(int idplayerrenovation, int year, String token) async {
-    final String apiUrl = '$baseUrl/sendRenovationoffer';
+    final String apiUrl = '$baseUrl/sendRenovationoffer?idplayerrenovation=$idplayerrenovation&year=$year';
     final response = await http.post(
       Uri.parse(apiUrl),
-      body: jsonEncode({
-        'idplayerrenovation': idplayerrenovation,
-        'year': year,
-      }),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token', 
