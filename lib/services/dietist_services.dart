@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:football_zone/models/player.dart';
 
 class DietistService {
-  static const String baseUrl = 'http://localhost:8090/apiDietist';
+  static const String baseUrl = 'http://192.168.56.1:8090/apiDietist';
   
   Future<List<PlayerModel>> getPlayersByTeam(int teamId, String token) async {
     final String apiUrl = '$baseUrl/getPlayersbyTeam?id=$teamId';

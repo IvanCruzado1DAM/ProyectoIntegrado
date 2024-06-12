@@ -11,32 +11,37 @@ class LoginResponse {
   LoginResponse({this.userData, this.error});
 }
 
+class LoginResult {
+  final UserData? userData;
+  final String? error;
+
+  LoginResult({this.userData, this.error});
+}
+
+
 class UserService {
-  static const String baseUrl = 'http://localhost:8090/api';
+  static const String baseUrl = 'http://192.168.56.1:8090/api';
 
-  Future<LoginResponse> login(String username, String password) async {
-    try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/login'),
-        body: {
-          'username': username,
-          'password': password,
-        },
-      );
+  Future<LoginResult> login(String username, String password) async {
+  final url = Uri.parse('$baseUrl/login?username=$username&password=$password');
+  final response = await http.post(
+    url,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  );
 
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = json.decode(response.body);
-        final UserData userData = UserData.fromJson(responseData);
-        return LoginResponse(userData: userData);
-      } else {
-        final Map<String, dynamic> errorData = json.decode(response.body);
-        final String errorMessage = errorData['message'] ?? 'Error desconocido';
-        return LoginResponse(error: errorMessage);
-      }
-    } catch (e) {
-      return LoginResponse(error: 'Error de conexión: $e');
-    }
+  print('username: $username');
+  if (response.statusCode == 200) {
+    final data = jsonDecode(response.body);
+    final userData = UserData.fromJson(data);
+    return LoginResult(userData: userData);
+  } else {
+    return LoginResult(error: 'Credenciales incorrectas');
   }
+}
+
+
 
   Future<List<TeamModel>> getTeams() async {
     final response = await http.get(Uri.parse('$baseUrl/getTeams'));

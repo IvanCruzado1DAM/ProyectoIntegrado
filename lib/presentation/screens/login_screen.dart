@@ -89,10 +89,10 @@ class _LoginFormState extends State<LoginForm> {
         );*/
         break;
       case 'ROLE_PLAYER':
-        /*Navigator.push(
+      Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => PlayerScreen(token: token)),
-        );*/
+          MaterialPageRoute(builder: (context) => PlayerScreen(user: userData)),
+        );
         break;
       case 'ROLE_PRESIDENT':
         /*Navigator.push(
@@ -115,7 +115,7 @@ class _LoginFormState extends State<LoginForm> {
       case 'ROLE_COACH':
         /*Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CoachScreen(token: token)),
+          MaterialPageRoute(builder: (context) => CoachScreen(user: userData)),
         );*/
         break;
       default:
@@ -200,6 +200,7 @@ class _LoginFormState extends State<LoginForm> {
             height: 50,
             child: ElevatedButton(
               onPressed: () {
+                print("Username:"+username);
                 _userService.login(username, password).then((result) {
                   if (result.error != null) {
                     showDialog(

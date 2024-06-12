@@ -26,6 +26,7 @@ class _PhysioScreenState extends State<PhysioScreen> {
     try {
       final List<PlayerModel> injuredPlayers =
           await _physioService.getPlayersInjured(widget.user.idTeamUser!, widget.user.token!);
+          print('IdTeam:'+widget.user.idTeamUser.toString());
       return injuredPlayers;
     } catch (e) {
       print('Error fetching injured players: $e');
