@@ -20,7 +20,7 @@ class LoginResult {
 
 
 class UserService {
-  static const String baseUrl = 'http://192.168.56.1:8090/api';
+  static const String baseUrl = 'https://proyectointegradoapi.onrender.com/api';
 
   Future<LoginResult> login(String username, String password) async {
   final url = Uri.parse('$baseUrl/login?username=$username&password=$password');

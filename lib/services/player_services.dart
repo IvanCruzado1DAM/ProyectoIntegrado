@@ -4,7 +4,7 @@ import 'package:football_zone/models/player.dart';
 import 'package:football_zone/models/renovationoffer.dart';
 
 class PlayerService{
-  static const String baseUrl = 'http://192.168.56.1:8090/apiPlayer';
+  static const String baseUrl = 'https://proyectointegradoapi.onrender.com/apiPlayer';
   Future<PlayerModel> fetchPlayerInfo(int id, String token) async {
     final String apiUrl = '$baseUrl/getInfoPlayer?id=$id';
     final response = await http.get(

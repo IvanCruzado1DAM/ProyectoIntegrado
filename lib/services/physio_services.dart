@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:football_zone/models/player.dart';
 
 class PhysioService {
-  static const String baseUrl = 'http://192.168.56.1:8090/apiPhysio';
+  static const String baseUrl = 'https://proyectointegradoapi.onrender.com/apiPhysio';
   
   Future<List<PlayerModel>> getPlayersInjured(int teamId, String token) async {
     final String apiUrl = '$baseUrl/getPlayersInjured?id=$teamId';

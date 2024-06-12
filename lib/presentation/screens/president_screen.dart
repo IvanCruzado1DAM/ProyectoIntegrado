@@ -15,15 +15,28 @@ class PresidentScreen extends StatefulWidget {
 
 class _PresidentScreenState extends State<PresidentScreen> {
   int _selectedIndex = 0;
-  
+  PageController _pageController = PageController();
 
-  static List<Widget> _widgetOptions = <Widget>[
-    MarketScreen(),
-    PlayersScreen(),
-    FinancialActionsScreen(),
-  ];
+  late List<Widget> _widgetOptions;
+
+  @override
+  void initState() {
+    super.initState();
+    _widgetOptions = <Widget>[
+      MarketScreen(user: widget.user),
+      PlayersScreen(user: widget.user),
+      FinancialActionsScreen(user: widget.user),
+    ];
+  }
 
   void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    _pageController.jumpToPage(index);
+  }
+
+  void _onPageChanged(int index) {
     setState(() {
       _selectedIndex = index;
     });
@@ -33,7 +46,11 @@ class _PresidentScreenState extends State<PresidentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('President Screen')),
-      body: _widgetOptions.elementAt(_selectedIndex),
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: _onPageChanged,
+        children: _widgetOptions,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -50,7 +67,8 @@ class _PresidentScreenState extends State<PresidentScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.blue,
+        selectedItemColor: Colors.white,
+        backgroundColor: Colors.blue,
         onTap: _onItemTapped,
       ),
     );

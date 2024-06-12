@@ -2,8 +2,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:football_zone/models/player.dart';
 
-class DietistService {
-  static const String baseUrl = 'https://proyectointegradoapi.onrender.com/apiDietist';
+class PresidentService {
+  static const String baseUrl = 'https://proyectointegradoapi.onrender.com/apiPresident';
   
   Future<List<PlayerModel>> getPlayersByTeam(int teamId, String token) async {
     final String apiUrl = '$baseUrl/getPlayersbyTeam?id=$teamId';
@@ -23,6 +23,7 @@ class DietistService {
                 name: item['name'],
                 position: item['position'],
                 dorsal: item['dorsal'],
+                transferStatus: item['transfer_status'] ?? ''
               ))
           .toList();
       return players;
@@ -31,17 +32,16 @@ class DietistService {
     }
   }
 
-  Future<void> setDiet(int idDietist, int idPlayer, String diet, String token) async {
-    final url = Uri.parse('$baseUrl/setDiet');
+  Future<void> setTransferible(int idPresident, int idPlayer, String token) async {
+    final url = Uri.parse('$baseUrl/setTransferible');
     final response = await http.post(
       url,
       headers: {
         'Authorization': 'Bearer $token',
       },
       body: {
-        'idDietist': idDietist.toString(),
+        'idPresident': idPresident.toString(),
         'idPlayer': idPlayer.toString(),
-        'diet': diet,
       },
     );
 

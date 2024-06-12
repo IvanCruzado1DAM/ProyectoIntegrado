@@ -4,7 +4,7 @@ import 'package:football_zone/models/player.dart';
 import 'package:football_zone/models/game.dart';
 
 class CoachService {
-  static const String baseUrl = 'http://192.168.56.1:8090/apiCoach';
+  static const String baseUrl = 'https://proyectointegradoapi.onrender.com/apiCoach';
   
   Future<List<PlayerModel>> getPlayersByTeam(int teamId, String token) async {
     final String apiUrl = '$baseUrl/getPlayersbyTeam?id=$teamId';
