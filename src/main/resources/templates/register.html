@@ -88,9 +88,7 @@
       <div class="form-label-group">
         <label for="id_team_user">Equipo favorito:</label>
         <br>
-        <select style="margin-top: 2%;" class="form-control" id="id_team_user" name="id_team_user">
-            <option th:field="*{id_team_user}" th:each="team : ${teams}" th:value="${team.id_team}" th:text="${team.name}">Equipo</option>
-        </select>
+        
     </div>
     <br>
       <input class="btn btn-lg btn-primary btn-block text-uppercase" id="boton" type="submit" value="Registrar"/>

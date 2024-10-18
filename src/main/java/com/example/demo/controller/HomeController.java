@@ -13,12 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.example.demo.entity.Team;
 import com.example.demo.entity.User;
-import com.example.demo.model.TeamModel;
 import com.example.demo.model.UserModel;
 import com.example.demo.repository.UserRepository;
-import com.example.demo.service.impl.TeamServiceImpl;
 import com.example.demo.service.impl.UserServiceImpl;
 
 @Controller
@@ -39,9 +36,7 @@ public class HomeController {
 	@Qualifier("userRepository")
 	private UserRepository userRepository;
 
-	@Autowired
-	@Qualifier("teamService")
-	private TeamServiceImpl teamService;
+	
 
 	@GetMapping("/index")
 	public ModelAndView index() {
@@ -67,17 +62,6 @@ public class HomeController {
 		return mav;
 	}
 
-	@GetMapping("/yourteam")
-	public ModelAndView tuequipo() {
-		String userName = userService.getCurrentUsername();
-		int idUserTeam = userService.getCurrentUserTeamId(userName);
-		Team userTeam = teamService.loadTeamById(idUserTeam);
-
-		ModelAndView mav = new ModelAndView(YOURTEAM_VIEW);
-		mav.addObject("usuario", userName);
-		mav.addObject("userTeam", userTeam);
-		return mav;
-	}
 
 	@GetMapping("/editUser")
 	public ModelAndView editUser() {
@@ -86,9 +70,7 @@ public class HomeController {
 		System.out.println(username);
 		User usuario = userRepository.findByUsername(username);
 		System.out.println(usuario);
-		List<TeamModel> teams = teamService.listAllTeams();
-		mav.addObject("teams", teams);
-		mav.addObject("id_user", usuario.getId_user());
+		mav.addObject("id_user", usuario.getIduser());
 		mav.addObject("usuario", usuario);
 		return mav;
 	}

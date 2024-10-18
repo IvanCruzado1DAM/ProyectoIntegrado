@@ -27,14 +27,15 @@ import lombok.NoArgsConstructor;
 public class User implements UserDetails {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id_user;
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @Column(name = "iduser")
+    private int iduser;
 
-	private String Name;
+	private String name;
 	@Column(unique = true) 
 	private String username;
 	private String password;
-	private int id_team_user;
+	private String email;
 	private String role;
 	
 	@Transient

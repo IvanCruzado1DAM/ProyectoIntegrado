@@ -14,8 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entity.User;
-import com.example.demo.model.TeamModel;
-import com.example.demo.service.impl.TeamServiceImpl;
 import com.example.demo.service.impl.UserServiceImpl;
 
 @Controller
@@ -26,9 +24,6 @@ public class LoginController {
 	@Qualifier("userService")
 	private UserServiceImpl userService;
 
-	@Autowired
-	@Qualifier("teamService")
-	private TeamServiceImpl teamService;
 
 	@GetMapping("/auth/login")
 	public ModelAndView login(Model model, @RequestParam(name = "error", required = false) String error,
@@ -50,9 +45,7 @@ public class LoginController {
 	@GetMapping("/auth/registerForm")
 	public ModelAndView registerForm(Model model) {
 		ModelAndView mav = new ModelAndView(REGISTER_VIEW);
-		List<TeamModel> teams = teamService.listAllTeams();
 		mav.addObject("user", new User());
-		mav.addObject("teams", teams);
 		return mav;
 	}
 

@@ -2,73 +2,139 @@
 <html>
 
 <head>
-	<meta charset="UTF-8">
-	<link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
-	<!--<link th:href="@{/webjars/font-awesome/6.4.2/css/font-awesome.css}" rel="stylesheet">-->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<title>Home</title>
-	<style>
-		body, html {
-            margin: 5%;
-            margin-top: 10%;
+    <meta charset="UTF-8">
+    <link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>BAR DAMM</title>
+    <style>
+        body,
+        html {
+            margin: 0;
             padding: 0;
             height: 100%;
             display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            font-family: "Helvetica", "Arial", sans-serif;
+        }
+
+        .container {
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+        }
+
+        /* Estilo del menú */
+        .navbar {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 16px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            transition: color 0.3s;
+        }
+
+        .navbar a:hover {
+            color: #ffcc00;
+        }
+
+        .navbar a:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        .content {
+            margin-top: 2%; /* Aumenta este valor para elevar más el rectángulo */
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
         }
-        .container {
-            padding: 0;
-           
-            width: 100%; /* Ancho completo de la página */
+
+        /* Nueva clase para la imagen del logo */
+        .logo-container {
+            position: absolute;
+            top: 0; /* Ajusta la posición vertical del logo para que esté lo más arriba posible */
+            left: 50%; /* Centrado horizontalmente */
+            transform: translateX(-50%); /* Centra la imagen */
+            z-index: -1; /* Mantiene el logo detrás del contenido */
         }
-        img {
-            width: 100%; /* Ocupar todo el ancho del contenedor */
-            height: auto; /* Mantener la proporción de la imagen */
-            
+
+        footer {
+            position: fixed; /* Cambiado a fixed para mantenerlo en la esquina inferior izquierda */
+            bottom: 0;
+            left: 0; /* Alineado a la izquierda */
+            color: gray; /* Color del texto */
+            margin: 0; /* Sin márgenes */
+            padding: 0; /* Sin padding */
+            font-size: 14px; /* Tamaño de la fuente */
+            width: 100%; /* Para que ocupe todo el ancho */
+            text-align: left; /* Alineación del texto a la izquierda */
+            padding-left: 10px; /* Margen a la izquierda */
         }
-        
-	</style>
+    </style>
 </head>
 
-<body style="background-image: url('/imgs/fondo.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
-	
-	<div class="container">
-		<!-- Encabezado -->
-		<div class="row align-items-center">
-			<div class="row">
-				<img src="/imgs/banner.png" alt="Banner" />
-			</div>
-		</div>
-		<br>
-		<!-- Navegador -->
-		<div class="row align-items-center">
-			<div class="col text-center" style="width: 100%;">
-				<div th:replace="~{navbar :: navbarFragment}"></div>
-			</div>
-		</div>
-		<br>
-		<br>
-		<!-- Cuerpo -->
-		 <div class="row align-items-center justify-content-center">
-        <div class="col-md-6 text-center" style="background-color: rgba(255, 255, 255, 0.7); border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-				<h2>Welcome to FootballZone!</h2>
-<p> At FootballZone, we immerse you in the exciting world of football, where the excitement never ends and every match is a new adventure. From the legendary feats of great players to the most thrilling moments in the history of this sport, here you will find everything you need to keep your passion for football alive.</p>
-<p> Explore our breaking news, stay updated on the latest transfers, and discover detailed analyses of the most important matches. Whether you're a die-hard fan of a particular team or simply love the game in general, at FootballZone, we have something for everyone.</p>
-<p> Join our community of fans, share your opinions, and engage in lively debates about the world's most popular sport. Whether you're a follower of the local league or an enthusiast of international football, here you'll find a place where your love for the game can flourish.</p>
-<p> We are here to celebrate the greatness of football, from moments of glory on the field to the most inspiring stories off it. Welcome to FootballZone, where football comes to life!</p>
-			</div>
-		</div>
-		<br>
-		<br>
-		<!-- Footer -->
-		<footer class="bg-body-tertiary text-center text-lg-start">
-			<div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
-				© 2024 Copyright: FOOTBALLZONE
-			</div> 
-		</footer>
-	</div>
+<body style="background-image: url('/imgs/fondobar.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
 
+    <div class="container">
+        <!-- Encabezado -->
+        <br>
+        <!-- Navegador -->
+        <div class="navbar">
+            <div class="col text-center" style="width: 100%;">
+                <div th:replace="~{navbar :: navbarFragment}"></div>
+            </div>
+        </div>
+
+        <br>
+        <br>
+
+        <!-- Contenedor para el logo -->
+        <div class="logo-container">
+            <img src="/imgs/logobar.png" alt="Logo Bar DAMM" style="width: 100px;"> <!-- Ajusta el tamaño según sea necesario -->
+        </div>
+
+        <!-- Cuerpo -->
+        <div class="content">
+            <div class="row align-items-center justify-content-center">
+                <div class="col-md-6 text-center" style="background-color: rgba(255, 255, 255, 0.7); border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <h1>¡Bienvenidos a <span class="highlight">Bar DAMM</span>!</h1>
+                    <p>En el corazón de la ciudad, <strong>Bar DAMM</strong> es el lugar ideal para disfrutar de una experiencia única.</p>
+
+                    <h3>¿Qué nos hace especiales?</h3>
+                    
+                    <ul>
+                        <li><strong>Amplia Selección de Bebidas:</strong> Desde las cervezas artesanales más refrescantes hasta cócteles innovadores, en <strong>Bar DAMM</strong> encontrarás una variedad de opciones que satisfarán todos los paladares.</li>
+                        <li><strong>Eventos y Entretenimiento:</strong> Únete a nosotros para noches de música en vivo, trivia, y otros eventos emocionantes que animarán tu experiencia en el bar. ¡Siempre hay algo sucediendo en <strong>Bar DAMM</strong>!</li>
+                        <li><strong>Ambiente Acogedor:</strong> Con una decoración única y un equipo amable, garantizamos que cada visita se sienta como en casa. Nuestro objetivo es hacer que te sientas bienvenido y cómodo.</li>
+                    </ul>
+
+                    <p>Ya sea que busques un lugar para relajarte después del trabajo o un sitio divertido para salir con amigos, <strong>Bar DAMM</strong> es tu destino. </p>
+                    <p>¡Ven y descubre por qué somos el bar más querido de la ciudad!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        © 2024 Copyright: BAR DAMM
+    </footer>
 </body>
 
 </html>
