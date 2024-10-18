@@ -67,28 +67,28 @@
                     <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item dropdown">
                         <a class="nav-link" href="/admin/registerusers" role="button" data-bs-toggle="dropdown"
                            aria-expanded="false" style="white-space: nowrap;">
-                            Register
+                            Drinks
                         </a>
                     </li>
                     <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
-                        <a class="nav-link" href="/admin/registerteam" style="white-space: nowrap;">Register Team</a>
+                        <a class="nav-link" href="/admin/editusers" style="white-space: nowrap;">Events</a>
                     </li>
                     <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
-                        <a class="nav-link" href="/admin/editusers" style="white-space: nowrap;">Edit</a>
-                    </li>
-                    <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
-                        <a class="nav-link" href="/admin/registermultimedia" style="white-space: nowrap;">Redact New</a>
+                        <a class="nav-link" href="/admin/registermultimedia" style="white-space: nowrap;">Job Applications</a>
                     </li>
                     
                     <!-- Elementos siempre visibles -->
                     <li sec:authorize="!hasRole('ROLE_ADMIN')" class="nav-item active">
-                        <a class="nav-link" href="/home/yourteam" style="white-space: nowrap;">Your Team</a>
+                        <a class="nav-link" href="/home/yourteam" style="white-space: nowrap;">Drinks</a>
+                    </li>
+                    <li sec:authorize="!hasRole('ROLE_ADMIN')" class="nav-item active">
+                        <a class="nav-link" href="/home/yourteam" style="white-space: nowrap;">Soon Events</a>
                     </li>
                     <li sec:authorize="!hasRole('ROLE_ADMIN')" class="nav-item active">
                         <a class="nav-link" href="/home/aboutus" style="white-space: nowrap;">About us</a>
                     </li>
                     <li sec:authorize="!hasRole('ROLE_ADMIN')" class="nav-item active">
-                        <a class="nav-link" href="/home/contactus" style="white-space: nowrap;">Contact</a>
+                        <a class="nav-link" href="/home/wherearewe" style="white-space: nowrap;">Where are we?</a>
                     </li>
 
                     <!-- Elementos para usuarios no autenticados -->

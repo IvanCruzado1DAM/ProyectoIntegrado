@@ -24,7 +24,7 @@ public class HomeController {
 
 	private static final String HOME_VIEW = "home";
 	private static final String ABOUTUS_VIEW = "aboutus";
-	private static final String CONTACT_VIEW = "contact";
+	private static final String WHEREAREWE_VIEW = "wherearewe";
 	private static final String YOURTEAM_VIEW = "yourteam";
 	private static final String EDIT_USER = "updateuser";
 
@@ -46,10 +46,10 @@ public class HomeController {
 		return mav;
 	}
 
-	@GetMapping("/contactus")
+	@GetMapping("/wherearewe")
 	public ModelAndView contacto() {
 		String userName = userService.getCurrentUsername();
-		ModelAndView mav = new ModelAndView(CONTACT_VIEW);
+		ModelAndView mav = new ModelAndView(WHEREAREWE_VIEW);
 		mav.addObject("usuario", userName);
 		return mav;
 	}

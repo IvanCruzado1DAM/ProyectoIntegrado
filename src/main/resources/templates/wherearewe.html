@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<title>BAR DAMM</title>
+	<style>
+		body,
+		html {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: center;
+			font-family: "Helvetica", "Arial", sans-serif;
+		}
+
+		.container {
+			width: 100%;
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+		}
+
+		img {
+			width: 100%;
+			height: auto;
+		}
+
+		.navbar {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			font-size: 16px;
+		}
+
+		.navbar a {
+			color: white;
+			text-decoration: none;
+			padding: 10px 15px;
+			transition: color 0.3s;
+		}
+
+		.navbar a:hover {
+			color: #ffcc00;
+		}
+
+		.navbar a:focus {
+			outline: none;
+			box-shadow: none;
+		}
+
+		/* Reduced vertical margin for content */
+		.content {
+			margin-top: 20%;
+			flex-grow: 1;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			margin-bottom: 2%;
+		}
+
+		.logo-container {
+			position: absolute;
+			top: 0;
+			left: 50%;
+			transform: translateX(-50%);
+			z-index: -1;
+		}
+
+		/* Compact text and map container */
+		.text-map-box {
+			background-color: rgba(255, 255, 255, 0.7);
+			border-radius: 10px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			height: 550px;
+			padding: 2%;
+			/* Adjusted padding */
+			overflow: hidden;
+		}
+
+		h1,
+		h3 {
+			margin: 10px 0;
+			/* Reduce vertical spacing for headings */
+		}
+
+		p {
+			margin: 5px 0;
+			/* Reduce vertical spacing for paragraphs */
+		}
+
+		iframe {
+			width: 100%;
+			height: 300px;
+			border: none;
+		}
+
+		footer {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			color: gray;
+			font-size: 14px;
+			width: 100%;
+			text-align: left;
+			padding-left: 10px;
+		}
+
+		.text-map-box {
+			background-color: rgba(255, 255, 255, 0.7);
+			border-radius: 10px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			height: 550px;
+			padding: 2%;
+			width: 90%;
+			/* Set custom width */
+			max-width: 1000px;
+			/* Optional max width */
+			overflow: hidden;
+		}
+	</style>
+</head>
+
+<body
+	style="background-image: url('/imgs/fondobar.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
+
+	<div class="container">
+		<!-- Navbar -->
+		<div class="navbar">
+			<div class="col text-center" style="width: 100%;">
+				<div th:replace="~{navbar :: navbarFragment}"></div>
+			</div>
+		</div>
+
+		<!-- Logo -->
+		<div class="logo-container">
+			<img src="/imgs/logobar.png" alt="Logo Bar DAMM" style="width: 100px;">
+		</div>
+
+		<!-- Content -->
+		<div class="content">
+			<div class="row align-items-center justify-content-center">
+				<div class="col-md-8 text-center text-map-box">
+					<h1>Welcome to <span class="highlight">Bar DAMM</span>!</h1>
+					<p>In the heart of Cádiz, <strong>Bar DAMM</strong> is the perfect place to enjoy a unique
+						experience.</p>
+
+					<h3>Find Us!!!</h3>
+					<p><strong>Address:</strong> Calle Ancha, 25, 11001 Cádiz, Spain</p>
+
+					<!-- Google Map -->
+					<div>
+						<iframe
+							src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3218.9253643523473!2d-6.296743585070046!3d36.53397298001808!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd0dc94bdb7a28d5%3A0x34cb0a94e940bdb0!2sCalle%20Ancha%2C%2025%2C%2011001%20C%C3%A1diz%2C%20Spain!5e0!3m2!1sen!2sus!4v1696413259880!5m2!1sen!2sus"
+							allowfullscreen="" loading="lazy"></iframe>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<footer>
+		© 2024 Copyright: BAR DAMM
+	</footer>
+</body>
+
+</html>
