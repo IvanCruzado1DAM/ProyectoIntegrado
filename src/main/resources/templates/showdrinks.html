@@ -32,6 +32,28 @@
             height: auto;
         }
 
+        /* Estilo del botón NEW DRINK */
+        .new-drink-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #007bff; /* Azul */
+            color: white; /* Texto blanco */
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-left: 7%;
+            margin-top: 1.5%;
+        }
+
+        .new-drink-btn:hover {
+            background-color: #0056b3;
+            
+        }
+
         /* Estilo del menú */
         .navbar {
             position: absolute;
@@ -57,7 +79,7 @@
         }
 
         .content {
-            margin-top: 2%; /* Aumenta este valor para elevar más el rectángulo */
+            margin-top: 2%;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
@@ -65,26 +87,25 @@
             align-items: center;
         }
 
-        /* Nueva clase para la imagen del logo */
         .logo-container {
             position: absolute;
-            top: 0; /* Ajusta la posición vertical del logo para que esté lo más arriba posible */
-            left: 50%; /* Centrado horizontalmente */
-            transform: translateX(-50%); /* Centra la imagen */
-            z-index: -1; /* Mantiene el logo detrás del contenido */
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: -1;
         }
 
         footer {
-            position: fixed; /* Cambiado a fixed para mantenerlo en la esquina inferior izquierda */
+            position: fixed;
             bottom: 0;
-            left: 0; /* Alineado a la izquierda */
-            color: gray; /* Color del texto */
-            margin: 0; /* Sin márgenes */
-            padding: 0; /* Sin padding */
-            font-size: 14px; /* Tamaño de la fuente */
-            width: 100%; /* Para que ocupe todo el ancho */
-            text-align: left; /* Alineación del texto a la izquierda */
-            padding-left: 10px; /* Margen a la izquierda */
+            left: 0;
+            color: gray;
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
+            width: 100%;
+            text-align: left;
+            padding-left: 10px;
         }
 
         .drink-category-title {
@@ -112,14 +133,14 @@
         .drink-row {
             display: flex;
             justify-content: center;
-            flex-wrap: wrap; /* Permite que las bebidas se distribuyan en varias filas */
+            flex-wrap: wrap;
             margin-bottom: -3%;
         }
 
         .drink-column {
-            flex: 1 1 30%; /* Cada bebida ocupará aproximadamente un 30% del ancho del contenedor */
-            max-width: 300px; /* Limita el ancho máximo de cada bebida */
-            margin: 10px; /* Espaciado entre bebidas */
+            flex: 1 1 30%;
+            max-width: 300px;
+            margin: 10px;
         }
     </style>
 </head>
@@ -127,6 +148,11 @@
 <body style="background-image: url('/imgs/fondobar.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
 
     <div class="container">
+        <!-- Botón NEW DRINK -->
+        <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
+        	<a href="/admin/newDrink" class="new-drink-btn">NEW DRINK</a>
+        </li>
+
         <!-- Navegador -->
         <div class="navbar">
             <div class="col text-center" style="width: 100%;">

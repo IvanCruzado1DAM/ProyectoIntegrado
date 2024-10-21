@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<title>BAR DAMM</title>
+	<style>
+		body,
+		html {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: center;
+			font-family: "Helvetica", "Arial", sans-serif;
+		}
+
+		.container {
+			width: 100%;
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+		}
+
+		img {
+			width: 100%;
+			height: auto;
+		}
+
+		.content {
+			margin-top: 2%;
+			flex-grow: 1;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.form-container {
+			background-color: rgba(255, 255, 255, 0.8);
+			/* Fondo blanco transparente */
+			padding: 30px;
+			border-radius: 15px;
+			/* Bordes redondeados */
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			/* Sombra sutil */
+			max-width: 600px;
+			width: 100%;
+		}
+
+		.form-group {
+			margin-bottom: 15px;
+		}
+
+		label {
+			font-weight: bold;
+		}
+
+		select,
+		input {
+			width: 100%;
+			padding: 8px;
+			border-radius: 5px;
+			border: 1px solid #ccc;
+		}
+
+		.btn-submit {
+			background-color: blue;
+			color: white;
+			padding: 10px 15px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+
+		.btn-submit:hover {
+			background-color: darkblue;
+		}
+
+		.new-category {
+			margin-top: 10px;
+			display: none;
+		}
+
+		.navbar {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			font-size: 16px;
+		}
+
+		.navbar a {
+			color: white;
+			text-decoration: none;
+			padding: 10px 15px;
+			transition: color 0.3s;
+		}
+
+		.navbar a:hover {
+			color: #ffcc00;
+		}
+
+		.navbar a:focus {
+			outline: none;
+			box-shadow: none;
+		}
+
+		/* Nueva clase para la imagen del logo */
+		.logo-container {
+			position: absolute;
+			top: 0;
+			left: 50%;
+			transform: translateX(-50%);
+			z-index: -1;
+		}
+
+		footer {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			color: gray;
+			margin: 0;
+			padding: 0;
+			font-size: 14px;
+			width: 100%;
+			text-align: left;
+			padding-left: 10px;
+		}
+
+		
+
+		
+	</style>
+</head>
+
+<body
+	style="background-image: url('/imgs/fondobar.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
+
+	<div class="container">
+		<div class="content">
+
+
+			<div class="navbar">
+				<div class="col text-center" style="width: 100%;">
+					<div th:replace="~{navbar :: navbarFragment}"></div>
+				</div>
+			</div>
+
+			<br><br>
+
+			<!-- Contenedor para el logo -->
+			<div class="logo-container">
+				<img src="/imgs/logobar.png" alt="Logo Bar DAMM" style="width: 100px;">
+			</div>
+
+			<!-- Contenedor del formulario con fondo blanco transparente -->
+			<div class="form-container" style="margin-top: 10%;">
+				<h1>Register New Drink</h1>
+				<form action="/admin/saveDrink" method="POST" enctype="multipart/form-data">
+					<!-- Nombre de la bebida -->
+					<div class="form-group">
+						<label for="drinkname">Drink's Name:</label>
+						<input type="text" id="drinkname" name="drinkname" placeholder="Introduce the drink's name"
+							required>
+					</div>
+
+					<!-- Descripción de la bebida -->
+					<div class="form-group">
+						<label for="drinkdescription">Drink's Description:</label>
+						<input id="drinkdescription" name="drinkdescription"
+							placeholder="Introduce the drink's description" required></input>
+					</div>
+
+					<!-- Categoría de la bebida -->
+					<div class="form-group">
+						<label for="drinkcategory">Drink's Category:</label>
+						<select id="drinkcategory" name="drinkcategory" required>
+							<option value="" disabled selected>Select a Category</option>
+							<!-- Se rellenará con las categorías existentes -->
+							<option th:each="category : ${drinksByCategory}" th:value="${category.key}"
+								th:text="${category.key}"></option>
+							<option value="new">Add New Category</option>
+						</select>
+
+						<!-- Campo para añadir una nueva categoría -->
+						<input type="text" id="newCategoryInput" name="newCategory" placeholder="New Categoty"
+							class="new-category">
+					</div>
+
+					<!-- Precio de la bebida -->
+					<div class="form-group">
+						<label for="drinkprice">Drink's Price (€):</label>
+						<input type="number" id="drinkprice" name="drinkprice" placeholder="Introduce the drink's price"
+							step="0.01" required>
+					</div>
+
+					<!-- Imagen de la bebida -->
+					<div class="form-group">
+						<label for="drinkimage">Drink's Image (PNG, JPG):</label>
+						<input type="file" id="drinkimage" name="drinkimage" accept="image/png, image/jpeg" required>
+					</div>
+
+					<!-- Botón para enviar el formulario -->
+					<div class="form-group" style="display: flex; gap: 10px;">
+						<!-- Botón Save Drink -->
+						<button type="submit" class="btn-submit">Save Drink</button>
+
+						<!-- Botón Back -->
+						<a href="/admin/showDrinks" class="btn btn-secondary"
+							style="padding: 10px 15px; border-radius: 5px; background-color: red; color: black;">BACK</a>
+					</div>
+
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<footer>
+		© 2024 Copyright: BAR DAMM
+	</footer>
+
+	<script>
+		// Mostrar el campo de nueva categoría si el usuario selecciona "Añadir nueva categoría"
+		document.getElementById('drinkcategory').addEventListener('change', function () {
+			const newCategoryInput = document.getElementById('newCategoryInput');
+			if (this.value === 'new') {
+				newCategoryInput.style.display = 'block';
+			} else {
+				newCategoryInput.style.display = 'none';
+			}
+		});
+	</script>
+</body>
+
+</html>

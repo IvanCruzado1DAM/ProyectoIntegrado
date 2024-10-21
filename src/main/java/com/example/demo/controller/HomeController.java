@@ -1,11 +1,14 @@
 package com.example.demo.controller;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,8 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.entity.User;
+import com.example.demo.model.DrinkModel;
 import com.example.demo.model.UserModel;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.service.impl.DrinkServiceImpl;
 import com.example.demo.service.impl.UserServiceImpl;
 
 @Controller
@@ -25,7 +30,7 @@ public class HomeController {
 	private static final String HOME_VIEW = "home";
 	private static final String ABOUTUS_VIEW = "aboutus";
 	private static final String WHEREAREWE_VIEW = "wherearewe";
-	private static final String YOURTEAM_VIEW = "yourteam";
+	private static final String SHOWDRINKS_VIEW="showdrinks";
 	private static final String EDIT_USER = "updateuser";
 
 	@Autowired
@@ -36,6 +41,9 @@ public class HomeController {
 	@Qualifier("userRepository")
 	private UserRepository userRepository;
 
+	@Autowired
+	@Qualifier("drinkService")
+	private DrinkServiceImpl drinkService;
 	
 
 	@GetMapping("/index")
@@ -80,5 +88,18 @@ public class HomeController {
 	    userService.updateUser(usuario);
 	    return "redirect:/auth/login";
 
+	}
+	
+	@GetMapping("/showDrinks")
+	public ModelAndView showDrinks(Model model) {
+	    String userName = userService.getCurrentUsername();
+	    List<DrinkModel> drinks = drinkService.listAllDrinks();
+	    Map<String, List<DrinkModel>> drinksByCategory = drinks.stream()
+	        .collect(Collectors.groupingBy(DrinkModel::getDrinkcategory));
+	    
+	    ModelAndView mav = new ModelAndView(SHOWDRINKS_VIEW);
+	    mav.addObject("usuario", userName);
+	    mav.addObject("drinksByCategory", drinksByCategory); // Añadimos el mapa al modelo
+	    return mav;
 	}
 }

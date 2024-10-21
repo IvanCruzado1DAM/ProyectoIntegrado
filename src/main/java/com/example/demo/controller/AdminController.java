@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.entity.Drink;
 import com.example.demo.entity.User;
 import com.example.demo.model.DrinkModel;
 import com.example.demo.service.impl.DrinkServiceImpl;
@@ -25,7 +26,7 @@ import com.example.demo.service.impl.UserServiceImpl;
 public class AdminController {
 
 	private static final String SHOWDRINKS_VIEW="showdrinks";
-	private static final String REGISTERNEWUSER_VIEW = "registernewuser";
+	private static final String REGISTERNEWDRINK_VIEW = "registernewdrink";
 	
 	@Autowired
 	@Qualifier("userService")
@@ -44,10 +45,22 @@ public class AdminController {
 	    Map<String, List<DrinkModel>> drinksByCategory = drinks.stream()
 	        .collect(Collectors.groupingBy(DrinkModel::getDrinkcategory));
 	    
-	    ModelAndView mav = new ModelAndView("showDrinks");
+	    ModelAndView mav = new ModelAndView(SHOWDRINKS_VIEW);
 	    mav.addObject("usuario", userName);
 	    mav.addObject("drinksByCategory", drinksByCategory); // Añadimos el mapa al modelo
 	    return mav;
+	}
+	
+	@GetMapping("/newDrink")
+	public ModelAndView registermultimediaVideo(Model model) {
+		String userName = userService.getCurrentUsername();
+		Map<String, List<DrinkModel>> drinksByCategory = drinkService.listAllDrinks().stream()
+		        .collect(Collectors.groupingBy(DrinkModel::getDrinkcategory));
+		ModelAndView mav = new ModelAndView(REGISTERNEWDRINK_VIEW);
+		mav.addObject("usuario", userName);
+		mav.addObject("drink", new Drink());
+		mav.addObject("drinksByCategory", drinksByCategory);
+		return mav;
 	}
 
 	
@@ -64,14 +77,14 @@ public class AdminController {
 
 	
 
-	@GetMapping("/registerusers/user")
+	/*@GetMapping("/registerusers/user")
 	public ModelAndView registerUser() {
 		String userName = userService.getCurrentUsername();		
 		ModelAndView mav = new ModelAndView(REGISTERNEWUSER_VIEW);
 		mav.addObject("usuario", userName);
 		mav.addObject("user", new User());
 		return mav;
-	}
+	}*/
 
 	@PostMapping("/registerusers/newUser")
 	public String register(@ModelAttribute User user, RedirectAttributes flash) {
