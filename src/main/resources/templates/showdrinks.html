@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -17,27 +17,86 @@
             justify-content: flex-start;
             align-items: center;
             font-family: "Helvetica", "Arial", sans-serif;
-            width: 100%; /* Asegurarse de que el body ocupe todo el ancho */
+        }
+
+        .container {
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+        }
+
+        /* Estilo del menú */
+        .navbar {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 16px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            transition: color 0.3s;
+        }
+
+        .navbar a:hover {
+            color: #ffcc00;
+        }
+
+        .navbar a:focus {
+            outline: none;
+            box-shadow: none;
         }
 
         .content {
+            margin-top: 2%; /* Aumenta este valor para elevar más el rectángulo */
             flex-grow: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            width: 100%; /* Asegúrate de que ocupe todo el ancho */
+        }
+
+        /* Nueva clase para la imagen del logo */
+        .logo-container {
+            position: absolute;
+            top: 0; /* Ajusta la posición vertical del logo para que esté lo más arriba posible */
+            left: 50%; /* Centrado horizontalmente */
+            transform: translateX(-50%); /* Centra la imagen */
+            z-index: -1; /* Mantiene el logo detrás del contenido */
+        }
+
+        footer {
+            position: fixed; /* Cambiado a fixed para mantenerlo en la esquina inferior izquierda */
+            bottom: 0;
+            left: 0; /* Alineado a la izquierda */
+            color: gray; /* Color del texto */
+            margin: 0; /* Sin márgenes */
+            padding: 0; /* Sin padding */
+            font-size: 14px; /* Tamaño de la fuente */
+            width: 100%; /* Para que ocupe todo el ancho */
+            text-align: left; /* Alineación del texto a la izquierda */
+            padding-left: 10px; /* Margen a la izquierda */
         }
 
         .drink-category-title {
-            width: 100%; /* Asegúrate de que ocupe todo el ancho de la página */
-            background-color: black; /* Fondo negro */
-            color: white; /* Texto blanco */
-            text-align: center; /* Centrar texto */
-            padding: 10px 0; /* Espaciado vertical */
-            text-decoration: underline; /* Texto subrayado */
-            margin: 0; /* Sin margen */
-            position: relative; /* Posicionamiento relativo para el contexto */
+            width: 100%;
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            text-decoration: underline;
+            margin: 0;
+            margin-top: 6%;
+            margin-bottom: 1%;
         }
 
         .drink-item {
@@ -45,54 +104,65 @@
             margin: 10px;
             background-color: rgba(240, 240, 240, 0.9);
             border-radius: 8px;
-            flex: 1; /* Permite que los elementos ocupen el mismo espacio */
-            min-width: 200px; /* Ancho mínimo para las tarjetas de bebida */
-            max-width: 300px; /* Ancho máximo para las tarjetas de bebida */
+            flex: 1;
+            min-width: 200px;
+            max-width: 300px;
         }
 
-        footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            color: gray;
-            margin: 0;
-            padding: 0;
-            font-size: 14px;
-            width: 100%;
-            text-align: left;
-            padding-left: 10px;
+        .drink-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap; /* Permite que las bebidas se distribuyan en varias filas */
+            margin-bottom: -3%;
         }
 
-        .drink-list {
-            display: flex; /* Flexbox para alinear horizontalmente */
-            flex-wrap: wrap; /* Permite que los elementos se envuelvan si son demasiado largos */
-            justify-content: space-around; /* Espaciado entre elementos */
-            width: 100%; /* Asegurarse de que ocupe todo el ancho */
+        .drink-column {
+            flex: 1 1 30%; /* Cada bebida ocupará aproximadamente un 30% del ancho del contenedor */
+            max-width: 300px; /* Limita el ancho máximo de cada bebida */
+            margin: 10px; /* Espaciado entre bebidas */
         }
     </style>
 </head>
 
 <body style="background-image: url('/imgs/fondobar.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
-    <div class="content">
-        <!-- Verificamos si hay bebidas -->
-        <div th:if="${drinksByCategory.size() > 0}">
-            <!-- Iteramos sobre las categorías -->
-            <div th:each="entry : ${drinksByCategory}">
-                <h2 class="drink-category-title" th:text="${entry.key}"></h2> <!-- Título de la categoría -->
-                <div class="drink-list">
-                    <div th:each="drink : ${entry.value}" class="drink-item">
-                        <p><strong th:text="${drink.drinkname}">Nombre de la bebida</strong></p>
-                        <p><span th:text="${drink.drinkdescription}">Descripción</span></p>
-                        <p><strong>Precio:</strong> <span th:text="${drink.drinkprice}">Precio</span> €</p>
-                    </div>
-                </div>
+
+    <div class="container">
+        <!-- Navegador -->
+        <div class="navbar">
+            <div class="col text-center" style="width: 100%;">
+                <div th:replace="~{navbar :: navbarFragment}"></div>
             </div>
         </div>
 
-        <!-- Si no hay bebidas, mostramos el mensaje de error -->
-        <div th:if="${drinksByCategory.size() == 0}" class="col-md-6 text-center"
-            style="background-color: rgba(255, 0, 0, 0.7); color: white; border-radius: 10px; padding: 20px;">
-            <h1>There are no drinks at this moment</h1>
+        <!-- Contenedor para el logo -->
+        <div class="logo-container">
+            <img src="/imgs/logobar.png" alt="Logo Bar DAMM" style="width: 100px;"> <!-- Ajusta el tamaño según sea necesario -->
+        </div>
+
+        <!-- Cuerpo -->
+        <div class="content">
+            <div th:if="${drinksByCategory.size() > 0}">
+                <!-- Iteramos sobre las categorías -->
+                <div th:each="entry : ${drinksByCategory}">
+                    <h2 class="drink-category-title" th:text="${entry.key}"></h2> <!-- Título de la categoría -->
+                    <div class="drink-row">
+                        <!-- Mostrar todas las bebidas en filas de 3 -->
+                        <div th:each="drink : ${entry.value}" class="drink-column">
+                            <div class="drink-item">
+                                <p><strong th:text="${drink.drinkname}">Nombre de la bebida</strong></p>
+                                <p><span th:text="${drink.drinkdescription}">Descripción</span></p>
+                                <p><strong>Precio:</strong> <span th:text="${drink.drinkprice}">Precio</span> €</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Si no hay bebidas, mostramos el mensaje de error -->
+            <div th:if="${drinksByCategory.size() == 0}" class="col-md-6 text-center"
+                style="background-color: rgba(255, 0, 0, 0.7); color: white; border-radius: 10px; padding: 20px;">
+                <h1>There are no drinks at this moment</h1>
+            </div>
         </div>
     </div>
 
