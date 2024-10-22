@@ -33,15 +33,28 @@ public class DrinkServiceImpl implements DrinkService{
 
 	@Override
 	public Drink addDrink(DrinkModel drinkModel) {
-		Drink newDrink = new Drink();
-		newDrink.setDrinkname(drinkModel.getDrinkname());
-		newDrink.setDrinkcategory(drinkModel.getDrinkcategory());
-		newDrink.setDrinkdescription(drinkModel.getDrinkdescription());
-		newDrink.setDrinkimage(drinkModel.getDrinkimage());
-		newDrink.setDrinkprice(drinkModel.getDrinkprice());
-		
-		return drinkRepository.save(newDrink);
+	    // Crear una nueva instancia de Drink a partir del modelo
+	    Drink newDrink = new Drink();
+	    newDrink.setDrinkname(drinkModel.getDrinkname());
+	    newDrink.setDrinkcategory(drinkModel.getDrinkcategory());
+	    newDrink.setDrinkdescription(drinkModel.getDrinkdescription());
+	    newDrink.setDrinkprice(drinkModel.getDrinkprice());
+
+	    // Asegurarse de que la imagen también se asigne
+	    if (drinkModel.getDrinkimage() != null) {
+	        newDrink.setDrinkimage(drinkModel.getDrinkimage()); // Mantener la imagen como byte[]
+	    } else {
+	        // Puedes manejar el caso donde la imagen no esté presente
+	        // Por ejemplo, puedes lanzar una excepción o establecer una imagen por defecto
+	        throw new IllegalArgumentException("Image data is required");
+	    }
+
+	    // Guardar en la base de datos
+	    return drinkRepository.save(newDrink);
 	}
+
+
+
 
 	@Override
 	public int removeDrink(int id) {
@@ -76,12 +89,22 @@ public class DrinkServiceImpl implements DrinkService{
 
 	@Override
 	public DrinkModel transformDrinkModel(Drink drink) {
-		if (drink == null) {
-			return null; 
-		}
-		ModelMapper modelMapper = new ModelMapper();
-		return modelMapper.map(drink, DrinkModel.class);
+		System.out.println("holaaaaaaaaaaaaaaaaaaa2");
+	    DrinkModel drinkModel = new DrinkModel();
+	    drinkModel.setIddrink(drink.getIddrink());
+	    drinkModel.setDrinkname(drink.getDrinkname());
+	    drinkModel.setDrinkcategory(drink.getDrinkcategory());
+	    drinkModel.setDrinkdescription(drink.getDrinkdescription());
+	    drinkModel.setDrinkprice(drink.getDrinkprice());
+	    
+	    // Asignar la imagen de Drink a DrinkModel
+	    if (drink.getDrinkimage() != null) {
+	        drinkModel.setDrinkimage(drink.getDrinkimage());
+	    }
+
+	    return drinkModel;
 	}
+
 
 	@Override
 	public Drink loadDrinkById(int id) {

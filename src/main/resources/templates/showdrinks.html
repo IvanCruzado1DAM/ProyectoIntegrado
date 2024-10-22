@@ -2,200 +2,245 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>BAR DAMM</title>
-    <style>
-        body,
-        html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            font-family: "Helvetica", "Arial", sans-serif;
-        }
+	<meta charset="UTF-8">
+	<link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<title>BAR DAMM</title>
+	<style>
+		body,
+		html {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: center;
+			font-family: "Helvetica", "Arial", sans-serif;
+		}
 
-        .container {
-            width: 100%;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-        }
+		.container {
+			width: 100%;
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+		}
 
-        img {
-            width: 100%;
-            height: auto;
-        }
+		img {
+			width: 100%;
+			height: auto;
+		}
 
-        /* Estilo del botón NEW DRINK */
-        .new-drink-btn {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background-color: #007bff; /* Azul */
-            color: white; /* Texto blanco */
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            margin-left: 7%;
-            margin-top: 1.5%;
-        }
+		/* Estilo del botón NEW DRINK */
+		.new-drink-btn {
+			position: absolute;
+			top: 10px;
+			left: 10px;
+			background-color: #007bff;
+			/* Azul */
+			color: white;
+			/* Texto blanco */
+			border: none;
+			padding: 10px 20px;
+			font-size: 16px;
+			border-radius: 5px;
+			cursor: pointer;
+			text-decoration: none;
+			margin-left: 7%;
+			margin-top: 3%;
+		}
 
-        .new-drink-btn:hover {
-            background-color: #0056b3;
-            
-        }
+		.new-drink-btn:hover {
+			background-color: #0056b3;
+		}
 
-        /* Estilo del menú */
-        .navbar {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 16px;
-        }
+		/* Estilo del menú */
+		.navbar {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			font-size: 16px;
+		}
 
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            padding: 10px 15px;
-            transition: color 0.3s;
-        }
+		.navbar a {
+			color: white;
+			text-decoration: none;
+			padding: 10px 15px;
+			transition: color 0.3s;
+		}
 
-        .navbar a:hover {
-            color: #ffcc00;
-        }
+		.navbar a:hover {
+			color: #ffcc00;
+		}
 
-        .navbar a:focus {
-            outline: none;
-            box-shadow: none;
-        }
+		.navbar a:focus {
+			outline: none;
+			box-shadow: none;
+		}
 
-        .content {
-            margin-top: 2%;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
+		.content {
+			margin-top: 2%;
+			flex-grow: 1;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
 
-        .logo-container {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: -1;
-        }
+		.logo-container {
+			position: absolute;
+			top: 0;
+			left: 50%;
+			transform: translateX(-50%);
+			z-index: -1;
+		}
 
-        footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            color: gray;
-            margin: 0;
-            padding: 0;
-            font-size: 14px;
-            width: 100%;
-            text-align: left;
-            padding-left: 10px;
-        }
+		footer {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			color: gray;
+			margin: 0;
+			padding: 0;
+			font-size: 14px;
+			width: 100%;
+			text-align: left;
+			padding-left: 10px;
+		}
 
-        .drink-category-title {
-            width: 100%;
-            background-color: black;
-            color: white;
-            text-align: center;
-            padding: 10px 0;
-            text-decoration: underline;
-            margin: 0;
-            margin-top: 6%;
-            margin-bottom: 1%;
-        }
+		.drink-category-title {
+			width: 100%;
+			background-color: black;
+			color: white;
+			text-align: center;
+			padding: 10px 0;
+			text-decoration: underline;
+			margin: 0;
+			margin-top: 6%;
+			margin-bottom: 1%;
+		}
 
-        .drink-item {
-            padding: 10px;
-            margin: 10px;
-            background-color: rgba(240, 240, 240, 0.9);
-            border-radius: 8px;
-            flex: 1;
-            min-width: 200px;
-            max-width: 300px;
-        }
+		.drink-item {
+			padding: 10px;
+			margin: 10px;
+			background-color: rgba(240, 240, 240, 0.9);
+			border-radius: 8px;
+			flex: 1;
+			min-width: 200px;
+			max-width: 300px;
+		}
 
-        .drink-row {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: -3%;
-        }
+		.drink-row {
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+			margin-bottom: -3%;
+		}
 
-        .drink-column {
-            flex: 1 1 30%;
-            max-width: 300px;
-            margin: 10px;
-        }
-    </style>
+		.drink-column {
+			flex: 1 1 30%;
+			max-width: 300px;
+			margin: 10px;
+		}
+
+		/* Ocultar automáticamente los mensajes de éxito o error después de 5 segundos */
+		.alert {
+			transition: opacity 0.5s ease-out;
+		}
+	</style>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			var errorMessage = document.querySelector('.error-message');
+        	var successMessage = document.querySelector('.alert-success');
+
+			// Mostrar el mensaje de éxito si tiene texto
+			if (successMessage && successMessage.textContent.trim() !== '') {
+				successMessage.style.display = 'block';
+			}
+
+			// Mostrar el mensaje de error si tiene texto
+			if (errorMessage && errorMessage.textContent.trim() !== '') {
+				errorMessage.style.display = 'block';
+			}
+
+			// Ocultar el mensaje después de 5 segundos
+			 setTimeout(function () {
+            if (errorMessage) {
+                errorMessage.style.display = 'none';
+            }
+            if (successMessage) {
+                successMessage.style.display = 'none';
+            }
+        }, 5000);
+		});
+	</script>
+
 </head>
 
-<body style="background-image: url('/imgs/fondobar.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
+<body
+	style="background-image: url('/imgs/fondobar.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
 
-    <div class="container">
-        <!-- Botón NEW DRINK -->
-        <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
-        	<a href="/admin/newDrink" class="new-drink-btn">NEW DRINK</a>
-        </li>
+	<div class="container">
+		<!-- Botón NEW DRINK -->
+		<li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
+			<a href="/admin/newDrink" class="new-drink-btn">NEW DRINK</a>
+		</li>
 
-        <!-- Navegador -->
-        <div class="navbar">
-            <div class="col text-center" style="width: 100%;">
-                <div th:replace="~{navbar :: navbarFragment}"></div>
-            </div>
-        </div>
+		<!-- Navegador -->
+		<div class="navbar">
+			<div class="col text-center" style="width: 100%;">
+				<div th:replace="~{navbar :: navbarFragment}"></div>
+			</div>
+		</div>
 
-        <!-- Contenedor para el logo -->
-        <div class="logo-container">
-            <img src="/imgs/logobar.png" alt="Logo Bar DAMM" style="width: 100px;"> <!-- Ajusta el tamaño según sea necesario -->
-        </div>
+		<!-- Contenedor para el logo -->
+		<div class="logo-container">
+			<img src="/imgs/logobar.png" alt="Logo Bar DAMM" style="width: 100px;">
+			<!-- Ajusta el tamaño según sea necesario -->
+		</div>
 
-        <!-- Cuerpo -->
-        <div class="content">
-            <div th:if="${drinksByCategory.size() > 0}">
-                <!-- Iteramos sobre las categorías -->
-                <div th:each="entry : ${drinksByCategory}">
-                    <h2 class="drink-category-title" th:text="${entry.key}"></h2> <!-- Título de la categoría -->
-                    <div class="drink-row">
-                        <!-- Mostrar todas las bebidas en filas de 3 -->
-                        <div th:each="drink : ${entry.value}" class="drink-column">
-                            <div class="drink-item">
-                                <p><strong th:text="${drink.drinkname}">Nombre de la bebida</strong></p>
-                                <p><span th:text="${drink.drinkdescription}">Descripción</span></p>
-                                <p><strong>Precio:</strong> <span th:text="${drink.drinkprice}">Precio</span> €</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+		<!-- Mensaje de éxito -->
+		<div th:if="${success}" class="alert alert-success" role="alert">
+			<span th:text="${success}"></span>
+		</div>
 
-            <!-- Si no hay bebidas, mostramos el mensaje de error -->
-            <div th:if="${drinksByCategory.size() == 0}" class="col-md-6 text-center"
-                style="background-color: rgba(255, 0, 0, 0.7); color: white; border-radius: 10px; padding: 20px;">
-                <h1>There are no drinks at this moment</h1>
-            </div>
-        </div>
-    </div>
+		<div th:if="${error}" class="error-message alert alert-danger" role="alert">
+			<p th:text="${error}"></p>
+		</div>
 
-    <!-- Footer -->
-    <footer>
-        © 2024 Copyright: BAR DAMM
-    </footer>
+		<!-- Cuerpo -->
+		<div class="content">
+			<div th:if="${drinksByCategory.size() > 0}">
+				<!-- Iteramos sobre las categorías -->
+				<div th:each="entry : ${drinksByCategory}">
+					<h2 class="drink-category-title" th:text="${entry.key}"></h2> <!-- Título de la categoría -->
+					<div class="drink-row">
+						<!-- Mostrar todas las bebidas en filas de 3 -->
+						<div th:each="drink : ${entry.value}" class="drink-column">
+							<div class="drink-item">
+								<p><strong th:text="${drink.drinkname}">Nombre de la bebida</strong></p>
+								<p><span th:text="${drink.drinkdescription}">Descripción</span></p>
+								<p><strong>Precio:</strong> <span th:text="${drink.drinkprice}">Precio</span> €</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Si no hay bebidas, mostramos el mensaje de error -->
+			<div th:if="${drinksByCategory.size() == 0}" class="col-md-6 text-center"
+				style="background-color: rgba(255, 0, 0, 0.7); color: white; border-radius: 10px; padding: 20px;">
+				<h1>There are no drinks at this moment</h1>
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<footer>
+		© 2024 Copyright: BAR DAMM
+	</footer>
 </body>
 
 </html>
