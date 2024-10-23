@@ -2,236 +2,289 @@
 <html lang="es">
 
 <head>
-	<meta charset="UTF-8">
-	<link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<title>BAR DAMM</title>
-	<style>
-		body,
-		html {
-			margin: 0;
-			padding: 0;
-			height: 100%;
-			display: flex;
-			flex-direction: column;
-			justify-content: flex-start;
-			align-items: center;
-			font-family: "Helvetica", "Arial", sans-serif;
-		}
+    <meta charset="UTF-8">
+    <link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>BAR DAMM</title>
+    <style>
+        /* Existing styles... */
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            font-family: "Helvetica", "Arial", sans-serif;
+        }
 
-		.container {
-			width: 100%;
-			flex: 1;
-			display: flex;
-			flex-direction: column;
-			justify-content: flex-start;
-		}
+        .container {
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
 
-		.content {
-			margin-top: 2%;
-			flex-grow: 1;
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-		}
+        .content {
+            margin-top: 2%;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
 
-		.form-container {
-			background-color: rgba(255, 255, 255, 0.8);
-			padding: 30px;
-			border-radius: 15px;
-			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-			max-width: 600px;
-			width: 100%;
-			margin-top: 10%;
-		}
+        .form-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            margin-top: 10%;
+        }
 
-		.form-group {
-			margin-bottom: 15px;
-		}
+        .form-group {
+            margin-bottom: 15px;
+        }
 
-		label {
-			font-weight: bold;
-		}
+        label {
+            font-weight: bold;
+        }
 
-		select,
-		input {
-			width: 100%;
-			padding: 8px;
-			border-radius: 5px;
-			border: 1px solid #ccc;
-		}
+        select,
+        input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
 
-		.btn-submit {
-			background-color: blue;
-			color: white;
-			padding: 10px 15px;
-			border: none;
-			border-radius: 5px;
-			cursor: pointer;
-		}
+        .btn-submit {
+            background-color: blue;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
-		.btn-submit:hover {
-			background-color: darkblue;
-		}
+        .btn-submit:hover {
+            background-color: darkblue;
+        }
 
-		.navbar {
-			position: absolute;
-			top: 10px;
-			right: 10px;
-			font-size: 16px;
-		}
+        .navbar {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 16px;
+        }
 
-		.navbar a {
-			color: white;
-			text-decoration: none;
-			padding: 10px 15px;
-			transition: color 0.3s;
-		}
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            transition: color 0.3s;
+        }
 
-		.navbar a:hover {
-			color: #ffcc00;
-		}
+        .navbar a:hover {
+            color: #ffcc00;
+        }
 
-		.logo-container {
-			position: absolute;
-			top: 0;
-			left: 50%;
-			transform: translateX(-50%);
-			z-index: -1;
-		}
+        .logo-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: -1;
+        }
 
-		footer {
-			position: fixed;
-			bottom: 0;
-			left: 0;
-			color: gray;
-			margin: 0;
-			padding: 0;
-			font-size: 14px;
-			width: 100%;
-			text-align: left;
-			padding-left: 10px;
-		}
-	</style>
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            color: gray;
+            margin: 0;
+            padding: 0;
+            font-size: 14px;
+            width: 100%;
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .mini-form {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .mini-form input {
+            margin-bottom: 10px;
+        }
+
+        .mini-form button {
+            background-color: green;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .mini-form button:hover {
+            background-color: darkgreen;
+        }
+    </style>
 </head>
 
-<body
-	style="background-image: url('/imgs/fondobar.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
+<body style="background-image: url('/imgs/fondobar.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
 
-	<div class="container">
-		<div class="content">
+    <div class="container">
+        <div class="content">
 
-			<!-- Navbar -->
-			<div class="navbar">
-				<div class="col text-center" style="width: 100%;">
-					<div th:replace="~{navbar :: navbarFragment}"></div>
-				</div>
-			</div>
+            <!-- Navbar -->
+            <div class="navbar">
+                <div class="col text-center" style="width: 100%;">
+                    <div th:replace="~{navbar :: navbarFragment}"></div>
+                </div>
+            </div>
 
-			<br><br>
+            <br><br>
 
-			<!-- Contenedor para el logo -->
-			<div class="logo-container">
-				<img src="/imgs/logobar.png" alt="Logo Bar DAMM" style="width: 100px;">
-			</div>
+            <!-- Contenedor para el logo -->
+            <div class="logo-container">
+                <img src="/imgs/logobar.png" alt="Logo Bar DAMM" style="width: 100px;">
+            </div>
 
+            <!-- Contenedor del formulario -->
+            <div class="form-container">
+                <h1>Register New Drink</h1>
+                <form id="drink-form" th:action="@{/admin/saveNewDrink}" th:object="${newdrink}" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-			<!-- Contenedor del formulario -->
-			<div class="form-container">
-				<h1>Register New Drink</h1>
-				<form th:action="@{/admin/saveNewDrink}" th:object="${newdrink}" method="POST"
-					enctype="multipart/form-data">
-					<input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <!-- Nombre de la bebida -->
+                    <div class="form-group">
+                        <label for="drinkname">Drink's Name:</label>
+                        <input type="text" id="drinkname" name="drinkname" placeholder="Introduce the drink's name" required>
+                    </div>
 
-					<!-- Nombre de la bebida -->
-					<div class="form-group">
-						<label for="drinkname">Drink's Name:</label>
-						<input type="text" id="drinkname" name="drinkname" placeholder="Introduce the drink's name"
-							required>
-					</div>
+                    <!-- Descripción de la bebida -->
+                    <div class="form-group">
+                        <label for="drinkdescription">Drink's Description:</label>
+                        <input id="drinkdescription" name="drinkdescription" placeholder="Introduce the drink's description" required>
+                    </div>
 
-					<!-- Descripción de la bebida -->
-					<div class="form-group">
-						<label for="drinkdescription">Drink's Description:</label>
-						<input id="drinkdescription" name="drinkdescription"
-							placeholder="Introduce the drink's description" required>
-					</div>
+                    <!-- Categoría de la bebida -->
+                    <div class="form-group">
+                        <label for="drinkcategory">Drink's Category:</label>
+                        <select id="drinkcategory" name="drinkcategory" required>
+                            <option value="" disabled selected>Select a Category</option>
+                            <option th:each="category : ${drinksByCategory}" th:value="${category.key}" th:text="${category.key}"></option>
+                            <option value="newCategory">New Category</option>
+                        </select>
 
-					<!-- Categoría de la bebida -->
+                        <!-- Mini formulario -->
+                        <div id="miniForm" class="mini-form">
+                            <label for="newCategoryInput">New Category Name:</label>
+                            <input type="text" id="newCategoryInput" name="newCategory" placeholder="Type new category" />
+                            <button id="addNewCategoryBtn" type="button">Add Category</button>
+                            <div id="error-message" class="error-message" style="display:none;"></div>
+                        </div>
+                    </div>
 
+                    <!-- Precio de la bebida -->
+                    <div class="form-group">
+                        <label for="drinkprice">Drink's Price (€):</label>
+                        <input type="number" id="drinkprice" name="drinkprice" placeholder="Introduce the drink's price" step="0.01" required>
+                    </div>
 
-					<div class="form-group">
-						<label for="drinkcategory">Drink's Category:</label>
-						<select id="drinkcategory" name="drinkcategory" required>
-							<option value="" disabled selected>Select a Category</option>
-							<option th:each="category : ${drinksByCategory}" th:value="${category.key}"
-								th:text="${category.key}"></option>
-							<option value="newCategory">New Category</option> <!-- Opción sin valor específico -->
-						</select>
-						<input type="text" id="newCategoryInput" name="newCategory" placeholder="Type new category"
-							style="display:none;" />
+                    <!-- Imagen de la bebida -->
+                    <div class="form-group">
+                        <label for="drinkimage">Drink's Image (PNG, JPG):</label>
+                        <input type="file" id="drinkimage" name="drinkImageFile" accept="image/png, image/jpeg" required>
+                    </div>
 
-					</div>
+                    <!-- Botones para guardar o retroceder -->
+                    <div class="form-group" style="display: flex; gap: 10px;">
+                        <button type="submit" class="btn-submit">Save Drink</button>
+                        <a href="/admin/showDrinks" class="btn btn-secondary" style="padding: 10px 15px; border-radius: 5px; background-color: red; color: black;">BACK</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
+    <footer>
+        © 2024 Copyright: BAR DAMM
+    </footer>
 
-					<!-- Precio de la bebida -->
-					<div class="form-group">
-						<label for="drinkprice">Drink's Price (€):</label>
-						<input type="number" id="drinkprice" name="drinkprice" placeholder="Introduce the drink's price"
-							step="0.01" required>
-					</div>
+    <script>
+        // Mostrar u ocultar el mini formulario cuando se selecciona "New Category"
+        document.getElementById('drinkcategory').addEventListener('change', function () {
+            const miniForm = document.getElementById('miniForm');
+            const errorMessage = document.getElementById('error-message');
+            errorMessage.style.display = 'none'; // Oculta el mensaje de error
 
-					<!-- Imagen de la bebida -->
-					<div class="form-group">
-						<label for="drinkimage">Drink's Image (PNG, JPG):</label>
-						<input type="file" id="drinkimage" name="drinkImageFile" accept="image/png, image/jpeg"
-							required>
-					</div>
+            if (this.value === 'newCategory') {
+                miniForm.style.display = 'block';
+            } else {
+                miniForm.style.display = 'none';
+            }
+        });
 
-					<!-- Botones para guardar o retroceder -->
-					<div class="form-group" style="display: flex; gap: 10px;">
-						<button type="submit" class="btn-submit">Save Drink</button>
-						<a href="/admin/showDrinks" class="btn btn-secondary"
-							style="padding: 10px 15px; border-radius: 5px; background-color: red; color: black;">BACK</a>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+        // Verificar si la categoría existe o agregarla
+        document.getElementById('addNewCategoryBtn').addEventListener('click', function () {
+            const newCategoryInput = document.getElementById('newCategoryInput').value.trim();
+            const drinkCategory = document.getElementById('drinkcategory');
+            const errorMessage = document.getElementById('error-message');
 
-	<footer>
-		© 2024 Copyright: BAR DAMM
-	</footer>
+            const existingCategories = Array.from(drinkCategory.options).map(option => option.value);
 
-	<script>
-		document.getElementById('drinkcategory').addEventListener('change', function () {
-			const newCategoryInput = document.getElementById('newCategoryInput');
+            if (newCategoryInput === '') {
+                errorMessage.textContent = "Please enter a new category name.";
+                errorMessage.style.display = 'block';
+            } else if (existingCategories.includes(newCategoryInput)) {
+                errorMessage.textContent = "This category already exists. Please choose a different name.";
+                errorMessage.style.display = 'block';
+            } else {
+                // Agregar la nueva categoría al select y seleccionarla
+                const newOption = document.createElement('option');
+                newOption.value = newCategoryInput;
+                newOption.text = newCategoryInput;
+                drinkCategory.appendChild(newOption);
+                drinkCategory.value = newCategoryInput; // Establecer la nueva categoría como seleccionada
 
-			if (this.value === 'newCategory') { // Cambiar 'new' a 'newCategory'
-				newCategoryInput.style.display = 'block';
-				newCategoryInput.focus();
-				newCategoryInput.value = ''; // Limpia el campo para que el usuario pueda escribir
-			} else {
-				newCategoryInput.style.display = 'none';
-			}
-		});
+                // Ocultar el mini formulario
+                document.getElementById('miniForm').style.display = 'none';
+            }
+        });
 
-		// Validar el formulario antes de enviarlo
-		document.querySelector('form').addEventListener('submit', function (event) {
-			const newCategoryInput = document.getElementById('newCategoryInput').value.trim();
+        // Validación final del formulario
+        document.getElementById('drink-form').addEventListener('submit', function (event) {
+            const drinkCategory = document.getElementById('drinkcategory');
+            const newCategoryInput = document.getElementById('newCategoryInput').value.trim();
+            const errorMessage = document.getElementById('error-message');
 
-			// Si el campo de texto está vacío y no se ha seleccionado otra categoría válida
-			if (newCategoryInput === '' && newCategoryInput=== 'newCategory') {
-				alert("Please enter a new category name before submitting.");
-				event.preventDefault(); // Previene el envío del formulario
-			} else if (newCategoryInput !== '') {
-				// Asigna el valor del campo de texto al select
-				this.drinkcategory.value = newCategoryInput; // Cambia el valor del select a lo que el usuario ha ingresado
-			}
-		});
+            if (drinkCategory.value === 'newCategory' && newCategoryInput === '') {
+                errorMessage.textContent = "Please enter a new category name before submitting.";
+                errorMessage.style.display = 'block';
+                event.preventDefault(); // Previene el envío del formulario
+            }
+        });
+    </script>
 
-	</script>
 </body>
 
 </html>

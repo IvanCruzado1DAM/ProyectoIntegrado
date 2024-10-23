@@ -122,6 +122,8 @@
 		}
 
 		.drink-item {
+			position: relative;
+			/* Para permitir la posición absoluta de los iconos */
 			padding: 10px;
 			margin: 10px;
 			background-color: rgba(240, 240, 240, 0.9);
@@ -129,6 +131,35 @@
 			flex: 1;
 			min-width: 200px;
 			max-width: 300px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			/* Centrar el contenido verticalmente */
+			align-items: center;
+			/* Centrar el contenido horizontalmente */
+			text-align: center;
+			/* Centrar el texto */
+		}
+
+
+		.icon-container {
+			position: absolute;
+			/* Posición absoluta para los iconos */
+			bottom: 10px;
+			/* Margen desde el fondo */
+			right: 10px;
+			/* Margen desde la derecha */
+			display: flex;
+			/* Flexbox para alinear los iconos horizontalmente */
+		}
+
+		.icon {
+			width: 30px;
+			/* Ajusta el tamaño del icono según sea necesario */
+			height: 30px;
+			/* Ajusta el tamaño del icono según sea necesario */
+			margin-left: 5px;
+			/* Espacio entre los iconos */
 		}
 
 		.drink-row {
@@ -153,7 +184,7 @@
 	<script>
 		document.addEventListener("DOMContentLoaded", function () {
 			var errorMessage = document.querySelector('.error-message');
-        	var successMessage = document.querySelector('.alert-success');
+			var successMessage = document.querySelector('.alert-success');
 
 			// Mostrar el mensaje de éxito si tiene texto
 			if (successMessage && successMessage.textContent.trim() !== '') {
@@ -166,14 +197,14 @@
 			}
 
 			// Ocultar el mensaje después de 5 segundos
-			 setTimeout(function () {
-            if (errorMessage) {
-                errorMessage.style.display = 'none';
-            }
-            if (successMessage) {
-                successMessage.style.display = 'none';
-            }
-        }, 5000);
+			setTimeout(function () {
+				if (errorMessage) {
+					errorMessage.style.display = 'none';
+				}
+				if (successMessage) {
+					successMessage.style.display = 'none';
+				}
+			}, 5000);
 		});
 	</script>
 
@@ -221,8 +252,24 @@
 						<div th:each="drink : ${entry.value}" class="drink-column">
 							<div class="drink-item">
 								<p><strong th:text="${drink.drinkname}">Nombre de la bebida</strong></p>
+								<div>
+									<img th:src="${drink.imageUrl}" alt="Imagen de la bebida"
+										style="max-width: 50%; height: auto;" />
+								</div>
 								<p><span th:text="${drink.drinkdescription}">Descripción</span></p>
 								<p><strong>Precio:</strong> <span th:text="${drink.drinkprice}">Precio</span> €</p>
+
+								<div class="icon-container">
+									<a th:href="@{/admin/editDrink/{id}(id=${drink.iddrink})}">
+										<img src="../static/imgs/editlogo.png" th:src="@{/imgs/editlogo.png}"
+											alt="Icono de herramienta" class="icon" />
+									</a>
+									<a th:href="@{/admin/deleteDrink/{id}(id=${drink.iddrink})}"
+										th:onclick="return confirm('¿Are you sure you want to delete this drink?');">
+										<img src="../static/imgs/deletelogo.png" th:src="@{/imgs/deletelogo.png}"
+											alt="Icono de papelera" class="icon" />
+									</a>
+								</div>
 							</div>
 						</div>
 					</div>

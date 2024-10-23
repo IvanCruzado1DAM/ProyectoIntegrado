@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,12 +48,21 @@ public class AdminController {
 		// Agrupar bebidas por categoría
 		Map<String, List<DrinkModel>> drinksByCategory = drinks.stream()
 				.collect(Collectors.groupingBy(DrinkModel::getDrinkcategory));
+		
+		for (DrinkModel drink : drinks) {
+	        if (drink.getDrinkimage() != null) {
+	            String base64Image = Base64.getEncoder().encodeToString(drink.getDrinkimage());
+	            String imageUrl = "data:image/jpeg;base64," + base64Image; // Asegúrate de usar el tipo correcto
+	            drink.setImageUrl(imageUrl); // Asumiendo que has añadido un campo imageUrl en DrinkModel
+	        }
+	    }
 
 		ModelAndView mav = new ModelAndView(SHOWDRINKS_VIEW);
 		mav.addObject("usuario", userName);
 		mav.addObject("drinksByCategory", drinksByCategory); // Añadimos el mapa al modelo
 		return mav;
 	}
+	
 
 	@GetMapping("/newDrink")
 	public ModelAndView newDrink(Model model) {
@@ -106,7 +117,16 @@ public class AdminController {
 	    return "redirect:/admin/showDrinks"; // Redirigir a la lista de bebidas tras el éxito
 	}
 
-
+	@GetMapping("/deleteDrink/{id}")
+	public String deleteDrink(@PathVariable("id") int id, RedirectAttributes flash) {
+		if(drinkService.exists(id)) {
+			drinkService.removeDrink(id);
+			flash.addFlashAttribute("success", "Drink delete successfully!");
+		}else {
+			flash.addFlashAttribute("error", "Fail removing this drink!");
+		}
+		return "redirect:/admin/showDrinks";
+	}
 
 
 	/*

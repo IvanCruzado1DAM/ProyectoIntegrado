@@ -13,4 +13,5 @@ public class DrinkModel {
 	private double drinkprice;
 	private byte[] drinkimage;
 	private MultipartFile drinkImageFile;
+	private String imageUrl; 
 }
