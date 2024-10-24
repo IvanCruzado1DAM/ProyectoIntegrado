@@ -69,7 +69,9 @@ public class DrinkServiceImpl implements DrinkService{
 			drink.setDrinkname(drinkModel.getDrinkname());
 			drink.setDrinkcategory(drinkModel.getDrinkcategory());
 			drink.setDrinkdescription(drinkModel.getDrinkdescription());
-			drink.setDrinkimage(drinkModel.getDrinkimage());
+			if (drinkModel.getDrinkimage() != null) {
+	            drink.setDrinkimage(drinkModel.getDrinkimage()); 
+	        }
 			drink.setDrinkprice(drinkModel.getDrinkprice());
 
 			return drinkRepository.save(drink);

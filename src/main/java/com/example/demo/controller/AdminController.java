@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,7 @@ import com.example.demo.service.impl.UserServiceImpl;
 public class AdminController {
 
 	private static final String SHOWDRINKS_VIEW = "showdrinks";
+	private static final String EDITDRINK_VIEW = "editdrink";
 	private static final String REGISTERNEWDRINK_VIEW = "registernewdrink";
 
 	@Autowired
@@ -39,6 +41,8 @@ public class AdminController {
 	@Autowired
 	@Qualifier("drinkService")
 	private DrinkServiceImpl drinkService;
+	
+	//Show
 
 	@GetMapping("/showDrinks")
 	public ModelAndView showDrinks(Model model) {
@@ -63,7 +67,8 @@ public class AdminController {
 		return mav;
 	}
 	
-
+	//Register 
+	
 	@GetMapping("/newDrink")
 	public ModelAndView newDrink(Model model) {
 		String userName = userService.getCurrentUsername();
@@ -116,6 +121,8 @@ public class AdminController {
 
 	    return "redirect:/admin/showDrinks"; // Redirigir a la lista de bebidas tras el éxito
 	}
+	
+	//Delete
 
 	@GetMapping("/deleteDrink/{id}")
 	public String deleteDrink(@PathVariable("id") int id, RedirectAttributes flash) {
@@ -127,40 +134,45 @@ public class AdminController {
 		}
 		return "redirect:/admin/showDrinks";
 	}
+	
+	//Edit
 
-
-	/*
-	 * @GetMapping("/deleteUser/{id}") public String deleteUser(@PathVariable("id")
-	 * int id, RedirectAttributes flash) {
-	 * if(userService.exists(userService.loadUserById(id).getId_user())) {
-	 * userService.removeUser(id); flash.addFlashAttribute("success",
-	 * "User delete successfully!"); }else { flash.addFlashAttribute("error",
-	 * "Fail removing this user!"); } return "redirect:/adminshow/showUsers"; }
-	 */
-
-	/*
-	 * @GetMapping("/registerusers/user") public ModelAndView registerUser() {
-	 * String userName = userService.getCurrentUsername(); ModelAndView mav = new
-	 * ModelAndView(REGISTERNEWUSER_VIEW); mav.addObject("usuario", userName);
-	 * mav.addObject("user", new User()); return mav; }
-	 */
-
-	@PostMapping("/registerusers/newUser")
-	public String register(@ModelAttribute User user, RedirectAttributes flash) {
-		try {
-			if (!userService.existsByUsername(user.getUsername())) {
-				userService.adminregistrar(user);
-				flash.addFlashAttribute("success", "Usuario registrado satisfactoriamente!");
-			} else {
-				flash.addFlashAttribute("error", "Usuario ya existente!");
-			}
-		} catch (Exception e) {
-			flash.addFlashAttribute("error", "An error occurred while registering the team. Please try again.");
-			e.printStackTrace();
-			return "redirect:/admin/registerusers/user"; // Redirige a la página de registro si hay un error
-		}
-
-		return "redirect:/admin/registerusers/user";
+	@GetMapping("/editDrink/{id}")
+	public ModelAndView updateTeam(@PathVariable("id") int id, RedirectAttributes flash) {
+		String userName = userService.getCurrentUsername();
+		Drink drink=drinkService.loadDrinkById(id);
+		DrinkModel d=drinkService.transformDrinkModel(drink);
+		Map<String, List<DrinkModel>> drinksByCategory = drinkService.listAllDrinks().stream()
+				.collect(Collectors.groupingBy(DrinkModel::getDrinkcategory));
+		ModelAndView mav = new ModelAndView(EDITDRINK_VIEW);
+		mav.addObject("usuario", userName);
+		mav.addObject("drink", d);
+		mav.addObject("drinksByCategory", drinksByCategory);
+		return mav;
 	}
+	
+	@PostMapping("/editDrink/update/{id}")
+	public String updateeditDrink(@PathVariable("id") int id, RedirectAttributes flash, @ModelAttribute DrinkModel model) {
+	    try {
+	        // Handle the conversion from MultipartFile to byte[]
+	        if (model.getDrinkImageFile() != null && !model.getDrinkImageFile().isEmpty()) {
+	            model.setDrinkimage(model.getDrinkImageFile().getBytes());
+	        }
+
+	        if (drinkService.exists(id)) {
+	            drinkService.updateDrink(id, model);
+	            flash.addFlashAttribute("success", "Drink updated successfully!");
+	        } else {
+	            flash.addFlashAttribute("error", "Fail updating this drink!");
+	        }
+	    } catch (IOException e) {
+	        flash.addFlashAttribute("error", "Error processing the image.");
+	    }
+	    return "redirect:/admin/showDrinks";
+	}
+
+
+
+	
 
 }
