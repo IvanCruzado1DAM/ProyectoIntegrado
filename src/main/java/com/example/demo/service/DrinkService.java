@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.example.demo.entity.Drink;
 import com.example.demo.model.DrinkModel;
@@ -24,5 +25,12 @@ public interface DrinkService {
 	public abstract Drink findDrinkByDrinkname(String drinkname);
 	
 	boolean exists(int id);
+
+	Map<String, List<DrinkModel>> listAllDrinksCategorys();
+
+
+	Map<String, List<DrinkModel>> convertImagesToBase64(Map<String, List<DrinkModel>> drinksByCategory);
+
+	List<DrinkModel> transformListDrinkModel(List<Drink> drink);
 
 }

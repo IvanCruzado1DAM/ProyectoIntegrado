@@ -47,20 +47,9 @@ public class AdminController {
 	@GetMapping("/showDrinks")
 	public ModelAndView showDrinks(Model model) {
 		String userName = userService.getCurrentUsername();
-		List<DrinkModel> drinks = drinkService.listAllDrinks();
-
 		// Agrupar bebidas por categoría
-		Map<String, List<DrinkModel>> drinksByCategory = drinks.stream()
-				.collect(Collectors.groupingBy(DrinkModel::getDrinkcategory));
-		
-		for (DrinkModel drink : drinks) {
-	        if (drink.getDrinkimage() != null) {
-	            String base64Image = Base64.getEncoder().encodeToString(drink.getDrinkimage());
-	            String imageUrl = "data:image/jpeg;base64," + base64Image; // Asegúrate de usar el tipo correcto
-	            drink.setImageUrl(imageUrl); // Asumiendo que has añadido un campo imageUrl en DrinkModel
-	        }
-	    }
-
+		Map<String, List<DrinkModel>> drinksByCategory = drinkService.listAllDrinksCategorys();
+		drinksByCategory = drinkService.convertImagesToBase64(drinksByCategory);
 		ModelAndView mav = new ModelAndView(SHOWDRINKS_VIEW);
 		mav.addObject("usuario", userName);
 		mav.addObject("drinksByCategory", drinksByCategory); // Añadimos el mapa al modelo
@@ -72,8 +61,7 @@ public class AdminController {
 	@GetMapping("/newDrink")
 	public ModelAndView newDrink(Model model) {
 		String userName = userService.getCurrentUsername();
-		Map<String, List<DrinkModel>> drinksByCategory = drinkService.listAllDrinks().stream()
-				.collect(Collectors.groupingBy(DrinkModel::getDrinkcategory));
+		Map<String, List<DrinkModel>> drinksByCategory = drinkService.listAllDrinksCategorys();
 		ModelAndView mav = new ModelAndView(REGISTERNEWDRINK_VIEW);
 		mav.addObject("usuario", userName);
 		mav.addObject("newdrink", new Drink());

@@ -32,15 +32,12 @@
 			height: auto;
 		}
 
-		/* Estilo del botón NEW DRINK */
 		.new-drink-btn {
 			position: absolute;
 			top: 10px;
 			left: 10px;
 			background-color: #007bff;
-			/* Azul */
 			color: white;
-			/* Texto blanco */
 			border: none;
 			padding: 10px 20px;
 			font-size: 16px;
@@ -55,7 +52,6 @@
 			background-color: #0056b3;
 		}
 
-		/* Estilo del menú */
 		.navbar {
 			position: absolute;
 			top: 10px;
@@ -123,43 +119,32 @@
 
 		.drink-item {
 			position: relative;
-			/* Para permitir la posición absoluta de los iconos */
 			padding: 10px;
 			margin: 10px;
 			background-color: rgba(240, 240, 240, 0.9);
 			border-radius: 8px;
 			flex: 1;
-			min-width: 200px;
-			max-width: 300px;
+			width: 285px;
+			height: 285px;
+			box-sizing: border-box;
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
-			/* Centrar el contenido verticalmente */
 			align-items: center;
-			/* Centrar el contenido horizontalmente */
 			text-align: center;
-			/* Centrar el texto */
 		}
-
 
 		.icon-container {
 			position: absolute;
-			/* Posición absoluta para los iconos */
 			bottom: 10px;
-			/* Margen desde el fondo */
 			right: 10px;
-			/* Margen desde la derecha */
 			display: flex;
-			/* Flexbox para alinear los iconos horizontalmente */
 		}
 
 		.icon {
 			width: 30px;
-			/* Ajusta el tamaño del icono según sea necesario */
 			height: 30px;
-			/* Ajusta el tamaño del icono según sea necesario */
 			margin-left: 5px;
-			/* Espacio entre los iconos */
 		}
 
 		.drink-row {
@@ -175,9 +160,15 @@
 			margin: 10px;
 		}
 
-		/* Ocultar automáticamente los mensajes de éxito o error después de 5 segundos */
 		.alert {
 			transition: opacity 0.5s ease-out;
+		}
+
+		.no-style {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			display: flex;
 		}
 	</style>
 
@@ -186,17 +177,14 @@
 			var errorMessage = document.querySelector('.error-message');
 			var successMessage = document.querySelector('.alert-success');
 
-			// Mostrar el mensaje de éxito si tiene texto
 			if (successMessage && successMessage.textContent.trim() !== '') {
 				successMessage.style.display = 'block';
 			}
 
-			// Mostrar el mensaje de error si tiene texto
 			if (errorMessage && errorMessage.textContent.trim() !== '') {
 				errorMessage.style.display = 'block';
 			}
 
-			// Ocultar el mensaje después de 5 segundos
 			setTimeout(function () {
 				if (errorMessage) {
 					errorMessage.style.display = 'none';
@@ -205,13 +193,40 @@
 					successMessage.style.display = 'none';
 				}
 			}, 5000);
+
+			var currentCategoryIndex = 1; // Inicia desde la segunda categoría
+			const categoriesPerLoad = 1; // Número de categorías a cargar por clic
+			const categories = document.querySelectorAll('.drink-category-title');
+
+			// Oculta todas las categorías excepto la primera
+			categories.forEach((el, index) => {
+				if (index > 0) {
+					el.parentElement.style.display = 'none'; // Oculta el contenedor de la categoría
+				}
+			});
+
+			document.getElementById('loadMoreBtn').addEventListener('click', function () {
+				loadMoreCategories();
+			});
+
+			function loadMoreCategories() {
+				for (let i = 0; i < categoriesPerLoad; i++) {
+					if (currentCategoryIndex < categories.length) {
+						categories[currentCategoryIndex].parentElement.style.display = 'block'; // Muestra la categoría
+						currentCategoryIndex++;
+					}
+				}
+
+				// Deshabilitar el botón si se han cargado todas las categorías
+				if (currentCategoryIndex >= categories.length) {
+					document.getElementById('loadMoreContainer').style.display = 'none';
+				}
+			}
 		});
 	</script>
-
 </head>
 
-<body
-	style="background-image: url('/imgs/fondobar.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
+<body style="background-image: url('/imgs/fondobar.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
 
 	<div class="container">
 		<!-- Botón NEW DRINK -->
@@ -229,7 +244,6 @@
 		<!-- Contenedor para el logo -->
 		<div class="logo-container">
 			<img src="/imgs/logobar.png" alt="Logo Bar DAMM" style="width: 100px;">
-			<!-- Ajusta el tamaño según sea necesario -->
 		</div>
 
 		<!-- Mensaje de éxito -->
@@ -244,31 +258,28 @@
 		<!-- Cuerpo -->
 		<div class="content">
 			<div th:if="${drinksByCategory.size() > 0}">
-				<!-- Iteramos sobre las categorías -->
 				<div th:each="entry : ${drinksByCategory}">
-					<h2 class="drink-category-title" th:text="${entry.key}"></h2> <!-- Título de la categoría -->
+					<h2 class="drink-category-title" th:text="${entry.key}"></h2>
 					<div class="drink-row">
-						<!-- Mostrar todas las bebidas en filas de 3 -->
 						<div th:each="drink : ${entry.value}" class="drink-column">
 							<div class="drink-item">
 								<p><strong th:text="${drink.drinkname}">Nombre de la bebida</strong></p>
 								<div>
-									<img th:src="${drink.imageUrl}" alt="Imagen de la bebida"
-										style="max-width: 120px; max-height: 120px;" />
+									<img th:src="${drink.imageUrl}" alt="Imagen de la bebida" style="max-width: 120px; max-height: 120px;" />
 								</div>
 								<p><span th:text="${drink.drinkdescription}">Descripción</span></p>
 								<p><strong>Precio:</strong> <span th:text="${drink.drinkprice}">Precio</span> €</p>
 
 								<div class="icon-container">
-									<a th:href="@{/admin/editDrink/{id}(id=${drink.iddrink})}">
-										<img src="../static/imgs/editlogo.png" th:src="@{/imgs/editlogo.png}"
-											alt="Icono de herramienta" class="icon" />
-									</a>
-									<a th:href="@{/admin/deleteDrink/{id}(id=${drink.iddrink})}"
-										th:onclick="return confirm('¿Are you sure you want to delete this drink?');">
-										<img src="../static/imgs/deletelogo.png" th:src="@{/imgs/deletelogo.png}"
-											alt="Icono de papelera" class="icon" />
-									</a>
+									<li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item no-style">
+										<a th:href="@{/admin/editDrink/{id}(id=${drink.iddrink})}">
+											<img th:src="@{/imgs/editlogo.png}" alt="Icono de herramienta" class="icon" />
+										</a>
+										<a th:href="@{/admin/deleteDrink/{id}(id=${drink.iddrink})}"
+											th:onclick="return confirm('¿Are you sure you want to delete this drink?');">
+											<img th:src="@{/imgs/deletelogo.png}" alt="Icono de papelera" class="icon" />
+										</a>
+									</li>
 								</div>
 							</div>
 						</div>
@@ -276,17 +287,22 @@
 				</div>
 			</div>
 
+			<!-- Botón para cargar más categorías -->
+			<div id="loadMoreContainer" class="text-center" style="margin: 20px;">
+				<button id="loadMoreBtn" class="btn btn-primary">Cargar más categorías</button>
+			</div>
+
 			<!-- Si no hay bebidas, mostramos el mensaje de error -->
 			<div th:if="${drinksByCategory.size() == 0}" class="col-md-6 text-center"
 				style="background-color: rgba(255, 0, 0, 0.7); color: white; border-radius: 10px; padding: 20px;">
-				<h1>There are no drinks at this moment</h1>
+				<h1>No hay bebidas en este momento</h1>
 			</div>
 		</div>
 	</div>
 
 	<!-- Footer -->
 	<footer>
-		© 2024 Copyright: BAR DAMM
+		<p>© 2024 Bar DAMM. Todos los derechos reservados.</p>
 	</footer>
 </body>
 

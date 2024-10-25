@@ -1,6 +1,9 @@
 package com.example.demo.service.impl;
 
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -8,11 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-
 import com.example.demo.entity.Drink;
-import com.example.demo.entity.User;
 import com.example.demo.model.DrinkModel;
-import com.example.demo.model.UserModel;
 import com.example.demo.repository.DrinkRepository;
 import com.example.demo.service.DrinkService;
 
@@ -106,6 +106,31 @@ public class DrinkServiceImpl implements DrinkService{
 
 	    return drinkModel;
 	}
+	
+	@Override
+	public List<DrinkModel> transformListDrinkModel(List<Drink> drinks) {
+	    List<DrinkModel> drinkModels = new ArrayList<>();
+
+	    for (Drink drink : drinks) {
+	        DrinkModel drinkModel = new DrinkModel();
+	        drinkModel.setIddrink(drink.getIddrink());
+	        drinkModel.setDrinkname(drink.getDrinkname());
+	        drinkModel.setDrinkcategory(drink.getDrinkcategory());
+	        drinkModel.setDrinkdescription(drink.getDrinkdescription());
+	        drinkModel.setDrinkprice(drink.getDrinkprice());
+	        
+	        // Assign image if it exists
+	        if (drink.getDrinkimage() != null) {
+	            drinkModel.setDrinkimage(drink.getDrinkimage());
+	        }
+
+	        // Add the mapped model to the result list
+	        drinkModels.add(drinkModel);
+	    }
+
+	    return drinkModels;
+	}
+
 
 
 	@Override
@@ -128,5 +153,39 @@ public class DrinkServiceImpl implements DrinkService{
 		}
 		return false;
 	}
+	
+	@Override
+	public Map<String, List<DrinkModel>> listAllDrinksCategorys() {
+	    ModelMapper modelMapper = new ModelMapper();
+
+	    return drinkRepository.findAll().stream()
+	        .map(drink -> modelMapper.map(drink, DrinkModel.class)) 
+	        .collect(Collectors.groupingBy(DrinkModel::getDrinkcategory)); 
+	}
+	
+	@Override
+	// En DrinkService
+	public Map<String, List<DrinkModel>> convertImagesToBase64(Map<String, List<DrinkModel>> drinksByCategory) {
+	    // Recorremos solo las categorías, evitando iterar múltiples veces sobre la misma lista de bebidas
+	    for (String category : drinksByCategory.keySet()) {
+	        // Obtenemos bebidas solo para la categoría actual
+	        List<DrinkModel> drinks = transformListDrinkModel(drinkRepository.findByDrinkcategory(category));
+	        
+	        // Convertimos a Base64 solo si es necesario
+	        drinks.parallelStream().forEach(drink -> {
+	            if (drink.getDrinkimage() != null && (drink.getImageUrl() == null || drink.getImageUrl().isEmpty())) {
+	                String base64Image = Base64.getEncoder().encodeToString(drink.getDrinkimage());
+	                drink.setImageUrl("data:image/jpeg;base64," + base64Image);
+	            }
+	        });
+
+	        // Actualizamos el mapa con la lista procesada
+	        drinksByCategory.put(category, drinks);
+	    }
+	    return drinksByCategory;
+	}
+
+
+
 
 }
