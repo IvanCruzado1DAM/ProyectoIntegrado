@@ -19,7 +19,7 @@
     .login-container {
       background-color: rgba(255, 255, 255, 0.8); /* Color de fondo con opacidad */
       padding: 20px;
-      height: 55%;
+      height: 60%;
       width: 40%;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -79,17 +79,17 @@
         <label>Username:</label>
         <input type="text" th:field="*{username}" class="form-control" placeholder="Usuario" name="username" required/>
       </div>
+      <div class="form-label-group">
+        <label>Email:</label>
+        <input type="text" th:field="*{email}" class="form-control" placeholder="Usuario" name="email" required/>
+      </div>
        <div class="form-label-group">
         <label>Password:</label>
         <input type="password" th:field="*{password}" class="form-control" placeholder="Password" name="password" required
        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}" 
        title="La contraseña debe contener al menos 8 caracteres, incluyendo al menos una mayúscula, una minúscula, un número y un carácter especial."/>
       </div>
-      <div class="form-label-group">
-        <label for="id_team_user">Equipo favorito:</label>
-        <br>
-        
-    </div>
+      
     <br>
       <input class="btn btn-lg btn-primary btn-block text-uppercase" id="boton" type="submit" value="Registrar"/>
     </form>
