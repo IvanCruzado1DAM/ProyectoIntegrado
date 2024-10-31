@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import java.io.IOException;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,9 +20,11 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entity.Drink;
-import com.example.demo.entity.User;
+import com.example.demo.entity.Event;
 import com.example.demo.model.DrinkModel;
+import com.example.demo.model.EventModel;
 import com.example.demo.service.impl.DrinkServiceImpl;
+import com.example.demo.service.impl.EventServiceImpl;
 import com.example.demo.service.impl.UserServiceImpl;
 
 @Controller
@@ -31,7 +32,9 @@ import com.example.demo.service.impl.UserServiceImpl;
 public class AdminController {
 
 	private static final String SHOWDRINKS_VIEW = "showdrinks";
+	private static final String SHOWEVENTS_VIEW = "showevents";
 	private static final String EDITDRINK_VIEW = "editdrink";
+	private static final String EDITEVENT_VIEW = "editevent";
 	private static final String REGISTERNEWDRINK_VIEW = "registernewdrink";
 
 	@Autowired
@@ -41,6 +44,10 @@ public class AdminController {
 	@Autowired
 	@Qualifier("drinkService")
 	private DrinkServiceImpl drinkService;
+	
+	@Autowired
+	@Qualifier("eventService")
+	private EventServiceImpl eventService;
 	
 	//Show
 
@@ -53,6 +60,16 @@ public class AdminController {
 		ModelAndView mav = new ModelAndView(SHOWDRINKS_VIEW);
 		mav.addObject("usuario", userName);
 		mav.addObject("drinksByCategory", drinksByCategory); // Añadimos el mapa al modelo
+		return mav;
+	}
+	
+	@GetMapping("/showEvents")
+	public ModelAndView showEvents(Model model) {
+		String userName = userService.getCurrentUsername();
+		List<EventModel> events = eventService.listAllEvents();
+		ModelAndView mav = new ModelAndView(SHOWEVENTS_VIEW);
+		mav.addObject("usuario", userName);
+		mav.addObject("events", events);
 		return mav;
 	}
 	
@@ -73,9 +90,6 @@ public class AdminController {
 	public String registerNewDrink(@ModelAttribute("newdrink") DrinkModel newdrink,
 	                               @RequestParam("drinkImageFile") MultipartFile drinkimage,
 	                               RedirectAttributes flash) {
-	    System.out.println("Recibiendo nueva bebida: " + newdrink);
-	    System.out.println("Holaaaaaa 1 - antes de verificar si la bebida ya existe");
-
 	    try {
 	        // Verificar si ya existe una bebida con el mismo nombre
 	        if (drinkService.findDrinkByDrinkname(newdrink.getDrinkname()) != null) {
@@ -85,8 +99,6 @@ public class AdminController {
 
 	        // Manejar el archivo de imagen
 	        if (!drinkimage.isEmpty()) {
-	            System.out.println("Holaaaaaa 1 - Procesando imagen");
-	            // Convertir MultipartFile a byte[]
 	            byte[] imageData = drinkimage.getBytes();
 	            newdrink.setDrinkimage(imageData); // Asignar la imagen como byte[]
 	        } else {
@@ -95,13 +107,9 @@ public class AdminController {
 	        }
 
 	        // Guardar el objeto de DrinkModel
-	        System.out.println("Holaaaaaa 3 - antes de transformar el Drink");
 	        drinkService.addDrink(newdrink);
-	        System.out.println("Holaaaaaa 3 - bebida guardada con éxito");
-
 	        flash.addFlashAttribute("success", "Drink registered successfully!");
 	    } catch (Exception e) {
-	        System.out.println("Holaaaaaa 4 - Error al registrar la bebida");
 	        flash.addFlashAttribute("error", "An error occurred while registering the drink. Please try again.");
 	        e.printStackTrace();
 	        return "redirect:/admin/newDrink";
@@ -157,6 +165,17 @@ public class AdminController {
 	        flash.addFlashAttribute("error", "Error processing the image.");
 	    }
 	    return "redirect:/admin/showDrinks";
+	}
+	
+	@GetMapping("/editEvent/{id}")
+	public ModelAndView updateEvent(@PathVariable("id") int id, RedirectAttributes flash) {
+		String userName = userService.getCurrentUsername();
+		Event event=eventService.loadEventById(id);
+		EventModel e=eventService.transformEventModel(event);
+		ModelAndView mav = new ModelAndView(EDITEVENT_VIEW);
+		mav.addObject("usuario", userName);
+		mav.addObject("event", e);
+		return mav;
 	}
 
 
