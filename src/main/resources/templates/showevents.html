@@ -236,11 +236,11 @@
 		</div>
 
 		<!-- Mensaje de éxito -->
-		<div th:if="${success}" class="alert alert-success" role="alert">
+		<div th:if="${success}" class="alert alert-success" style="margin-top: 5%;" role="alert">
 			<span th:text="${success}"></span>
 		</div>
 
-		<div th:if="${error}" class="error-message alert alert-danger" role="alert">
+		<div th:if="${error}" class="error-message alert alert-danger" style="margin-top: 5%;" role="alert">
 			<p th:text="${error}"></p>
 		</div>
 
@@ -255,8 +255,10 @@
 						<div class="text-center">
 							<h2 th:text="${event.eventname}" class="event-title">Nombre del Evento</h2>
 							<p th:text="${event.eventdescription}">Descripción del evento</p>
-							<img th:src="${event.imageUrl}" class="d-block w-100">
-							<p th:text="'Fin de evento: ' + ${event.eventenddate}"></p>
+							<div class="imgevent">
+									<img th:src="${event.imageUrl}" alt="Imagen de la bebida" style="width: 300px; height: 300px;" />
+							</div>
+							<p th:text="'Event last day: ' + ${event.eventenddate}"></p>
 
 							<div class="icon-container">
 								<li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item no-style">
@@ -287,7 +289,7 @@
 			</div>
 
 			<div class="new-event-container" sec:authorize="hasRole('ROLE_ADMIN')">
-				<a href="/admin/newDrink" class="new-event-btn">NEW EVENT</a>
+				<a href="/admin/newEvent" class="new-event-btn">NEW EVENT</a>
 			</div>
 			<!-- Si no hay bebidas, mostramos el mensaje de error -->
 			<div th:if="${events.isEmpty()}" class="col-md-6 text-center"

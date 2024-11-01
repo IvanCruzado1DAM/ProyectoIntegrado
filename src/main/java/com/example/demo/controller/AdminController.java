@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -36,6 +38,7 @@ public class AdminController {
 	private static final String EDITDRINK_VIEW = "editdrink";
 	private static final String EDITEVENT_VIEW = "editevent";
 	private static final String REGISTERNEWDRINK_VIEW = "registernewdrink";
+	private static final String REGISTERNEWEVENT_VIEW = "registernewevent";
 
 	@Autowired
 	@Qualifier("userService")
@@ -67,9 +70,10 @@ public class AdminController {
 	public ModelAndView showEvents(Model model) {
 		String userName = userService.getCurrentUsername();
 		List<EventModel> events = eventService.listAllEvents();
+		List<EventModel> updatedEvents = eventService.convertImagesToBase64(events);
 		ModelAndView mav = new ModelAndView(SHOWEVENTS_VIEW);
 		mav.addObject("usuario", userName);
-		mav.addObject("events", events);
+		mav.addObject("events", updatedEvents);
 		return mav;
 	}
 	
@@ -118,6 +122,47 @@ public class AdminController {
 	    return "redirect:/admin/showDrinks"; // Redirigir a la lista de bebidas tras el éxito
 	}
 	
+	@GetMapping("/newEvent")
+	public ModelAndView newEvent(Model model) {
+		String userName = userService.getCurrentUsername();
+		ModelAndView mav = new ModelAndView(REGISTERNEWEVENT_VIEW);
+		mav.addObject("usuario", userName);
+		mav.addObject("newevent", new Event());
+		return mav;
+	}
+	
+	@PostMapping("/saveNewEvent")
+	public String registerNewEvent(@ModelAttribute("newevent") EventModel newevent,
+	                               @RequestParam("eventImageFile") MultipartFile eventimage,
+	                               RedirectAttributes flash) {
+	    try {
+	        // Verificar si ya existe una bebida con el mismo nombre
+	        if (eventService.findEventByname(newevent.getEventname()) != null) {
+	            flash.addFlashAttribute("error", "Event already exists!");
+	            return "redirect:/admin/showEvents";
+	        }
+
+	        // Manejar el archivo de imagen
+	        if (!eventimage.isEmpty()) {
+	            byte[] imageData = eventimage.getBytes();
+	            newevent.setEventimage(imageData); // Asignar la imagen como byte[]
+	        } else {
+	            flash.addFlashAttribute("error", "Image is required!");
+	            return "redirect:/admin/newEvent";
+	        }
+
+	        // Guardar el objeto de DrinkModel
+	        eventService.addEvent(newevent);
+	        flash.addFlashAttribute("success", "Event registered successfully!");
+	    } catch (Exception e) {
+	        flash.addFlashAttribute("error", "An error occurred while registering the drink. Please try again.");
+	        e.printStackTrace();
+	        return "redirect:/admin/newEvent";
+	    }
+
+	    return "redirect:/admin/showEvents"; 
+	}
+	
 	//Delete
 
 	@GetMapping("/deleteDrink/{id}")
@@ -129,6 +174,17 @@ public class AdminController {
 			flash.addFlashAttribute("error", "Fail removing this drink!");
 		}
 		return "redirect:/admin/showDrinks";
+	}
+	
+	@GetMapping("/deleteEvent/{id}")
+	public String deleteEvent(@PathVariable("id") int id, RedirectAttributes flash) {
+		if(eventService.exists(id)) {
+			eventService.removeEvent(id);
+			flash.addFlashAttribute("success", "Event delete successfully!");
+		}else {
+			flash.addFlashAttribute("error", "Fail removing this event!");
+		}
+		return "redirect:/admin/showEvents";
 	}
 	
 	//Edit
@@ -169,14 +225,34 @@ public class AdminController {
 	
 	@GetMapping("/editEvent/{id}")
 	public ModelAndView updateEvent(@PathVariable("id") int id, RedirectAttributes flash) {
-		String userName = userService.getCurrentUsername();
-		Event event=eventService.loadEventById(id);
-		EventModel e=eventService.transformEventModel(event);
-		ModelAndView mav = new ModelAndView(EDITEVENT_VIEW);
-		mav.addObject("usuario", userName);
-		mav.addObject("event", e);
-		return mav;
+	    String userName = userService.getCurrentUsername();
+	    Event event = eventService.loadEventById(id);
+	    EventModel e = eventService.transformEventModel(event);
+	    ModelAndView mav = new ModelAndView(EDITEVENT_VIEW);
+	    mav.addObject("usuario", userName);
+	    mav.addObject("event", e);
+	    return mav;
 	}
+
+	
+	@PostMapping("/editEvent/update/{id}")
+	public String updateeditEvent(@PathVariable("id") int id, RedirectAttributes flash, @ModelAttribute EventModel model) {
+	    try {
+	        if (model.getEventImageFile() != null && !model.getEventImageFile().isEmpty()) {
+	            model.setEventimage(model.getEventImageFile().getBytes());
+	        }
+	        if (eventService.exists(id)) {
+	            eventService.updateEvent(id, model);
+	            flash.addFlashAttribute("success", "Event updated successfully!");
+	        } else {
+	            flash.addFlashAttribute("error", "Fail updating this event!");
+	        }
+	    } catch (IOException e) {
+	        flash.addFlashAttribute("error", "Error processing the image.");
+	    }
+	    return "redirect:/admin/showEvents";
+	}
+	
 
 
 

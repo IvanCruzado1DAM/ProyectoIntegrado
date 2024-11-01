@@ -120,14 +120,17 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public EventModel convertImageToBase64(EventModel event) {
-	    if (event.getEventimage() != null && (event.getImageUrl() == null || event.getImageUrl().isEmpty())) {
-	        // Convierte la imagen a una cadena en Base64
-	        String base64Image = Base64.getEncoder().encodeToString(event.getEventimage());
-	        event.setImageUrl("data:image/jpeg;base64," + base64Image);
+	public List<EventModel> convertImagesToBase64(List<EventModel> events) {
+	    for (EventModel event : events) {
+	        if (event.getEventimage() != null && (event.getImageUrl() == null || event.getImageUrl().isEmpty())) {
+	            // Convert the image to a Base64 string
+	            String base64Image = Base64.getEncoder().encodeToString(event.getEventimage());
+	            event.setImageUrl("data:image/jpeg;base64," + base64Image);
+	        }
 	    }
-	    return event;
+	    return events;
 	}
+	
 
 
 }

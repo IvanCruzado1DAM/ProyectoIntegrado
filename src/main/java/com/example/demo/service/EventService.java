@@ -24,7 +24,7 @@ public interface EventService {
 	
 	boolean exists(int id);
 
-	EventModel convertImageToBase64(EventModel event);
+	List<EventModel> convertImagesToBase64(List<EventModel> events);
 
 
 }
