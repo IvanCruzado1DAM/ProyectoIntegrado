@@ -26,5 +26,7 @@ public interface EventService {
 
 	List<EventModel> convertImagesToBase64(List<EventModel> events);
 
+	List<EventModel> listAllEventsAfterToday();
+
 
 }

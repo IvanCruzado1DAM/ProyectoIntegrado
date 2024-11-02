@@ -110,6 +110,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 		if (userExistente != null) {
 			userExistente.setName(userModel.getName());
 			userExistente.setUsername(userModel.getUsername());
+			userExistente.setEmail(userModel.getEmail());
 			if(!userModel.getPassword().equals("")) {
 				userExistente.setPassword(passwordEncoder().encode(userModel.getPassword()));
 			}

@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +26,14 @@ public class EventServiceImpl implements EventService {
 	public List<EventModel> listAllEvents() {
 		ModelMapper modelMapper = new ModelMapper();
 		List<Event> eventsList = eventRepository.findAll();
+		return eventsList.stream().map(user -> modelMapper.map(user, EventModel.class)).collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<EventModel> listAllEventsAfterToday() {
+		ModelMapper modelMapper = new ModelMapper();
+		LocalDateTime now = LocalDateTime.now(); 
+	    List<Event> eventsList = eventRepository.findByEventenddateAfter(now);
 		return eventsList.stream().map(user -> modelMapper.map(user, EventModel.class)).collect(Collectors.toList());
 	}
 

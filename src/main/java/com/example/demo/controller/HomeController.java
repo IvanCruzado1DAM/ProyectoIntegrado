@@ -18,9 +18,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.entity.User;
 import com.example.demo.model.DrinkModel;
+import com.example.demo.model.EventModel;
 import com.example.demo.model.UserModel;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.impl.DrinkServiceImpl;
+import com.example.demo.service.impl.EventServiceImpl;
 import com.example.demo.service.impl.UserServiceImpl;
 
 @Controller
@@ -32,6 +34,7 @@ public class HomeController {
 	private static final String WHEREAREWE_VIEW = "wherearewe";
 	private static final String SHOWDRINKS_VIEW="showdrinks";
 	private static final String EDIT_USER = "updateuser";
+	private static final String SHOWEVENTS_VIEW = "showevents";
 
 	@Autowired
 	@Qualifier("userService")
@@ -44,6 +47,10 @@ public class HomeController {
 	@Autowired
 	@Qualifier("drinkService")
 	private DrinkServiceImpl drinkService;
+	
+	@Autowired
+	@Qualifier("eventService")
+	private EventServiceImpl eventService;
 	
 
 	@GetMapping("/index")
@@ -75,16 +82,14 @@ public class HomeController {
 	public ModelAndView editUser() {
 		ModelAndView mav = new ModelAndView(EDIT_USER);
 		String username = userService.getCurrentUsername();
-		System.out.println(username);
 		User usuario = userRepository.findByUsername(username);
-		System.out.println(usuario);
-		mav.addObject("id_user", usuario.getIduser());
+		mav.addObject("iduser", usuario.getIduser());
 		mav.addObject("usuario", usuario);
 		return mav;
 	}
 
-	@PostMapping("/editUser/edit/{id_user}")
-	public String updateUsereditado(@PathVariable("id_user") int id, @ModelAttribute UserModel usuario) {
+	@PostMapping("/editUser/edit/{iduser}")
+	public String updateUsereditado(@PathVariable("iduser") int id, @ModelAttribute UserModel usuario) {
 	    userService.updateUser(usuario);
 	    return "redirect:/auth/login";
 
@@ -98,6 +103,17 @@ public class HomeController {
 	    ModelAndView mav = new ModelAndView(SHOWDRINKS_VIEW);
 	    mav.addObject("usuario", userName);
 	    mav.addObject("drinksByCategory", drinksByCategory); // Añadimos el mapa al modelo
+	    return mav;
+	}
+	
+	@GetMapping("/showEvents")
+	public ModelAndView showEvents(Model model) {
+	    String userName = userService.getCurrentUsername();
+	    List<EventModel> events = eventService.listAllEventsAfterToday();
+		List<EventModel> updatedEvents = eventService.convertImagesToBase64(events);
+		ModelAndView mav = new ModelAndView(SHOWEVENTS_VIEW);
+		mav.addObject("usuario", userName);
+		mav.addObject("events", updatedEvents);
 	    return mav;
 	}
 }
