@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<title>BAR DAMM</title>
 	<style>
+		/* Existing styles */
 		body,
 		html {
 			margin: 0;
@@ -76,7 +77,8 @@
 		}
 
 		.content {
-			margin-top: 2%;
+			margin-top: 150px;
+			/* Ajusta según el espacio que necesites */
 			flex-grow: 1;
 			display: flex;
 			flex-direction: column;
@@ -170,6 +172,16 @@
 			margin: 0;
 			display: flex;
 		}
+
+		.filter-container {
+			position: relative;
+    		z-index: 10; /* Asegura que el filtro esté por encima de otros elementos */
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding-top: 120px; /* Aumenta el padding superior */
+   			margin-bottom: -15%; /* Aumenta el margen inferior */
+		}
 	</style>
 
 	<script>
@@ -194,39 +206,61 @@
 				}
 			}, 5000);
 
-			var currentCategoryIndex = 1; // Inicia desde la segunda categoría
-			const categoriesPerLoad = 1; // Número de categorías a cargar por clic
-			const categories = document.querySelectorAll('.drink-category-title');
+			// Filtro por categorías
+			document.getElementById('categoryFilter').addEventListener('change', function () {
+				const selectedCategory = this.value;
+				const categories = document.querySelectorAll('.category-container');
+				const loadMoreContainer = document.getElementById('loadMoreContainer');
+
+				if (selectedCategory === "all") {
+					// Oculta todas las categorías excepto la primera al seleccionar "All categories"
+					categories.forEach((category, index) => {
+						category.style.display = index === 0 ? 'block' : 'none';
+					});
+					loadMoreContainer.style.display = 'block';
+					currentCategoryIndex = 1; // Reiniciar el índice de categorías cargadas
+				} else {
+					// Mostrar solo la categoría seleccionada
+					categories.forEach(function (category) {
+						if (category.getAttribute('data-category') === selectedCategory) {
+							category.style.display = 'block';
+						} else {
+							category.style.display = 'none';
+						}
+					});
+					loadMoreContainer.style.display = 'none';
+				}
+			});
+
+			// Cargar más categorías (solo para "All categories")
+			let currentCategoryIndex = 1;
+			const categoriesPerLoad = 1;
+			const categories = document.querySelectorAll('.category-container');
 
 			// Oculta todas las categorías excepto la primera
 			categories.forEach((el, index) => {
 				if (index > 0) {
-					el.parentElement.style.display = 'none'; // Oculta el contenedor de la categoría
+					el.style.display = 'none';
 				}
 			});
 
 			document.getElementById('loadMoreBtn').addEventListener('click', function () {
-				loadMoreCategories();
-			});
-
-			function loadMoreCategories() {
 				for (let i = 0; i < categoriesPerLoad; i++) {
 					if (currentCategoryIndex < categories.length) {
-						categories[currentCategoryIndex].parentElement.style.display = 'block'; // Muestra la categoría
+						categories[currentCategoryIndex].style.display = 'block';
 						currentCategoryIndex++;
 					}
 				}
-
-				// Deshabilitar el botón si se han cargado todas las categorías
 				if (currentCategoryIndex >= categories.length) {
 					document.getElementById('loadMoreContainer').style.display = 'none';
 				}
-			}
+			});
 		});
 	</script>
 </head>
 
-<body style="background-image: url('/imgs/fondobar.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
+<body
+	style="background-image: url('/imgs/fondobar.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
 
 	<div class="container">
 		<!-- Botón NEW DRINK -->
@@ -246,41 +280,48 @@
 			<img src="/imgs/logobar.png" alt="Logo Bar DAMM" style="width: 100px;">
 		</div>
 
+		<!-- Selector de categorías -->
+		<div class="filter-container">
+			<select id="categoryFilter" class="form-select" style="width: 200px;">
+				<option value="all">All categories</option>
+				<option th:each="entry : ${drinksByCategory}" th:value="${entry.key}" th:text="${entry.key}"></option>
+			</select>
+		</div>
+
 		<!-- Mensaje de éxito -->
 		<div th:if="${success}" class="alert alert-success" role="alert">
 			<span th:text="${success}"></span>
 		</div>
 
-		<div th:if="${error}" class="error-message alert alert-danger" role="alert">
-			<p th:text="${error}"></p>
+		<div th:if="${errorMessage}" class="error-message alert alert-danger" role="alert">
+			<span th:text="${errorMessage}"></span>
 		</div>
 
-		<!-- Cuerpo -->
+		<!-- Contenido principal de bebidas -->
 		<div class="content">
-			<div th:if="${drinksByCategory.size() > 0}">
-				<div th:each="entry : ${drinksByCategory}">
-					<h2 class="drink-category-title" th:text="${entry.key}"></h2>
-					<div class="drink-row">
-						<div th:each="drink : ${entry.value}" class="drink-column">
-							<div class="drink-item">
-								<p><strong th:text="${drink.drinkname}">Nombre de la bebida</strong></p>
-								<div>
-									<img th:src="${drink.imageUrl}" alt="Imagen de la bebida" style="max-width: 120px; max-height: 120px;" />
-								</div>
-								<p><span th:text="${drink.drinkdescription}">Descripción</span></p>
-								<p><strong>Precio:</strong> <span th:text="${drink.drinkprice}">Precio</span> €</p>
+			<div th:each="entry : ${drinksByCategory}" class="category-container" th:attr="data-category=${entry.key}">
+				<h2 class="drink-category-title" th:text="${entry.key}"></h2>
+				<div class="drink-row">
+					<div th:each="drink : ${entry.value}" class="drink-column">
+						<div class="drink-item">
+							<p><strong th:text="${drink.drinkname}">Nombre de la bebida</strong></p>
+							<div>
+								<img th:src="${drink.imageUrl}" alt="Imagen de la bebida"
+									style="max-width: 120px; max-height: 120px;" />
+							</div>
+							<p><span th:text="${drink.drinkdescription}">Descripción</span></p>
+							<p><strong>Precio:</strong> <span th:text="${drink.drinkprice}">Precio</span> €</p>
 
-								<div class="icon-container">
-									<li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item no-style">
-										<a th:href="@{/admin/editDrink/{id}(id=${drink.iddrink})}">
-											<img th:src="@{/imgs/editlogo.png}" alt="Icono de herramienta" class="icon" />
-										</a>
-										<a th:href="@{/admin/deleteDrink/{id}(id=${drink.iddrink})}"
-											th:onclick="return confirm('¿Are you sure you want to delete this drink?');">
-											<img th:src="@{/imgs/deletelogo.png}" alt="Icono de papelera" class="icon" />
-										</a>
-									</li>
-								</div>
+							<div class="icon-container">
+								<li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item no-style">
+									<a th:href="@{/admin/editDrink/{id}(id=${drink.iddrink})}">
+										<img th:src="@{/imgs/editlogo.png}" alt="Icono de herramienta" class="icon" />
+									</a>
+									<a th:href="@{/admin/deleteDrink/{id}(id=${drink.iddrink})}"
+										th:onclick="return confirm('¿Are you sure you want to delete this drink?');">
+										<img th:src="@{/imgs/deletelogo.png}" alt="Icono de papelera" class="icon" />
+									</a>
+								</li>
 							</div>
 						</div>
 					</div>
