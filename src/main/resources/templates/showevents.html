@@ -120,7 +120,7 @@
 			display: flex;
 		}
 
-		/* Slide Content Styles */
+		
 		.carousel-item .text-center {
 			background-color: rgba(255, 255, 255, 0.7);
 			color: black;
@@ -136,7 +136,7 @@
 			object-fit: cover;
 		}
 
-		/* Control Buttons */
+		
 		.carousel-control-prev-icon,
 		.carousel-control-next-icon {
 			filter: invert(1);
@@ -186,14 +186,13 @@
 				}
 			}, 5000);
 
-			var currentCategoryIndex = 1; // Inicia desde la segunda categoría
-			const categoriesPerLoad = 1; // Número de categorías a cargar por clic
+			var currentCategoryIndex = 1; 
+			const categoriesPerLoad = 1; 
 			const categories = document.querySelectorAll('.drink-category-title');
 
-			// Oculta todas las categorías excepto la primera
 			categories.forEach((el, index) => {
 				if (index > 0) {
-					el.parentElement.style.display = 'none'; // Oculta el contenedor de la categoría
+					el.parentElement.style.display = 'none'; 
 				}
 			});
 
@@ -204,12 +203,11 @@
 			function loadMoreCategories() {
 				for (let i = 0; i < categoriesPerLoad; i++) {
 					if (currentCategoryIndex < categories.length) {
-						categories[currentCategoryIndex].parentElement.style.display = 'block'; // Muestra la categoría
+						categories[currentCategoryIndex].parentElement.style.display = 'block'; 
 						currentCategoryIndex++;
 					}
 				}
 
-				// Deshabilitar el botón si se han cargado todas las categorías
 				if (currentCategoryIndex >= categories.length) {
 					document.getElementById('loadMoreContainer').style.display = 'none';
 				}
@@ -235,7 +233,6 @@
 			<img src="/imgs/logobar.png" alt="Logo Bar DAMM" style="width: 100px;">
 		</div>
 
-		<!-- Mensaje de éxito -->
 		<div th:if="${success}" class="alert alert-success" style="margin-top: 5%;" role="alert">
 			<span th:text="${success}"></span>
 		</div>
@@ -291,7 +288,6 @@
 			<div class="new-event-container" sec:authorize="hasRole('ROLE_ADMIN')">
 				<a href="/admin/newEvent" class="new-event-btn">NEW EVENT</a>
 			</div>
-			<!-- Si no hay bebidas, mostramos el mensaje de error -->
 			<div th:if="${events.isEmpty()}" class="col-md-6 text-center"
 				style="background-color: rgba(255, 0, 0, 0.7); color: white; border-radius: 10px; padding: 20px;">
 				<h1>No hay eventos en este momento</h1>

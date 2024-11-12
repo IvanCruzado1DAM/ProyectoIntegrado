@@ -7,7 +7,6 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<title>BAR DAMM</title>
 	<style>
-		/* Existing styles... */
 		body,
 		html {
 			margin: 0;
@@ -151,14 +150,12 @@
 					method="POST" enctype="multipart/form-data">
 					<input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-					<!-- Nombre de la bebida -->
 					<div class="form-group">
 						<label for="eventname">Event's Name:</label>
 						<input type="text" th:field="*{eventname}" id="eventname" name="eventname"
 							placeholder="Introduce the event's name">
 					</div>
 
-					<!-- Descripción de la bebida -->
 					<div class="form-group">
 						<label for="eventdescription">Event's Description:</label>
 						<input id="eventdescription" th:field="*{eventdescription}" name="eventdescription"
@@ -169,7 +166,6 @@
 						<input type="datetime-local" th:value="*{eventenddate}"
 							id="eventenddate" name="eventenddate" placeholder="Select the end date and time">
 					</div>
-					<!-- Imagen de la bebida -->
 					<div class="form-group">
 						<label for="eventimage">Event's Image (PNG, JPG):</label>
 						<input type="file" th:field="*{eventImageFile}" id="eventimage" name="eventImageFile"

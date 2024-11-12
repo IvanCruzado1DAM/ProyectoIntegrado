@@ -32,7 +32,6 @@
 			height: auto;
 		}
 
-		/* Estilo del menú */
 		.navbar {
 			position: absolute;
 			top: 10px;
@@ -58,7 +57,6 @@
 
 		.content {
 			margin-top: 2%;
-			/* Aumenta este valor para elevar más el rectángulo */
 			flex-grow: 1;
 			display: flex;
 			flex-direction: column;
@@ -66,39 +64,25 @@
 			align-items: center;
 		}
 
-		/* Nueva clase para la imagen del logo */
 		.logo-container {
 			position: absolute;
 			top: 0;
-			/* Ajusta la posición vertical del logo para que esté lo más arriba posible */
 			left: 50%;
-			/* Centrado horizontalmente */
 			transform: translateX(-50%);
-			/* Centra la imagen */
 			z-index: -1;
-			/* Mantiene el logo detrás del contenido */
 		}
 
 		footer {
 			position: fixed;
-			/* Cambiado a fixed para mantenerlo en la esquina inferior izquierda */
 			bottom: 0;
 			left: 0;
-			/* Alineado a la izquierda */
 			color: gray;
-			/* Color del texto */
 			margin: 0;
-			/* Sin márgenes */
 			padding: 0;
-			/* Sin padding */
 			font-size: 14px;
-			/* Tamaño de la fuente */
 			width: 100%;
-			/* Para que ocupe todo el ancho */
 			text-align: left;
-			/* Alineación del texto a la izquierda */
 			padding-left: 10px;
-			/* Margen a la izquierda */
 		}
 	</style>
 </head>
@@ -107,7 +91,6 @@
 	style="background-image: url('/imgs/fondobar.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
 
 	<div class="container">
-		<!-- Encabezado -->
 		<br>
 		<!-- Navegador -->
 		<div class="navbar">
@@ -119,10 +102,8 @@
 		<br>
 		<br>
 
-		<!-- Contenedor para el logo -->
 		<div class="logo-container">
 			<img src="/imgs/logobar.png" alt="Logo Bar DAMM" style="width: 100px;">
-			<!-- Ajusta el tamaño según sea necesario -->
 		</div>
 
 		<!-- Cuerpo -->

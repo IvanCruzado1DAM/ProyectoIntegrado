@@ -7,7 +7,6 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<title>BAR DAMM</title>
 	<style>
-		/* Existing styles */
 		body,
 		html {
 			margin: 0;
@@ -78,7 +77,6 @@
 
 		.content {
 			margin-top: 150px;
-			/* Ajusta según el espacio que necesites */
 			flex-grow: 1;
 			display: flex;
 			flex-direction: column;
@@ -175,12 +173,12 @@
 
 		.filter-container {
 			position: relative;
-    		z-index: 10; /* Asegura que el filtro esté por encima de otros elementos */
+    		z-index: 10; 
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			padding-top: 120px; /* Aumenta el padding superior */
-   			margin-bottom: -15%; /* Aumenta el margen inferior */
+			padding-top: 120px; 
+   			margin-bottom: -15%; 
 		}
 	</style>
 
@@ -206,21 +204,18 @@
 				}
 			}, 5000);
 
-			// Filtro por categorías
 			document.getElementById('categoryFilter').addEventListener('change', function () {
 				const selectedCategory = this.value;
 				const categories = document.querySelectorAll('.category-container');
 				const loadMoreContainer = document.getElementById('loadMoreContainer');
 
 				if (selectedCategory === "all") {
-					// Oculta todas las categorías excepto la primera al seleccionar "All categories"
 					categories.forEach((category, index) => {
 						category.style.display = index === 0 ? 'block' : 'none';
 					});
 					loadMoreContainer.style.display = 'block';
-					currentCategoryIndex = 1; // Reiniciar el índice de categorías cargadas
+					currentCategoryIndex = 1; 
 				} else {
-					// Mostrar solo la categoría seleccionada
 					categories.forEach(function (category) {
 						if (category.getAttribute('data-category') === selectedCategory) {
 							category.style.display = 'block';
@@ -232,12 +227,10 @@
 				}
 			});
 
-			// Cargar más categorías (solo para "All categories")
 			let currentCategoryIndex = 1;
 			const categoriesPerLoad = 1;
 			const categories = document.querySelectorAll('.category-container');
 
-			// Oculta todas las categorías excepto la primera
 			categories.forEach((el, index) => {
 				if (index > 0) {
 					el.style.display = 'none';
@@ -260,10 +253,10 @@
 </head>
 
 <body
-	style="background-image: url('/imgs/fondobar.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
+	 style="background-image: url('/imgs/fondobar.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
 
 	<div class="container">
-		<!-- Botón NEW DRINK -->
+		
 		<li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
 			<a href="/admin/newDrink" class="new-drink-btn">NEW DRINK</a>
 		</li>
@@ -280,7 +273,7 @@
 			<img src="/imgs/logobar.png" alt="Logo Bar DAMM" style="width: 100px;">
 		</div>
 
-		<!-- Selector de categorías -->
+		
 		<div class="filter-container">
 			<select id="categoryFilter" class="form-select" style="width: 200px;">
 				<option value="all">All categories</option>
@@ -288,7 +281,6 @@
 			</select>
 		</div>
 
-		<!-- Mensaje de éxito -->
 		<div th:if="${success}" class="alert alert-success" role="alert">
 			<span th:text="${success}"></span>
 		</div>
@@ -328,17 +320,18 @@
 				</div>
 			</div>
 
-			<!-- Botón para cargar más categorías -->
+			
 			<div id="loadMoreContainer" class="text-center" style="margin: 25px;">
 				<button id="loadMoreBtn" class="btn btn-primary">Cargar más categorías</button>
 			</div>
 
-			<!-- Si no hay bebidas, mostramos el mensaje de error -->
+			
 			<div th:if="${drinksByCategory.size() == 0}" class="col-md-6 text-center"
 				style="background-color: rgba(255, 0, 0, 0.7); color: white; border-radius: 10px; padding: 20px;">
 				<h1>No hay bebidas en este momento</h1>
 			</div>
 		</div>
+
 	</div>
 
 	<!-- Footer -->

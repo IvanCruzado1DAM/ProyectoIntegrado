@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>BAR DAMM</title>
     <style>
-        /* Existing styles... */
         body,
         html {
             margin: 0;
@@ -180,7 +179,6 @@
 							placeholder="Introduce the event's name">
 					</div>
 
-					<!-- Descripción de la bebida -->
 					<div class="form-group">
 						<label for="eventdescription">Event's Description:</label>
 						<input id="eventdescription"  name="eventdescription"
@@ -191,7 +189,6 @@
 						<input type="datetime-local" 
 							id="eventenddate" name="eventenddate" placeholder="Select the end date and time">
 					</div>
-					<!-- Imagen de la bebida -->
 					<div class="form-group">
 						<label for="eventimage">Event's Image (PNG, JPG):</label>
 						<input type="file" id="eventimage" name="eventImageFile" accept="image/png, image/jpeg" required>
@@ -213,7 +210,6 @@
     </footer>
 
     <script>
-        // Mostrar u ocultar el mini formulario cuando se selecciona "New Category"
         document.getElementById('drinkcategory').addEventListener('change', function () {
             const miniForm = document.getElementById('miniForm');
             const errorMessage = document.getElementById('error-message');
@@ -226,7 +222,6 @@
             }
         });
 
-        // Verificar si la categoría existe o agregarla
         document.getElementById('addNewCategoryBtn').addEventListener('click', function () {
             const newCategoryInput = document.getElementById('newCategoryInput').value.trim();
             const drinkCategory = document.getElementById('drinkcategory');
@@ -241,19 +236,16 @@
                 errorMessage.textContent = "This category already exists. Please choose a different name.";
                 errorMessage.style.display = 'block';
             } else {
-                // Agregar la nueva categoría al select y seleccionarla
                 const newOption = document.createElement('option');
                 newOption.value = newCategoryInput;
                 newOption.text = newCategoryInput;
                 drinkCategory.appendChild(newOption);
-                drinkCategory.value = newCategoryInput; // Establecer la nueva categoría como seleccionada
+                drinkCategory.value = newCategoryInput; 
 
-                // Ocultar el mini formulario
                 document.getElementById('miniForm').style.display = 'none';
             }
         });
 
-        // Validación final del formulario
         document.getElementById('drink-form').addEventListener('submit', function (event) {
             const drinkCategory = document.getElementById('drinkcategory');
             const newCategoryInput = document.getElementById('newCategoryInput').value.trim();
@@ -262,7 +254,7 @@
             if (drinkCategory.value === 'newCategory' && newCategoryInput === '') {
                 errorMessage.textContent = "Please enter a new category name before submitting.";
                 errorMessage.style.display = 'block';
-                event.preventDefault(); // Previene el envío del formulario
+                event.preventDefault(); 
             }
         });
     </script>
