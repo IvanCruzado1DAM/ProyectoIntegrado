@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.entity.Event;
 import com.example.demo.entity.User;
 import com.example.demo.model.UserModel;
 import com.example.demo.repository.UserRepository;
@@ -92,10 +93,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 	public User addUser(UserModel alumnoModel) {
 		User nuevoUser = new User();
 		nuevoUser.setName(alumnoModel.getName());
-//        nuevoAlumno.setUsername(alumnoModel.getUsername());
 		nuevoUser.setPassword(alumnoModel.getPassword());
-//        nuevoAlumno.setIdFamilia(alumnoModel.getIdFamilia());
-
 		return userRepository.save(nuevoUser);
 	}
 
@@ -159,16 +157,24 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
 	@Override
 	public User transformUser(UserModel userModel) {
-		// TODO Auto-generated method stub
-		return null;
+		if (userModel == null) {
+			return null;
+		}
+
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(userModel, User.class);
 	}
 
 
 
 	@Override
 	public UserModel transformUserModel(User user) {
-		// TODO Auto-generated method stub
-		return null;
+		if (user == null) {
+			return null;
+		}
+
+		ModelMapper modelMapper = new ModelMapper();
+		return modelMapper.map(user, UserModel.class);
 	}
 
 
