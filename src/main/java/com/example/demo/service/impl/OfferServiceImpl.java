@@ -11,11 +11,12 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Event;
 import com.example.demo.entity.Offer;
+import com.example.demo.model.EventModel;
 import com.example.demo.model.OfferModel;
 import com.example.demo.repository.OfferRepository;
 import com.example.demo.service.OfferService;
 
-@Service("offerSercice")
+@Service("offerService")
 public class OfferServiceImpl implements OfferService {
 	
 	@Autowired
@@ -28,6 +29,14 @@ public class OfferServiceImpl implements OfferService {
 		List<Offer> offersList = offerRepository.findAll();
 		return offersList.stream().map(user -> modelMapper.map(user, OfferModel.class)).collect(Collectors.toList());
 	}
+	
+	@Override
+	public List<OfferModel> listAllOffersAfterToday() {
+		ModelMapper modelMapper = new ModelMapper();
+		LocalDateTime now = LocalDateTime.now(); 
+	    List<Offer> offersList = offerRepository.findByOfferenddateAfter(now);
+		return offersList.stream().map(user -> modelMapper.map(user, OfferModel.class)).collect(Collectors.toList());
+	}
 
 	@Override
 	public Offer addOffer(OfferModel offerModel) {
@@ -35,6 +44,28 @@ public class OfferServiceImpl implements OfferService {
 		newOffer.setTitle(offerModel.getTitle());
 		newOffer.setOfferenddate(offerModel.getOfferenddate());
 		return offerRepository.save(newOffer);
+	}
+	
+	@Override
+	public int removeOffer(int id) {
+	    if (offerRepository.existsById(id)) {  
+	        offerRepository.deleteById(id);    
+	        return id;                        
+	    }
+	    return -1; 
+	}
+
+
+	@Override
+	public Offer updateOffer(int id, OfferModel offerModel) {
+		Offer offer = offerRepository.findByIdoffer(id);
+		if (offer != null) {
+			offer.setTitle(offerModel.getTitle());
+			offer.setOfferenddate(offerModel.getOfferenddate());
+			
+			return offerRepository.save(offer);
+		}
+		return null;
 	}
 
 	@Override

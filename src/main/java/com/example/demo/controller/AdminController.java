@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,8 +23,10 @@ import com.example.demo.entity.Drink;
 import com.example.demo.entity.Event;
 import com.example.demo.model.DrinkModel;
 import com.example.demo.model.EventModel;
+import com.example.demo.model.OfferModel;
 import com.example.demo.service.impl.DrinkServiceImpl;
 import com.example.demo.service.impl.EventServiceImpl;
+import com.example.demo.service.impl.OfferServiceImpl;
 import com.example.demo.service.impl.UserServiceImpl;
 
 @Controller
@@ -35,6 +35,7 @@ public class AdminController {
 
 	private static final String SHOWDRINKS_VIEW = "showdrinks";
 	private static final String SHOWEVENTS_VIEW = "showevents";
+	private static final String SHOWOFFERS_VIEW = "showoffers";
 	private static final String EDITDRINK_VIEW = "editdrink";
 	private static final String EDITEVENT_VIEW = "editevent";
 	private static final String REGISTERNEWDRINK_VIEW = "registernewdrink";
@@ -51,6 +52,10 @@ public class AdminController {
 	@Autowired
 	@Qualifier("eventService")
 	private EventServiceImpl eventService;
+	
+	@Autowired
+	@Qualifier("offerService")
+	private OfferServiceImpl offerService;
 	
 	//Show
 
@@ -74,6 +79,16 @@ public class AdminController {
 		ModelAndView mav = new ModelAndView(SHOWEVENTS_VIEW);
 		mav.addObject("usuario", userName);
 		mav.addObject("events", updatedEvents);
+		return mav;
+	}
+	
+	@GetMapping("/showOffers")
+	public ModelAndView showOffers(Model model) {
+		String userName = userService.getCurrentUsername();
+		List<OfferModel> offers = offerService.listAllOffersAfterToday();
+		ModelAndView mav = new ModelAndView(SHOWOFFERS_VIEW);
+		mav.addObject("usuario", userName);
+		mav.addObject("offers", offers);
 		return mav;
 	}
 	

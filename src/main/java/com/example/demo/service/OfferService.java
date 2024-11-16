@@ -21,6 +21,12 @@ public interface OfferService {
 	
 	boolean exists(int id);
 
+	public abstract List<OfferModel> listAllOffersAfterToday();
+
+	public abstract int removeOffer(int id);
+
+	public abstract Offer updateOffer(int id, OfferModel offerModel);
+
 
 
 }
