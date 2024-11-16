@@ -169,6 +169,31 @@
             text-align: center; 
         }
     </style>
+    <script>
+		document.addEventListener("DOMContentLoaded", function () {
+			var errorMessage = document.querySelector('.error-message');
+			var successMessage = document.querySelector('.alert-success');
+
+			if (successMessage && successMessage.textContent.trim() !== '') {
+				successMessage.style.display = 'block';
+			}
+
+			if (errorMessage && errorMessage.textContent.trim() !== '') {
+				errorMessage.style.display = 'block';
+			}
+
+			setTimeout(function () {
+				if (errorMessage) {
+					errorMessage.style.display = 'none';
+				}
+				if (successMessage) {
+					successMessage.style.display = 'none';
+				}
+			}, 5000);
+
+			
+		});
+	</script>
 </head>
 
 <body
@@ -202,7 +227,7 @@
         
             <!-- Contenedor de todas las ofertas -->
             <div class="active-offers-container" style="margin: 5%;">
-                <div class="offers-title">ACTIVE OFFERS</div>
+                <div class="offers-title">OFFERS</div>
                     <!-- Ofertas -->
                     <div th:each="offer : ${offers}" class="offer-card" style="margin-bottom: 3%;">
                         <h2 th:text="${offer.title}">Offer Title</h2>

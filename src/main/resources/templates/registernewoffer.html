@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<title>BAR DAMM</title>
+	<style>
+		body,
+		html {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: center;
+			font-family: "Helvetica", "Arial", sans-serif;
+		}
+
+		.container {
+			width: 100%;
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+		}
+
+		.content {
+			margin-top: 2%;
+			flex-grow: 1;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.form-container {
+			background-color: rgba(255, 255, 255, 0.8);
+			padding: 30px;
+			border-radius: 15px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			max-width: 600px;
+			width: 100%;
+			margin-top: 10%;
+		}
+
+		.form-group {
+			margin-bottom: 15px;
+		}
+
+		label {
+			font-weight: bold;
+		}
+
+		select,
+		input {
+			width: 100%;
+			padding: 8px;
+			border-radius: 5px;
+			border: 1px solid #ccc;
+		}
+
+		.btn-submit {
+			background-color: blue;
+			color: white;
+			padding: 10px 15px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+
+		.btn-submit:hover {
+			background-color: darkblue;
+		}
+
+		.navbar {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			font-size: 16px;
+		}
+
+		.navbar a {
+			color: white;
+			text-decoration: none;
+			padding: 10px 15px;
+			transition: color 0.3s;
+		}
+
+		.navbar a:hover {
+			color: #ffcc00;
+		}
+
+		.logo-container {
+			position: absolute;
+			top: 0;
+			left: 50%;
+			transform: translateX(-50%);
+			z-index: -1;
+		}
+
+		footer {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			color: gray;
+			margin: 0;
+			padding: 0;
+			font-size: 14px;
+			width: 100%;
+			text-align: left;
+			padding-left: 10px;
+		}
+
+		.error-message {
+			color: red;
+			font-weight: bold;
+			margin-top: 10px;
+		}
+
+		.mini-form {
+			display: none;
+			margin-top: 15px;
+			padding: 15px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			background-color: #f9f9f9;
+		}
+
+		.mini-form input {
+			margin-bottom: 10px;
+		}
+
+		.mini-form button {
+			background-color: green;
+			color: white;
+			padding: 5px 10px;
+			border: none;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+
+		.mini-form button:hover {
+			background-color: darkgreen;
+		}
+	</style>
+	<script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const titleSelect = document.getElementById('title');
+            const miniForm = document.getElementById('miniForm');
+            const errorMessage = document.getElementById('error-message');
+            
+            // Cargar títulos desde localStorage
+            const storedTitles = JSON.parse(localStorage.getItem('titles')) || [];
+            storedTitles.forEach(title => {
+                const newOption = document.createElement('option');
+                newOption.value = title;
+                newOption.textContent = title;
+                titleSelect.appendChild(newOption);
+            });
+
+            // Escuchar el evento change en el select de título
+            titleSelect.addEventListener('change', function () {
+                errorMessage.style.display = 'none'; // Esconde el mensaje de error
+
+                if (titleSelect.value === 'newTitle') {
+                    miniForm.style.display = 'block'; // Muestra el formulario para nuevo título
+                } else {
+                    miniForm.style.display = 'none'; // Oculta el formulario si no se selecciona "New Offer Title"
+                }
+            });
+
+            // Agregar nuevo título al desplegable
+            document.getElementById('addNewTitleBtn').addEventListener('click', function () {
+                const newTitleInput = document.getElementById('newTitleInput').value.trim();
+                const existingTitles = Array.from(titleSelect.options).map(option => option.value);
+
+                if (newTitleInput === '') {
+                    errorMessage.textContent = "Please enter a new title.";
+                    errorMessage.style.display = 'block';
+                } else if (existingTitles.includes(newTitleInput)) {
+                    errorMessage.textContent = "This title already exists. Please choose a different name.";
+                    errorMessage.style.display = 'block';
+                } else {
+                    const newOption = document.createElement('option');
+                    newOption.value = newTitleInput;
+                    newOption.textContent = newTitleInput;
+                    titleSelect.appendChild(newOption);
+                    titleSelect.value = newTitleInput; // Selecciona el nuevo título
+
+                    // Almacenar el nuevo título en localStorage
+                    storedTitles.push(newTitleInput);
+                    localStorage.setItem('titles', JSON.stringify(storedTitles));
+
+                    miniForm.style.display = 'none'; // Esconde el formulario
+                }
+            });
+
+            // Validar en el submit
+            document.getElementById('offer-form').addEventListener('submit', function (event) {
+                const newTitleInput = document.getElementById('newTitleInput').value.trim();
+
+                if (titleSelect.value === 'newTitle' && newTitleInput === '') {
+                    errorMessage.textContent = "Please enter a new title before submitting.";
+                    errorMessage.style.display = 'block';
+                    event.preventDefault(); // Prevenir el envío si no se ha ingresado un título
+                }
+            });
+        });
+    </script>
+</head>
+
+<body style="background-image: url('/imgs/fondobar.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
+
+	<div class="container">
+		<div class="content">
+
+			<!-- Navbar -->
+			<div class="navbar">
+				<div class="col text-center" style="width: 100%;">
+					<div th:replace="~{navbar :: navbarFragment}"></div>
+				</div>
+			</div>
+
+			<br><br>
+
+			<!-- Contenedor para el logo -->
+			<div class="logo-container">
+				<img src="/imgs/logobar.png" alt="Logo Bar DAMM" style="width: 100px;">
+			</div>
+
+			<!-- Contenedor del formulario -->
+			<div class="form-container">
+				<h1>Register New Offer</h1>
+				<form id="offer-form" th:action="@{/admin/saveNewOffer}" th:object="${newoffer}" method="POST" enctype="multipart/form-data">
+					<input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+					<div class="form-group">
+                        <label for="eventname">Offer's Title:</label>
+                        <select id="title" name="title" required>
+                            <option value="Free drink until 6:00 PM">Free Drink Until 6:00 PM</option>
+                            <option value="2 drinks for the price of 1">2 Drinks for the Price of 1</option>
+                            <option value="Drinks at Half Price">Drinks at Half Price</option>
+                            <option value="newTitle">New Offer Title</option>
+                        </select>
+
+                        <!-- Mini Form para agregar nuevo título de oferta -->
+                        <div id="miniForm" class="mini-form">
+                            <label for="newTitleInput">New Offer Title:</label>
+                            <input type="text" id="newTitleInput" name="newTitle" placeholder="Type new offer title" />
+                            <button type="button" id="addNewTitleBtn">Add Title</button>
+                            <div id="error-message" class="error-message" style="display:none;"></div>
+                        </div>
+                    </div>
+
+					<div class="form-group">
+						<label for="offerenddate">Offer's End Date: </label>
+						<input type="datetime-local" id="offerenddate" name="offerenddate" placeholder="Select the end date and time">
+					</div>
+
+					<!-- Botones para guardar o retroceder -->
+                    <div class="form-group" style="display: flex; gap: 10px;">
+                        <button type="submit" class="btn-submit">Save Offer</button>
+                        <a href="/admin/showOffers" class="btn btn-secondary" style="padding: 10px 15px; border-radius: 5px; background-color: red; color: black;">BACK</a>
+                    </div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<footer>
+		<p>&copy; 2024 Bar DAMM. All rights reserved.</p>
+	</footer>
+
+</body>
+
+</html>

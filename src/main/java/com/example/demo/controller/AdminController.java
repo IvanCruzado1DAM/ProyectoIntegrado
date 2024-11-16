@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entity.Drink;
 import com.example.demo.entity.Event;
+import com.example.demo.entity.Offer;
 import com.example.demo.model.DrinkModel;
 import com.example.demo.model.EventModel;
 import com.example.demo.model.OfferModel;
@@ -38,8 +39,10 @@ public class AdminController {
 	private static final String SHOWOFFERS_VIEW = "showoffers";
 	private static final String EDITDRINK_VIEW = "editdrink";
 	private static final String EDITEVENT_VIEW = "editevent";
+	private static final String EDITOFFER_VIEW = "editoffer";
 	private static final String REGISTERNEWDRINK_VIEW = "registernewdrink";
 	private static final String REGISTERNEWEVENT_VIEW = "registernewevent";
+	private static final String REGISTERNEWOFFER_VIEW = "registernewoffer";
 
 	@Autowired
 	@Qualifier("userService")
@@ -85,7 +88,7 @@ public class AdminController {
 	@GetMapping("/showOffers")
 	public ModelAndView showOffers(Model model) {
 		String userName = userService.getCurrentUsername();
-		List<OfferModel> offers = offerService.listAllOffersAfterToday();
+		List<OfferModel> offers = offerService.listAllOffers();
 		ModelAndView mav = new ModelAndView(SHOWOFFERS_VIEW);
 		mav.addObject("usuario", userName);
 		mav.addObject("offers", offers);
@@ -178,6 +181,30 @@ public class AdminController {
 	    return "redirect:/admin/showEvents"; 
 	}
 	
+	@GetMapping("/newOffer")
+	public ModelAndView newOffer(Model model) {
+		String userName = userService.getCurrentUsername();
+		ModelAndView mav = new ModelAndView(REGISTERNEWOFFER_VIEW);
+		mav.addObject("usuario", userName);
+		mav.addObject("newoffer", new Offer());
+		return mav;
+	}
+
+	@PostMapping("/saveNewOffer")
+	public String registerNewOffer(@ModelAttribute("newoffer") OfferModel newoffer,
+	                               RedirectAttributes flash) {
+	    try {
+	        offerService.addOffer(newoffer);
+	        flash.addFlashAttribute("success", "Offer registered successfully!");
+	    } catch (Exception e) {
+	        flash.addFlashAttribute("error", "An error occurred while registering the offer. Please try again.");
+	        e.printStackTrace();
+	        return "redirect:/admin/newOffer";
+	    }
+
+	    return "redirect:/admin/showOffers"; 
+	}
+	
 	//Delete
 
 	@GetMapping("/deleteDrink/{id}")
@@ -201,6 +228,18 @@ public class AdminController {
 		}
 		return "redirect:/admin/showEvents";
 	}
+	
+	@GetMapping("/deleteOffer/{id}")
+	public String deleteOffer(@PathVariable("id") int id, RedirectAttributes flash) {
+		if(offerService.exists(id)) {
+			offerService.removeOffer(id);
+			flash.addFlashAttribute("success", "Offer delete successfully!");
+		}else {
+			flash.addFlashAttribute("error", "Fail removing this offer!");
+		}
+		return "redirect:/admin/showOffers";
+	}
+	
 	
 	//Edit
 
@@ -266,6 +305,29 @@ public class AdminController {
 	        flash.addFlashAttribute("error", "Error processing the image.");
 	    }
 	    return "redirect:/admin/showEvents";
+	}
+	
+	@GetMapping("/editOffer/{id}")
+	public ModelAndView updateOffer(@PathVariable("id") int id, RedirectAttributes flash) {
+	    String userName = userService.getCurrentUsername();
+	    Offer offer = offerService.loadOfferById(id);
+	    OfferModel of = offerService.transformOfferModel(offer);
+	    ModelAndView mav = new ModelAndView(EDITOFFER_VIEW);
+	    mav.addObject("usuario", userName);
+	    mav.addObject("offer", of);
+	    return mav;
+	}
+
+	
+	@PostMapping("/editOffer/update/{id}")
+	public String updateeditOffer(@PathVariable("id") int id, RedirectAttributes flash, @ModelAttribute OfferModel model) {
+	    if (offerService.exists(id)) {
+		    offerService.updateOffer(id, model);
+		    flash.addFlashAttribute("success", "Offer updated successfully!");
+		} else {
+		    flash.addFlashAttribute("error", "Fail updating this offer!");
+		}
+	    return "redirect:/admin/showOffers";
 	}
 	
 
