@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,9 +24,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.demo.entity.Drink;
 import com.example.demo.entity.Event;
 import com.example.demo.entity.Offer;
+import com.example.demo.model.CvModel;
 import com.example.demo.model.DrinkModel;
 import com.example.demo.model.EventModel;
 import com.example.demo.model.OfferModel;
+import com.example.demo.service.impl.CVServiceImpl;
 import com.example.demo.service.impl.DrinkServiceImpl;
 import com.example.demo.service.impl.EventServiceImpl;
 import com.example.demo.service.impl.OfferServiceImpl;
@@ -37,6 +41,7 @@ public class AdminController {
 	private static final String SHOWDRINKS_VIEW = "showdrinks";
 	private static final String SHOWEVENTS_VIEW = "showevents";
 	private static final String SHOWOFFERS_VIEW = "showoffers";
+	private static final String SHOWCVS_VIEW = "showcvs";
 	private static final String EDITDRINK_VIEW = "editdrink";
 	private static final String EDITEVENT_VIEW = "editevent";
 	private static final String EDITOFFER_VIEW = "editoffer";
@@ -59,6 +64,10 @@ public class AdminController {
 	@Autowired
 	@Qualifier("offerService")
 	private OfferServiceImpl offerService;
+	
+	@Autowired
+	@Qualifier("cvService")
+	private CVServiceImpl cvService;
 	
 	//Show
 
@@ -92,6 +101,18 @@ public class AdminController {
 		ModelAndView mav = new ModelAndView(SHOWOFFERS_VIEW);
 		mav.addObject("usuario", userName);
 		mav.addObject("offers", offers);
+		return mav;
+	}
+	
+	@GetMapping("/showCVs")
+	public ModelAndView showCVs(Model model) {
+		String userName = userService.getCurrentUsername();
+		List<CvModel> cvs = cvService.listAllCvs();
+	    boolean noCvsAvailable = cvs.isEmpty() || cvs.stream().allMatch(c -> c.isAccept());
+		ModelAndView mav = new ModelAndView(SHOWCVS_VIEW);
+		mav.addObject("usuario", userName);
+	    mav.addObject("noCvsAvailable", noCvsAvailable);
+		mav.addObject("cvs", cvs);
 		return mav;
 	}
 	
@@ -329,9 +350,23 @@ public class AdminController {
 		}
 	    return "redirect:/admin/showOffers";
 	}
+	 
+	//CV
+	@GetMapping("/acceptCv/{id}")
+	public String acceptCv(@PathVariable("id") int id, RedirectAttributes flash, @ModelAttribute CvModel model) {
+		if (cvService.exists(id)) {
+		    cvService.acceptCv(id, model);
+		    flash.addFlashAttribute("success", "Cv acepted successfully!");
+		} else {
+		    flash.addFlashAttribute("error", "Fail updating this cv!");
+		}
+	    return "redirect:/admin/showCVs";
+	}
+	@GetMapping("/readCv/{id}")
+	public ResponseEntity<byte[]> readCv(@PathVariable("id") int id, RedirectAttributes flash) {
+	    return cvService.getCvFile(id);
+	}
 	
-
-
 
 	
 

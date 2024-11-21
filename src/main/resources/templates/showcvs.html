@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<link th:href="@{/webjars/bootstrap/5.3.2/css/bootstrap.min.css}" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<title>BAR DAMM</title>
+	<style>
+		body,
+		html {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: center;
+			font-family: "Helvetica", "Arial", sans-serif;
+		}
+
+		.container {
+			width: 100%;
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+		}
+
+		.navbar {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			font-size: 16px;
+		}
+
+		.navbar a {
+			color: white;
+			text-decoration: none;
+			padding: 10px 15px;
+			transition: color 0.3s;
+		}
+
+		.navbar a:hover {
+			color: #ffcc00;
+		}
+
+		.navbar a:focus {
+			outline: none;
+			box-shadow: none;
+		}
+
+		.content {
+			flex-grow: 1;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			width: 100%;
+		}
+
+		.logo-container {
+			position: absolute;
+			top: 0;
+			left: 50%;
+			transform: translateX(-50%);
+			z-index: -1;
+		}
+
+		footer {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			color: gray;
+			margin: 0;
+			padding: 0;
+			font-size: 14px;
+			width: 100%;
+			text-align: left;
+			padding-left: 10px;
+		}
+
+		.active-offers-container {
+			background-color: rgba(255, 255, 255, 0.7);
+			color: black;
+			border-radius: 15px;
+			border: 2px solid transparent;
+			padding: 20px;
+			width: 500px;
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+			margin: 50px auto;
+		}
+
+		.offer-card {
+			background-color: rgba(255, 255, 255, 0.7);
+			color: black;
+			border: 1px solid #ddd;
+			border-radius: 10px;
+			padding: 15px;
+			text-align: center;
+			height: auto;
+			width: 450px;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+		}
+
+		.offers-title {
+			font-size: 24px;
+			font-weight: bold;
+			text-decoration: underline;
+			margin-bottom: 20px;
+			text-align: center;
+		}
+	</style>
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			var errorMessage = document.querySelector('.error-message');
+			var successMessage = document.querySelector('.alert-success');
+
+			if (successMessage && successMessage.textContent.trim() !== '') {
+				successMessage.style.display = 'block';
+			}
+
+			if (errorMessage && errorMessage.textContent.trim() !== '') {
+				errorMessage.style.display = 'block';
+			}
+
+			setTimeout(function () {
+				if (errorMessage) {
+					errorMessage.style.display = 'none';
+				}
+				if (successMessage) {
+					successMessage.style.display = 'none';
+				}
+			}, 5000);
+			// Delegar eventos en la active-offers-container
+			const offersContainer = document.querySelector('.active-offers-container');
+
+			if (!offersContainer) {
+				console.error('Error: No se encontró el contenedor de ofertas activas.');
+				return;
+			}
+
+			offersContainer.addEventListener('click', function (event) {
+				const target = event.target;
+				
+				//Accept button
+				if (target.classList.contains('read-btn')) {
+					const cvId = target.getAttribute('data-cv-id'); // Obtener el ID del CV
+					if (cvId) {
+						const url = `/admin/readCv/${cvId}`;
+						window.location.href = url; // Redirigir al usuario
+					} else {
+						console.error('Error: No se encontró el ID del CV.');
+					}
+				}
+				
+				//Accept button
+				if (target.classList.contains('accept-btn')) {
+					const cvId = target.getAttribute('data-cv-id'); // Obtener el ID del CV
+					if (cvId) {
+						const url = `/admin/acceptCv/${cvId}`;
+						window.location.href = url; // Redirigir al usuario
+					} else {
+						console.error('Error: No se encontró el ID del CV.');
+					}
+				}
+
+				// Decline button
+				if (target.classList.contains('decline-btn')) {
+					const cvId = target.getAttribute('data-cv-id');
+					const container = target.closest('.offer-card');
+					if (cvId && container) {
+						console.log(`Decline button clicked for CV ID: ${cvId}`);
+						toggleDecision(container, cvId);
+					}
+				}
+
+				// Change decision button
+				if (target.classList.contains('change-decision-btn')) {
+					const cvId = target.getAttribute('data-cv-id');
+					const container = target.closest('.offer-card');
+					if (cvId && container) {
+						console.log(`Change decision button clicked for CV ID: ${cvId}`);
+						revertDecision(container, cvId);
+					}
+				}
+			});
+
+			// Función para manejar el cambio a estado de "decisión tomada"
+			function toggleDecision(container, cvId) {
+				console.log(`Toggling decision for CV ID: ${cvId}`);
+				const acceptButton = container.querySelector(`#accept-${cvId}`);
+				const declineButton = container.querySelector(`#decline-${cvId}`);
+				const changeDecisionButton = container.querySelector(`#change-decision-${cvId}`);
+
+				if (acceptButton && declineButton && changeDecisionButton) {
+					acceptButton.style.display = 'none';
+					declineButton.style.display = 'none';
+					changeDecisionButton.style.display = 'inline-block';
+				} else {
+					console.error(`Error: No se encontraron todos los botones para CV ID: ${cvId}`);
+				}
+			}
+
+			// Función para manejar el cambio de vuelta al estado inicial
+			function revertDecision(container, cvId) {
+				console.log(`Reverting decision for CV ID: ${cvId}`);
+				const acceptButton = container.querySelector(`#accept-${cvId}`);
+				const declineButton = container.querySelector(`#decline-${cvId}`);
+				const changeDecisionButton = container.querySelector(`#change-decision-${cvId}`);
+
+				if (acceptButton && declineButton && changeDecisionButton) {
+					acceptButton.style.display = 'inline-block';
+					declineButton.style.display = 'inline-block';
+					changeDecisionButton.style.display = 'none';
+				} else {
+					console.error(`Error: No se encontraron todos los botones para CV ID: ${cvId}`);
+				}
+			}
+		});
+
+	</script>
+</head>
+
+<body
+	style="background-image: url('/imgs/fondobar.jpg'); background-size: cover; background-position: center center; background-repeat: no-repeat; background-attachment: fixed;">
+
+	<div class="container">
+		<div class="navbar">
+			<div class="col text-center" style="width: 100%;">
+				<div th:replace="~{navbar :: navbarFragment}"></div>
+			</div>
+		</div>
+
+		<div class="logo-container">
+			<img src="/imgs/logobar.png" alt="Logo Bar DAMM" style="width: 100px;">
+		</div>
+
+		<div th:if="${success}" class="alert alert-success" style="margin-top: 5%;" role="alert">
+			<span th:text="${success}"></span>
+		</div>
+
+		<div th:if="${error}" class="error-message alert alert-danger" style="margin-top: 5%;" role="alert">
+			<p th:text="${error}"></p>
+		</div>
+
+		<div class="content" style="margin-top: 20%;">
+			<div class="active-offers-container" style="margin: 5%;">
+				<div class="offers-title">JOB APPLICATIONS</div>
+				<div th:each="cv : ${cvs}" th:if="${cv.accept == false}" class="offer-card" style="margin-bottom: 3%;">
+
+					<button class="read-btn" th:data-cv-id="${cv.idcv}"
+						style="background-color: #007BFF; color: white; border: none; margin-bottom: 2px; border-radius: 5px; padding: 10px 15px; cursor: pointer;">
+						Read CV
+					</button>
+					<div style="display: flex; justify-content: space-between; gap: 10px;">
+						<button id="accept-123"
+							style="background-color: #28A745; width: 49%; color: white; border: none; border-radius: 5px; padding: 10px 15px; cursor: pointer;"
+							class="accept-btn" th:data-cv-id="${cv.idcv}">Accept</button>
+						<button id="decline-123"
+							style="background-color: #DC3545; width: 49%; color: white; border: none; border-radius: 5px; padding: 10px 15px; cursor: pointer;"
+							class="decline-btn" data-cv-id="123">Decline</button>
+					</div>
+
+					<button id="change-decision-123"
+						style="display: none; background-color: #FFC107; width: 100%; color: white; border: none; border-radius: 5px; padding: 10px 15px; cursor: pointer;"
+						class="change-decision-btn" data-cv-id="123">
+						Change Decision
+					</button>
+
+
+				</div>
+
+				<div th:if="${noCvsAvailable}" 
+				style="background-color: rgba(255, 0, 0, 0.7); color: white; border-radius: 10px; padding: 10px;"
+					class="offer-card">
+					<h2>There are no Jobs Applications at this time</h2>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<footer>
+		<p>© 2024 Bar DAMM. Todos los derechos reservados.</p>
+	</footer>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

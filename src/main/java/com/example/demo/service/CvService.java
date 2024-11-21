@@ -21,6 +21,6 @@ public interface CvService {
 	
 	boolean exists(int id);
 	
-	public abstract byte[] convertPdfToBytes(File file) throws IOException;
+	public abstract byte[] convertCvDocumentToPdf(int id);
 
 }

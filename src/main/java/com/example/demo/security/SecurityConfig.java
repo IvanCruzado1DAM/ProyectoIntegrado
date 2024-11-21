@@ -36,11 +36,6 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/api/**").permitAll()
                 .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
-                .requestMatchers("/adminshow/**").hasAuthority("ROLE_ADMIN")
-                .requestMatchers("/adminedit/**").hasAuthority("ROLE_ADMIN")
-                .requestMatchers("/home/index").permitAll()
-                .requestMatchers("/home/**").hasAuthority("ROLE_USER")
-                .requestMatchers("/", "/home/**", "/imgs/**", "/auth/**", "/css/**", "/files/**", "/webjars/**", "/error/**").permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
