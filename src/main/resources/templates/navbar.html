@@ -91,6 +91,10 @@
                     <li sec:authorize="!hasRole('ROLE_ADMIN')" class="nav-item active">
                         <a class="nav-link" href="/home/wherearewe" style="white-space: nowrap;">Where are we?</a>
                     </li>
+                    <li sec:authorize="!hasRole('ROLE_ADMIN')" class="nav-item active">
+                        <a class="nav-link editar" type="submit" href="/home/editUser"
+                           style="height: 35px; width: 100px;">Edit Profile</a>
+                    </li>
 
                     <!-- Elementos para usuarios no autenticados -->
                     <li sec:authorize="!isAuthenticated()" class="nav-item">
@@ -108,10 +112,7 @@
                     <li sec:authorize="isAuthenticated()" class="nav-item">
                         <a class="nav-link" th:text="${usuario}" style="white-space: nowrap;"></a>
                     </li>
-                    <li sec:authorize="hasRole('ROLE_USER')" class="nav-item active">
-                        <a class="nav-link editar" type="submit" href="/home/editUser"
-                           style="height: 50px; width: 105px;">Edit Profile</a>
-                    </li>
+                    
                     <li sec:authorize="isAuthenticated()" class="nav-item">
                         <form th:action="@{/logout}" method="post">
                             <button class="btn btn-link fa fa-sign-in" type="submit"
