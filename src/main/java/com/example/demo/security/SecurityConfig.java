@@ -48,6 +48,7 @@ public class SecurityConfig {
                         )
                 )
                 .requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/imgs/**").permitAll()
+                .requestMatchers("/api/**").permitAll()
         		.requestMatchers("/apiclient/**").hasAuthority("ROLE_USER")
                 .requestMatchers("/auth/registerForm/**").permitAll()
                 .requestMatchers("/auth/register/**").permitAll()
