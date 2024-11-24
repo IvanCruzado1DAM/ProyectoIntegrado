@@ -47,6 +47,7 @@ public class SecurityConfig {
                                 .noneMatch(grantedAuthority -> "ROLE_ADMIN".equals(grantedAuthority.getAuthority()))
                         )
                 )
+                .requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/imgs/**").permitAll()
         		.requestMatchers("/apiclient/**").hasAuthority("ROLE_USER")
                 .requestMatchers("/auth/registerForm/**").permitAll()
                 .requestMatchers("/auth/register/**").permitAll()
