@@ -152,7 +152,6 @@
             const miniForm = document.getElementById('miniForm');
             const errorMessage = document.getElementById('error-message');
             
-            // Cargar títulos desde localStorage
             const storedTitles = JSON.parse(localStorage.getItem('titles')) || [];
             storedTitles.forEach(title => {
                 const newOption = document.createElement('option');
@@ -161,18 +160,16 @@
                 titleSelect.appendChild(newOption);
             });
 
-            // Escuchar el evento change en el select de título
             titleSelect.addEventListener('change', function () {
-                errorMessage.style.display = 'none'; // Esconde el mensaje de error
+                errorMessage.style.display = 'none'; 
 
                 if (titleSelect.value === 'newTitle') {
-                    miniForm.style.display = 'block'; // Muestra el formulario para nuevo título
+                    miniForm.style.display = 'block'; 
                 } else {
-                    miniForm.style.display = 'none'; // Oculta el formulario si no se selecciona "New Offer Title"
+                    miniForm.style.display = 'none'; 
                 }
             });
 
-            // Agregar nuevo título al desplegable
             document.getElementById('addNewTitleBtn').addEventListener('click', function () {
                 const newTitleInput = document.getElementById('newTitleInput').value.trim();
                 const existingTitles = Array.from(titleSelect.options).map(option => option.value);
@@ -188,24 +185,22 @@
                     newOption.value = newTitleInput;
                     newOption.textContent = newTitleInput;
                     titleSelect.appendChild(newOption);
-                    titleSelect.value = newTitleInput; // Selecciona el nuevo título
+                    titleSelect.value = newTitleInput; 
 
-                    // Almacenar el nuevo título en localStorage
                     storedTitles.push(newTitleInput);
                     localStorage.setItem('titles', JSON.stringify(storedTitles));
 
-                    miniForm.style.display = 'none'; // Esconde el formulario
+                    miniForm.style.display = 'none'; 
                 }
             });
 
-            // Validar en el submit
             document.getElementById('offer-form').addEventListener('submit', function (event) {
                 const newTitleInput = document.getElementById('newTitleInput').value.trim();
 
                 if (titleSelect.value === 'newTitle' && newTitleInput === '') {
                     errorMessage.textContent = "Please enter a new title before submitting.";
                     errorMessage.style.display = 'block';
-                    event.preventDefault(); // Prevenir el envío si no se ha ingresado un título
+                    event.preventDefault(); 
                 }
             });
         });

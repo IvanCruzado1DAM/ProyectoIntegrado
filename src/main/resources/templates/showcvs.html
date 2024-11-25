@@ -133,7 +133,6 @@
 					successMessage.style.display = 'none';
 				}
 			}, 5000);
-			// Delegar eventos en la active-offers-container
 			const offersContainer = document.querySelector('.active-offers-container');
 
 			if (!offersContainer) {
@@ -144,29 +143,28 @@
 			offersContainer.addEventListener('click', function (event) {
 				const target = event.target;
 				
-				//Accept button
+				
 				if (target.classList.contains('read-btn')) {
-					const cvId = target.getAttribute('data-cv-id'); // Obtener el ID del CV
+					const cvId = target.getAttribute('data-cv-id'); 
 					if (cvId) {
 						const url = `/admin/readCv/${cvId}`;
-						window.location.href = url; // Redirigir al usuario
+						window.location.href = url; 
 					} else {
 						console.error('Error: No se encontró el ID del CV.');
 					}
 				}
 				
-				//Accept button
 				if (target.classList.contains('accept-btn')) {
-					const cvId = target.getAttribute('data-cv-id'); // Obtener el ID del CV
+					const cvId = target.getAttribute('data-cv-id'); 
 					if (cvId) {
 						const url = `/admin/acceptCv/${cvId}`;
-						window.location.href = url; // Redirigir al usuario
+						window.location.href = url; 
 					} else {
 						console.error('Error: No se encontró el ID del CV.');
 					}
 				}
 
-				// Decline button
+				
 				if (target.classList.contains('decline-btn')) {
 					const cvId = target.getAttribute('data-cv-id');
 					const container = target.closest('.offer-card');
@@ -176,7 +174,7 @@
 					}
 				}
 
-				// Change decision button
+				
 				if (target.classList.contains('change-decision-btn')) {
 					const cvId = target.getAttribute('data-cv-id');
 					const container = target.closest('.offer-card');
@@ -187,7 +185,7 @@
 				}
 			});
 
-			// Función para manejar el cambio a estado de "decisión tomada"
+			
 			function toggleDecision(container, cvId) {
 				console.log(`Toggling decision for CV ID: ${cvId}`);
 				const acceptButton = container.querySelector(`#accept-${cvId}`);
@@ -203,7 +201,6 @@
 				}
 			}
 
-			// Función para manejar el cambio de vuelta al estado inicial
 			function revertDecision(container, cvId) {
 				console.log(`Reverting decision for CV ID: ${cvId}`);
 				const acceptButton = container.querySelector(`#accept-${cvId}`);

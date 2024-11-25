@@ -191,9 +191,9 @@
             errorMessage.style.display = 'none'; 
 
             if (this.value === 'newTitle') {
-                miniForm.style.display = 'block'; // Muestra el formulario para nuevo título
+                miniForm.style.display = 'block'; 
             } else {
-                miniForm.style.display = 'none'; // Oculta el formulario si no se selecciona "New Offer Title"
+                miniForm.style.display = 'none'; 
             }
         });
 
@@ -215,13 +215,12 @@
                 newOption.value = newTitleInput;
                 newOption.text = newTitleInput;
                 titleSelect.appendChild(newOption);
-                titleSelect.value = newTitleInput; // Establece el nuevo título como seleccionado
+                titleSelect.value = newTitleInput; 
 
-                miniForm.style.display = 'none'; // Esconde el formulario
+                miniForm.style.display = 'none'; 
             }
         });
 
-        // Al enviar el formulario, si se elige 'newTitle' y no se ha introducido un valor, mostrar error
         document.getElementById('drink-form').addEventListener('submit', function (event) {
             const titleSelect = document.getElementById('title');
             const newTitleInput = document.getElementById('newTitleInput').value.trim();

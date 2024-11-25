@@ -102,7 +102,7 @@ public class HomeController {
 		drinksByCategory = drinkService.convertImagesToBase64(drinksByCategory);   
 	    ModelAndView mav = new ModelAndView(SHOWDRINKS_VIEW);
 	    mav.addObject("usuario", userName);
-	    mav.addObject("drinksByCategory", drinksByCategory); // Añadimos el mapa al modelo
+	    mav.addObject("drinksByCategory", drinksByCategory); 
 	    return mav;
 	}
 	
