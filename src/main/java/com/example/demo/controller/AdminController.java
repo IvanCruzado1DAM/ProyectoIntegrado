@@ -74,12 +74,11 @@ public class AdminController {
 	@GetMapping("/showDrinks")
 	public ModelAndView showDrinks(Model model) {
 		String userName = userService.getCurrentUsername();
-		// Agrupar bebidas por categoría
 		Map<String, List<DrinkModel>> drinksByCategory = drinkService.listAllDrinksCategorys();
 		drinksByCategory = drinkService.convertImagesToBase64(drinksByCategory);
 		ModelAndView mav = new ModelAndView(SHOWDRINKS_VIEW);
 		mav.addObject("usuario", userName);
-		mav.addObject("drinksByCategory", drinksByCategory); // Añadimos el mapa al modelo
+		mav.addObject("drinksByCategory", drinksByCategory); 
 		return mav;
 	}
 	
@@ -134,22 +133,19 @@ public class AdminController {
 	                               @RequestParam("drinkImageFile") MultipartFile drinkimage,
 	                               RedirectAttributes flash) {
 	    try {
-	        // Verificar si ya existe una bebida con el mismo nombre
 	        if (drinkService.findDrinkByDrinkname(newdrink.getDrinkname()) != null) {
 	            flash.addFlashAttribute("error", "Drink already exists!");
 	            return "redirect:/admin/showDrinks";
 	        }
 
-	        // Manejar el archivo de imagen
 	        if (!drinkimage.isEmpty()) {
 	            byte[] imageData = drinkimage.getBytes();
-	            newdrink.setDrinkimage(imageData); // Asignar la imagen como byte[]
+	            newdrink.setDrinkimage(imageData); 
 	        } else {
 	            flash.addFlashAttribute("error", "Image is required!");
 	            return "redirect:/admin/newDrink";
 	        }
 
-	        // Guardar el objeto de DrinkModel
 	        drinkService.addDrink(newdrink);
 	        flash.addFlashAttribute("success", "Drink registered successfully!");
 	    } catch (Exception e) {
@@ -158,7 +154,7 @@ public class AdminController {
 	        return "redirect:/admin/newDrink";
 	    }
 
-	    return "redirect:/admin/showDrinks"; // Redirigir a la lista de bebidas tras el éxito
+	    return "redirect:/admin/showDrinks"; 
 	}
 	
 	@GetMapping("/newEvent")
@@ -175,22 +171,19 @@ public class AdminController {
 	                               @RequestParam("eventImageFile") MultipartFile eventimage,
 	                               RedirectAttributes flash) {
 	    try {
-	        // Verificar si ya existe una bebida con el mismo nombre
 	        if (eventService.findEventByname(newevent.getEventname()) != null) {
 	            flash.addFlashAttribute("error", "Event already exists!");
 	            return "redirect:/admin/showEvents";
 	        }
 
-	        // Manejar el archivo de imagen
 	        if (!eventimage.isEmpty()) {
 	            byte[] imageData = eventimage.getBytes();
-	            newevent.setEventimage(imageData); // Asignar la imagen como byte[]
+	            newevent.setEventimage(imageData); 
 	        } else {
 	            flash.addFlashAttribute("error", "Image is required!");
 	            return "redirect:/admin/newEvent";
 	        }
 
-	        // Guardar el objeto de DrinkModel
 	        eventService.addEvent(newevent);
 	        flash.addFlashAttribute("success", "Event registered successfully!");
 	    } catch (Exception e) {
@@ -281,7 +274,6 @@ public class AdminController {
 	@PostMapping("/editDrink/update/{id}")
 	public String updateeditDrink(@PathVariable("id") int id, RedirectAttributes flash, @ModelAttribute DrinkModel model) {
 	    try {
-	        // Handle the conversion from MultipartFile to byte[]
 	        if (model.getDrinkImageFile() != null && !model.getDrinkImageFile().isEmpty()) {
 	            model.setDrinkimage(model.getDrinkImageFile().getBytes());
 	        }
