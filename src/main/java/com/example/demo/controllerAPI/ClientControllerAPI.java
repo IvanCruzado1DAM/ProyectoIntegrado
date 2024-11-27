@@ -1,10 +1,12 @@
 package com.example.demo.controllerAPI;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,12 +16,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.entity.Reservetable;
 import com.example.demo.model.CvModel;
 import com.example.demo.model.DrinkModel;
 import com.example.demo.model.EventModel;
 import com.example.demo.service.impl.CVServiceImpl;
 import com.example.demo.service.impl.DrinkServiceImpl;
 import com.example.demo.service.impl.EventServiceImpl;
+import com.example.demo.service.impl.ReservetableServiceImpl;
 
 @RestController
 @RequestMapping("/apiclient")
@@ -36,6 +40,10 @@ public class ClientControllerAPI {
 	@Autowired
 	@Qualifier("cvService")
 	private CVServiceImpl cvService;
+	
+	@Autowired
+	@Qualifier("reservetableService")
+	private ReservetableServiceImpl reservetableService;
 
 	//Drinks
 	@GetMapping("/listdrinks")
@@ -82,4 +90,39 @@ public class ClientControllerAPI {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading CV: " + e.getMessage());
         }
     }
+	
+	//Table 
+	@PostMapping("/reserveTable")
+	public ResponseEntity<String> reserveTable(
+	        @RequestParam int idtable,
+	        @RequestParam int idclient,
+	        @RequestParam String reservationHour) {
+		
+		LocalDateTime reservationTime = LocalDateTime.parse(reservationHour);
+
+	    // Verificar si la mesa existe
+	    if (!reservetableService.exists(idtable)) {
+	        return new ResponseEntity<>("Table not found", HttpStatus.NOT_FOUND);
+	    }
+
+	    // Cargar la mesa existente por ID
+	    Reservetable existingTable = reservetableService.loadTableByIdTable(idtable);
+
+	    // Verificar si la mesa ya está ocupada
+	    if (existingTable.isOccupy()) {
+	        return new ResponseEntity<>("Table is already occupied", HttpStatus.CONFLICT);
+	    }
+
+	    // Actualizar los datos de la mesa
+	    existingTable.setIdclient(idclient);
+	    existingTable.setReservationhour(reservationTime);
+	    existingTable.setOccupy(false);
+	    existingTable.setWanttopay(false);
+
+	    // Guardar los cambios
+	    reservetableService.updateTable(idtable, reservetableService.transformTableModel(existingTable));
+
+	    return new ResponseEntity<>("Table reserved successfully", HttpStatus.OK);
+	}
+
 }
