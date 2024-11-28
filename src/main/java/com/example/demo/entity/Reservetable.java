@@ -16,6 +16,7 @@ public class Reservetable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idtable;
+	private int numtable;
 	private int idclient;
     private LocalDateTime reservationhour;
 	private boolean occupy;

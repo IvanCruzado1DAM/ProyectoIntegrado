@@ -30,7 +30,7 @@ public class ReservetableServiceImpl implements ReservetableService{
 	@Override
 	public Reservetable addTable(ReservetableModel tableModel) {
 		Reservetable tb=new Reservetable();
-		tb.setIdtable(tableModel.getIdtable());
+		tb.setNumtable(tableModel.getNumtable());
 		tb.setIdclient(tableModel.getIdclient());
 		tb.setReservationhour(tableModel.getReservationhour());
 		tb.setOccupy(tableModel.isOccupy());
@@ -53,6 +53,7 @@ public class ReservetableServiceImpl implements ReservetableService{
 	public ReservetableModel transformTableModel(Reservetable table) {
 		ReservetableModel tb=new ReservetableModel();
 		tb.setIdtable(table.getIdtable());
+		tb.setNumtable(table.getNumtable());
 		tb.setIdclient(table.getIdclient());
 		tb.setReservationhour(table.getReservationhour());
 		tb.setOccupy(table.isOccupy());

@@ -106,33 +106,30 @@ public class ClientControllerAPI {
 	//Table 
 	@PostMapping("/reserveTable")
 	public ResponseEntity<String> reserveTable(
-	        @RequestParam int idtable,
+	        @RequestParam int numtable,
 	        @RequestParam int idclient,
 	        @RequestParam String reservationHour) {
 		
 		LocalDateTime reservationTime = LocalDateTime.parse(reservationHour);
 
 	    // Verificar si la mesa existe
-	    if (!reservetableService.exists(idtable)) {
+	    if (!reservetableService.exists(numtable)) {
 	        return new ResponseEntity<>("Table not found", HttpStatus.NOT_FOUND);
 	    }
 
 	    // Cargar la mesa existente por ID
-	    Reservetable existingTable = reservetableService.loadTableByIdTable(idtable);
+	    Reservetable existingTable = new Reservetable();
 
-	    // Verificar si la mesa ya está ocupada
-	    if (existingTable.isOccupy()) {
-	        return new ResponseEntity<>("Table is already occupied", HttpStatus.CONFLICT);
-	    }
 
 	    // Actualizar los datos de la mesa
+	    existingTable.setNumtable(numtable);
 	    existingTable.setIdclient(idclient);
 	    existingTable.setReservationhour(reservationTime);
 	    existingTable.setOccupy(false);
 	    existingTable.setWanttopay(false);
 
 	    // Guardar los cambios
-	    reservetableService.updateTable(idtable, reservetableService.transformTableModel(existingTable));
+	    reservetableService.addTable(reservetableService.transformTableModel(existingTable));
 
 	    return new ResponseEntity<>("Table reserved successfully", HttpStatus.OK);
 	}

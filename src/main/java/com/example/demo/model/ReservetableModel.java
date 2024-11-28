@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReservetableModel {
 	private int idtable;
+	private int numtable;
 	private int idclient;
     private LocalDateTime reservationhour;
 	private boolean occupy;
