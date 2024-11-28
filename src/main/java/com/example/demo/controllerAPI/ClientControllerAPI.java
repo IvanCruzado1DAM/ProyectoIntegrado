@@ -20,6 +20,7 @@ import com.example.demo.entity.Reservetable;
 import com.example.demo.model.CvModel;
 import com.example.demo.model.DrinkModel;
 import com.example.demo.model.EventModel;
+import com.example.demo.model.ReservetableModel;
 import com.example.demo.service.impl.CVServiceImpl;
 import com.example.demo.service.impl.DrinkServiceImpl;
 import com.example.demo.service.impl.EventServiceImpl;
@@ -64,6 +65,17 @@ public class ClientControllerAPI {
 			return ResponseEntity.ok(events); 
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("There is a error with the events!");
+		}
+	}
+	
+	//Reserves
+	@GetMapping("/listreserves")
+	public ResponseEntity<?> listAllReserves() {
+		try {
+			List<ReservetableModel> reserves = reservetableService.listAllTables(); 
+			return ResponseEntity.ok(reserves); 
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("There is a error with the reserves!");
 		}
 	}
 	
