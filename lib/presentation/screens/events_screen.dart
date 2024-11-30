@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:convert'; 
 import 'dart:typed_data';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter_application_bardamm/models/event.dart'; 
-import 'package:flutter_application_bardamm/services/client_services.dart'; 
-import 'package:flutter_application_bardamm/presentation/screens/user_screen.dart'; 
+import 'package:BarDamm/models/event.dart'; 
+import 'package:BarDamm/services/client_services.dart'; 
+import 'package:BarDamm/presentation/screens/user_screen.dart'; 
 
 class EventsScreen extends StatefulWidget {
   final String token;

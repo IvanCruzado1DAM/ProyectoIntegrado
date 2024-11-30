@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter_application_bardamm/models/user.dart';
+import 'package:BarDamm/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 

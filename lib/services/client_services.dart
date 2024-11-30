@@ -1,9 +1,9 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:flutter_application_bardamm/models/user.dart';
-import 'package:flutter_application_bardamm/models/drink.dart';
-import 'package:flutter_application_bardamm/models/event.dart';
-import 'package:flutter_application_bardamm/models/reservetable.dart';
+import 'package:BarDamm/models/user.dart';
+import 'package:BarDamm/models/drink.dart';
+import 'package:BarDamm/models/event.dart';
+import 'package:BarDamm/models/reservetable.dart';
 import 'dart:typed_data';
 import 'dart:io';
 import 'package:intl/intl.dart';

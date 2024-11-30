@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_bardamm/presentation/screens/user_screen.dart';
-import 'package:flutter_application_bardamm/services/client_services.dart';
-import 'package:flutter_application_bardamm/models/drink.dart';
+import 'package:BarDamm/presentation/screens/user_screen.dart';
+import 'package:BarDamm/services/client_services.dart';
+import 'package:BarDamm/models/drink.dart';
 import 'dart:typed_data'; 
 
 class MenuScreen extends StatefulWidget {

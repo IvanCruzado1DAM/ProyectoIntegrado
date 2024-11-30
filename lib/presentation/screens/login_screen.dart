@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_bardamm/services/user_services.dart';
+import 'package:BarDamm/services/user_services.dart';
 import 'user_screen.dart';
-import 'package:flutter_application_bardamm/models/user.dart';
+import 'package:BarDamm/models/user.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {

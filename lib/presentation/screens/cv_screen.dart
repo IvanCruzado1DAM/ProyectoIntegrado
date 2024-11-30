@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter_application_bardamm/services/client_services.dart';
+import 'package:BarDamm/services/client_services.dart';
 import 'user_screen.dart'; 
 
 class CvScreen extends StatefulWidget {
@@ -137,7 +137,7 @@ class _CvSubmissionScreenState extends State<CvScreen> {
                   icon: const Icon(Icons.attach_file),
                   label: const Text('Select CV (PDF)'),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.blue,
+                    backgroundColor: Colors.blue,
                   ),
                 ),
               ),
@@ -153,7 +153,7 @@ class _CvSubmissionScreenState extends State<CvScreen> {
                 child: const Text('Submit'),
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 50),
-                  primary: Colors.green,
+                  backgroundColor: Colors.green,
                 ),
               ),
               const SizedBox(height: 10),

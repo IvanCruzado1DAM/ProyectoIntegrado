@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_bardamm/presentation/screens/user_screen.dart';
-import 'package:flutter_application_bardamm/services/client_services.dart';
+import 'package:BarDamm/presentation/screens/user_screen.dart';
+import 'package:BarDamm/services/client_services.dart';
 import 'package:intl/intl.dart';
 
 class ReserveScreen extends StatefulWidget {
@@ -144,7 +144,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
                     child: const Text('Reserve Table'),
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size(double.infinity, 50),
-                      primary: Colors.green,
+                      backgroundColor: Colors.green,
                     ),
                   ),
               ],

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_bardamm/services/user_services.dart';
+import 'package:BarDamm/services/user_services.dart';
 import 'menu_screen.dart';
-import 'package:flutter_application_bardamm/presentation/screens/events_screen.dart';
-import 'package:flutter_application_bardamm/presentation/screens/cv_screen.dart';
-import 'package:flutter_application_bardamm/presentation/screens/reserve_screen.dart';
+import 'package:BarDamm/presentation/screens/events_screen.dart';
+import 'package:BarDamm/presentation/screens/cv_screen.dart';
+import 'package:BarDamm/presentation/screens/reserve_screen.dart';
 
 class UserScreen extends StatefulWidget {
   final String token;
