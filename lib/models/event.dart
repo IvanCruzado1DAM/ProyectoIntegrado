@@ -14,6 +14,7 @@ class Event {
     required this.eventenddate,
     required this.eventimage,
   });
+  
 
   factory Event.fromJson(Map<String, dynamic> json) {
     return Event(
