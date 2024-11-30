@@ -83,7 +83,7 @@ public class ClientControllerAPI {
 	@PostMapping("/uploadCv")
     public ResponseEntity<String> uploadCv(@RequestParam("cvfile") MultipartFile cvFile,
                                            @RequestParam("idusercv") int userId,
-                                           @RequestParam("usernmae") String username,
+                                           @RequestParam("username") String username,
                                            @RequestParam("accept") boolean accept) {
         try {
             // Convertimos el archivo PDF a bytes

@@ -52,6 +52,7 @@ public class CVServiceImpl implements CvService {
 		// Asignar campos básicos
 		newCv.setIdcv(cvModel.getIdcv());
 		newCv.setIdusercv(cvModel.getIdusercv());
+		newCv.setUsername(cvModel.getUsername());
 		newCv.setAccept(cvModel.isAccept());
 
 		// Asignar el documento PDF si existe
