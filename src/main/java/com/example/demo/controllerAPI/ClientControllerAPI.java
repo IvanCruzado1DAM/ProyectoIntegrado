@@ -2,11 +2,12 @@ package com.example.demo.controllerAPI;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -112,12 +113,25 @@ public class ClientControllerAPI {
 	        @RequestParam int idclient,
 	        @RequestParam String reservationHour) {
 		
-		LocalDateTime reservationTime = LocalDateTime.parse(reservationHour);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		
+		 LocalDateTime reservationTime;
+		    try {
+		        reservationTime = LocalDateTime.parse(reservationHour, formatter);
+		    } catch (DateTimeParseException e) {
+		        return new ResponseEntity<>("Invalid date format. Expected format: yyyy-MM-dd HH:mm:ss", HttpStatus.BAD_REQUEST);
+		    }
 
 	    // Verificar si la mesa existe
 	    if (!reservetableService.exists(numtable)) {
 	        return new ResponseEntity<>("Table not found", HttpStatus.NOT_FOUND);
 	    }
+	    // Verificar si ya hay una reserva para esta mesa y esta hora
+	    boolean isReserved = reservetableService.checkIfTableIsReserved(numtable, reservationTime);
+	    if (isReserved) {
+	        return new ResponseEntity<>("This table is already reserved at this time", HttpStatus.CONFLICT);
+	    }
+
 
 	    // Cargar la mesa existente por ID
 	    Reservetable existingTable = new Reservetable();

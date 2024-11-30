@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -95,6 +96,17 @@ public class ReservetableServiceImpl implements ReservetableService{
 			return reservetableRepository.save(tb);
 		}
 		return null;
+	}
+	
+	public boolean checkIfTableIsReserved(int numtable, LocalDateTime reservationTime) {
+	    List<Reservetable> existingReserves = reservetableRepository.findByNumtable(numtable);
+	    for (Reservetable reserve : existingReserves) {
+	        // Verifica si la fecha y hora de la reserva coinciden
+	        if (reserve.getReservationhour().isEqual(reservationTime)) {
+	            return true;
+	        }
+	    }
+	    return false;
 	}
 
 }
