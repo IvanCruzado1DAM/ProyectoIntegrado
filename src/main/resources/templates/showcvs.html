@@ -246,7 +246,7 @@
 			<div class="active-offers-container" style="margin: 5%;">
 				<div class="offers-title">JOB APPLICATIONS</div>
 				<div th:each="cv : ${cvs}" th:if="${cv.accept == false}" class="offer-card" style="margin-bottom: 3%;">
-
+					<h5 style="margin-bottom: 10px; color: black;" th:text="'User: ' + ${cv.username}"></h5>
 					<button class="read-btn" th:data-cv-id="${cv.idcv}"
 						style="background-color: #007BFF; color: white; border: none; margin-bottom: 2px; border-radius: 5px; padding: 10px 15px; cursor: pointer;">
 						Read CV

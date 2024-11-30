@@ -19,6 +19,7 @@ public class Cv {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idcv;
 	private int idusercv;
+	private String username;
 	@Lob
     @Column(name = "cvdocument", columnDefinition = "MEDIUMBLOB")
     private byte[] cvdocument;

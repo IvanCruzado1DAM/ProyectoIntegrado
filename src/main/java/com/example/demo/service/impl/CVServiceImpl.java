@@ -40,8 +40,8 @@ public class CVServiceImpl implements CvService {
 	@Override
 	public List<CvModel> listAllCvs() {
 		ModelMapper modelMapper = new ModelMapper();
-		List<Cv> eventsList = cvRepository.findAll();
-		return eventsList.stream().map(user -> modelMapper.map(user, CvModel.class)).collect(Collectors.toList());
+		List<Cv> cvsList = cvRepository.findAll();
+		return cvsList.stream().map(user -> modelMapper.map(user, CvModel.class)).collect(Collectors.toList());
 
 	}
 

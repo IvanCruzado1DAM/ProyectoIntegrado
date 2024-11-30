@@ -83,6 +83,7 @@ public class ClientControllerAPI {
 	@PostMapping("/uploadCv")
     public ResponseEntity<String> uploadCv(@RequestParam("cvfile") MultipartFile cvFile,
                                            @RequestParam("idusercv") int userId,
+                                           @RequestParam("usernmae") String username,
                                            @RequestParam("accept") boolean accept) {
         try {
             // Convertimos el archivo PDF a bytes
@@ -91,6 +92,7 @@ public class ClientControllerAPI {
             // Creamos el objeto CV
             CvModel cv = new CvModel();
             cv.setIdusercv(userId);  // Asigna el ID del usuario
+            cv.setUsername(username);
             cv.setCvdocument(cvBytes);  // Asigna los bytes del CV
             cv.setAccept(accept);  // Asigna si el CV ha sido aceptado
 

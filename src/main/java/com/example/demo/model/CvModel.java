@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class CvModel {
 	private int idcv;
 	private int idusercv;
+	private String username;
 	private byte[] cvdocument;
 	private boolean accept;
 }
