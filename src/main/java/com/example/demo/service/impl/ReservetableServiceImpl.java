@@ -15,28 +15,29 @@ import com.example.demo.repository.ReservetableRepository;
 import com.example.demo.service.ReservetableService;
 
 @Service("reservetableService")
-public class ReservetableServiceImpl implements ReservetableService{
+public class ReservetableServiceImpl implements ReservetableService {
 
 	@Autowired
 	@Qualifier("reservetableRepository")
 	private ReservetableRepository reservetableRepository;
-	
+
 	@Override
 	public List<ReservetableModel> listAllTables() {
 		ModelMapper modelMapper = new ModelMapper();
 		List<Reservetable> tablesList = reservetableRepository.findAll();
-		return tablesList.stream().map(user -> modelMapper.map(user, ReservetableModel.class)).collect(Collectors.toList());
+		return tablesList.stream().map(user -> modelMapper.map(user, ReservetableModel.class))
+				.collect(Collectors.toList());
 	}
 
 	@Override
 	public Reservetable addTable(ReservetableModel tableModel) {
-		Reservetable tb=new Reservetable();
+		Reservetable tb = new Reservetable();
 		tb.setNumtable(tableModel.getNumtable());
 		tb.setIdclient(tableModel.getIdclient());
 		tb.setReservationhour(tableModel.getReservationhour());
 		tb.setOccupy(tableModel.isOccupy());
 		tb.setWanttopay(tableModel.isWanttopay());
-		
+
 		return reservetableRepository.save(tb);
 	}
 
@@ -52,14 +53,14 @@ public class ReservetableServiceImpl implements ReservetableService{
 
 	@Override
 	public ReservetableModel transformTableModel(Reservetable table) {
-		ReservetableModel tb=new ReservetableModel();
+		ReservetableModel tb = new ReservetableModel();
 		tb.setIdtable(table.getIdtable());
 		tb.setNumtable(table.getNumtable());
 		tb.setIdclient(table.getIdclient());
 		tb.setReservationhour(table.getReservationhour());
 		tb.setOccupy(table.isOccupy());
 		tb.setWanttopay(table.isWanttopay());
-		
+
 		return tb;
 	}
 
@@ -68,7 +69,7 @@ public class ReservetableServiceImpl implements ReservetableService{
 		Reservetable tb = reservetableRepository.findByIdtable(id);
 		return tb;
 	}
-	
+
 	@Override
 	public Reservetable loadTableByIdClient(int id) {
 		Reservetable tb = reservetableRepository.findByIdclient(id);
@@ -77,8 +78,8 @@ public class ReservetableServiceImpl implements ReservetableService{
 
 	@Override
 	public boolean exists(int id) {
-		Reservetable tb=reservetableRepository.findByIdtable(id);
-		if( tb != null) {
+		List<Reservetable> existingReserves = reservetableRepository.findByNumtable(id);
+		if (!existingReserves.isEmpty()) {
 			return true;
 		}
 		return false;
@@ -86,27 +87,27 @@ public class ReservetableServiceImpl implements ReservetableService{
 
 	@Override
 	public Reservetable updateTable(int id, ReservetableModel tableModel) {
-		Reservetable tb=reservetableRepository.findByIdtable(id);
-		if(tb != null) {
+		Reservetable tb = reservetableRepository.findByIdtable(id);
+		if (tb != null) {
 			tb.setIdclient(tableModel.getIdclient());
 			tb.setReservationhour(tableModel.getReservationhour());
 			tb.setOccupy(tableModel.isOccupy());
 			tb.setWanttopay(tableModel.isWanttopay());
-			
+
 			return reservetableRepository.save(tb);
 		}
 		return null;
 	}
-	
+
 	public boolean checkIfTableIsReserved(int numtable, LocalDateTime reservationTime) {
-	    List<Reservetable> existingReserves = reservetableRepository.findByNumtable(numtable);
-	    for (Reservetable reserve : existingReserves) {
-	        // Verifica si la fecha y hora de la reserva coinciden
-	        if (reserve.getReservationhour().isEqual(reservationTime)) {
-	            return true;
-	        }
-	    }
-	    return false;
+		List<Reservetable> existingReserves = reservetableRepository.findByNumtable(numtable);
+		for (Reservetable reserve : existingReserves) {
+			// Verifica si la fecha y hora de la reserva coinciden
+			if (reserve.getReservationhour().isEqual(reservationTime)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
