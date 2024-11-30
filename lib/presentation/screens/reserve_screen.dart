@@ -35,7 +35,8 @@ class _ReserveScreenState extends State<ReserveScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Reserve a Table'),
-        backgroundColor: const Color(0xff142047),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

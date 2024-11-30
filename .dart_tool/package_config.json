@@ -15,7 +15,7 @@
     },
     {
       "name": "carousel_slider",
-      "rootUri": "file:///C:/Users/IvanCruzado/AppData/Local/Pub/Cache/hosted/pub.dev/carousel_slider-4.2.1",
+      "rootUri": "file:///C:/Users/IvanCruzado/AppData/Local/Pub/Cache/hosted/pub.dev/carousel_slider-5.0.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -36,6 +36,12 @@
       "rootUri": "file:///C:/Users/IvanCruzado/AppData/Local/Pub/Cache/hosted/pub.dev/collection-1.18.0",
       "packageUri": "lib/",
       "languageVersion": "2.18"
+    },
+    {
+      "name": "cross_file",
+      "rootUri": "file:///C:/Users/IvanCruzado/AppData/Local/Pub/Cache/hosted/pub.dev/cross_file-0.3.4+2",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
     },
     {
       "name": "cupertino_icons",
@@ -63,9 +69,9 @@
     },
     {
       "name": "file_picker",
-      "rootUri": "file:///C:/Users/IvanCruzado/AppData/Local/Pub/Cache/hosted/pub.dev/file_picker-5.5.0",
+      "rootUri": "file:///C:/Users/IvanCruzado/AppData/Local/Pub/Cache/hosted/pub.dev/file_picker-8.1.4",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.4"
     },
     {
       "name": "flutter",
@@ -320,7 +326,7 @@
       "languageVersion": "3.1"
     }
   ],
-  "generated": "2024-11-30T14:30:14.548490Z",
+  "generated": "2024-11-30T14:56:31.506861Z",
   "generator": "pub",
   "generatorVersion": "3.5.4",
   "flutterRoot": "file:///C:/flutter",

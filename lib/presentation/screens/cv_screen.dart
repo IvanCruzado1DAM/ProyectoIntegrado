@@ -80,102 +80,110 @@ class _CvSubmissionScreenState extends State<CvScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text('Join Our Team'),
-          backgroundColor: const Color(0xff142047),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => UserScreen(
-                    token: widget.token,
-                    idUser: widget.userId,
-                    username: widget.username,
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-        body: Padding(
-            padding:
-                const EdgeInsets.all(16.0), 
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Text(
-                'Do you want to work with us as a waiter?',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
+Widget build(BuildContext context) {
+  double screenWidth = MediaQuery.of(context).size.width;
+  double screenHeight = MediaQuery.of(context).size.height;
+  
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text('Join Our Team'),
+      backgroundColor: Colors.blue,
+      foregroundColor: Colors.white,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => UserScreen(
+                token: widget.token,
+                idUser: widget.userId,
+                username: widget.username,
               ),
-              const SizedBox(height: 10),
-              const Text(
-                'Please upload your CV in PDF format. We are excited to have you on our team!',
-                style: TextStyle(fontSize: 16),
+            ),
+          );
+        },
+      ),
+    ),
+    body: SingleChildScrollView(  // Envuelve el contenido en un SingleChildScrollView
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Do you want to work with us as a waiter?',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
               ),
-              const SizedBox(height: 20),
-              Center(
-                child: Image.asset(
-                  'assets/images/camareros.jpg',
-                  width: screenWidth * 0.9, 
-                  height: screenHeight * 0.4, 
-                  fit: BoxFit.cover,
-                ),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              'Please upload your CV in PDF format. We are excited to have you on our team!',
+              style: TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 20),
+            Center(
+              child: Image.asset(
+                'assets/images/camareros.jpg',
+                width: screenWidth * 0.9,
+                height: screenHeight * 0.4,
+                fit: BoxFit.cover,
               ),
-              const SizedBox(height: 20),
-              Center(
-                child: ElevatedButton.icon(
-                  onPressed: _pickFile,
-                  icon: const Icon(Icons.attach_file),
-                  label: const Text('Select CV (PDF)'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 10),
-              if (_selectedFile != null)
-                Text(
-                  'Selected file: ${_selectedFile!.path.split('/').last}',
-                  style: const TextStyle(color: Colors.green),
-                ),
-              const Spacer(),
-              ElevatedButton(
-                onPressed: () => _submitCv(widget.userId, widget.username),
-                child: const Text('Submit'),
+            ),
+            const SizedBox(height: 20),
+            Center(
+              child: ElevatedButton.icon(
+                onPressed: _pickFile,
+                icon: const Icon(Icons.attach_file),
+                label: const Text('Select CV (PDF)'),
                 style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 50),
-                  backgroundColor: Colors.green,
+                  backgroundColor: Colors.blue,
                 ),
               ),
-              const SizedBox(height: 10),
-              OutlinedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => UserScreen(
-                        token: widget.token,
-                        idUser: widget.userId,
-                        username: widget.username,
-                      ),
+            ),
+            const SizedBox(height: 10),
+            if (_selectedFile != null)
+              Text(
+                'Selected file: ${_selectedFile!.path.split('/').last}',
+                style: const TextStyle(color: Colors.green),
+              ),
+            const SizedBox(height: 20),  // Agregar espacio para que el contenido no se amontone
+            ElevatedButton(
+              onPressed: () => _submitCv(widget.userId, widget.username),
+              child: const Text('Submit'),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 50),
+                backgroundColor: Colors.green,
+              ),
+            ),
+            const SizedBox(height: 10),
+            OutlinedButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => UserScreen(
+                      token: widget.token,
+                      idUser: widget.userId,
+                      username: widget.username,
                     ),
-                  );
-                },
-                child: const Text('Back'),
-                style: OutlinedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 50),
-                  side: const BorderSide(color: Colors.blue),
-                ),
+                  ),
+                );
+              },
+              child: const Text('Back'),
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 50),
+                side: const BorderSide(color: Colors.blue),
               ),
-            ])));
-  }
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
 }

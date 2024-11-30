@@ -59,6 +59,8 @@ class _UserScreenState extends State<UserScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('User Screen'),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

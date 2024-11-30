@@ -61,7 +61,8 @@ class _MenuScreenState extends State<MenuScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Drinks Menu'),
-        backgroundColor: const Color(0xff142047),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {

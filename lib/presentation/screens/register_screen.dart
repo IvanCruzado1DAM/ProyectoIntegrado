@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:BarDamm/services/user_services.dart';
+import 'package:BarDamm/presentation/screens/login_screen.dart'; // Asegúrate de que tienes la pantalla LoginScreen
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -14,13 +15,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
- 
 
   @override
   void initState() {
     super.initState();
   }
-
 
   void _register() async {
     String username = _usernameController.text;
@@ -56,7 +55,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         );
         Future.delayed(const Duration(seconds: 5), () {
-          Navigator.of(context).pop(); 
+          Navigator.of(context).pop();
         });
       }
     } catch (e) {
@@ -64,53 +63,140 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
+  void _goBack() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Registrarse')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextFormField(
-              controller: _usernameController,
-              decoration: const InputDecoration(
-                labelText: 'Usuario',
-                border: OutlineInputBorder(),
+      body: Stack(
+        children: [
+          // Fondo de imagen
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/fondologinapp.jpg',
+              fit: BoxFit.cover,
+            ),
+          ),
+          // Contenido centrado en la pantalla
+          Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Formulario
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.8), // Fondo blanco semitransparente
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: _usernameController,
+                          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold), // Texto negro y en negrita
+                          decoration: const InputDecoration(
+                            labelText: 'Usuario',
+                            labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), // Etiqueta en negro y negrita
+                            border: OutlineInputBorder(),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black),
+                            ),
+                            fillColor: Colors.white60, // Fondo semitransparente en el campo
+                            filled: true, // Habilitar el fondo en el campo
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _passwordController,
+                          obscureText: true,
+                          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold), // Texto negro y en negrita
+                          decoration: const InputDecoration(
+                            labelText: 'Contraseña',
+                            labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), // Etiqueta en negro y negrita
+                            border: OutlineInputBorder(),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black),
+                            ),
+                            fillColor: Colors.white60, // Fondo semitransparente en el campo
+                            filled: true, // Habilitar el fondo en el campo
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _nameController,
+                          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold), // Texto negro y en negrita
+                          decoration: const InputDecoration(
+                            labelText: 'Nombre',
+                            labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), // Etiqueta en negro y negrita
+                            border: OutlineInputBorder(),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black),
+                            ),
+                            fillColor: Colors.white60, // Fondo semitransparente en el campo
+                            filled: true, // Habilitar el fondo en el campo
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _emailController,
+                          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold), // Texto negro y en negrita
+                          decoration: const InputDecoration(
+                            labelText: 'Email',
+                            labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), // Etiqueta en negro y negrita
+                            border: OutlineInputBorder(),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black),
+                            ),
+                            fillColor: Colors.white60, // Fondo semitransparente en el campo
+                            filled: true, // Habilitar el fondo en el campo
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        // Botones centrados horizontalmente
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center, // Centrado horizontal
+                          children: [
+                            ElevatedButton(
+                              onPressed: _register,
+                              child: const Text('Registrarse'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue, // Fondo del botón en azul
+                                foregroundColor: Colors.white, // Texto del botón en blanco
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            ElevatedButton(
+                              onPressed: _goBack,
+                              child: const Text('Back'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red, // Fondo del botón en gris
+                                foregroundColor: Colors.white, // Texto del botón en blanco
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _passwordController,
-              decoration: const InputDecoration(
-                labelText: 'Contraseña',
-                border: OutlineInputBorder(),
-              ),
-              obscureText: true,
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Nombre',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _register,
-              child: const Text('Registrarse'),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

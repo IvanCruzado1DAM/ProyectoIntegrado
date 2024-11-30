@@ -51,7 +51,8 @@ class _EventsScreenState extends State<EventsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Soon Events'),
-        backgroundColor: const Color(0xff142047),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
         leading: IconButton( 
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
