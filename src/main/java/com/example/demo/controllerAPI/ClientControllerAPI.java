@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.entity.Opinion;
 import com.example.demo.entity.Reservetable;
 import com.example.demo.model.CvModel;
 import com.example.demo.model.DrinkModel;
@@ -25,6 +26,7 @@ import com.example.demo.model.ReservetableModel;
 import com.example.demo.service.impl.CVServiceImpl;
 import com.example.demo.service.impl.DrinkServiceImpl;
 import com.example.demo.service.impl.EventServiceImpl;
+import com.example.demo.service.impl.OpinionServiceImpl;
 import com.example.demo.service.impl.ReservetableServiceImpl;
 
 @RestController
@@ -46,6 +48,10 @@ public class ClientControllerAPI {
 	@Autowired
 	@Qualifier("reservetableService")
 	private ReservetableServiceImpl reservetableService;
+	
+	@Autowired
+	@Qualifier("opinionService")
+	private OpinionServiceImpl opinionService;
 
 	//Drinks
 	@GetMapping("/listdrinks")
@@ -149,5 +155,43 @@ public class ClientControllerAPI {
 
 	    return new ResponseEntity<>("Table reserved successfully", HttpStatus.OK);
 	}
+	
+	//Opinion
+	@PostMapping("/saveOpinion")
+	public ResponseEntity<String> saveOpinion(
+	        @RequestParam int iduseropinion,
+	        @RequestParam int score,
+	        @RequestParam String comment) {
+		
+	    if (opinionService.loadOpinionByIduser(iduseropinion) !=null) {
+	        return new ResponseEntity<>("Your opinion is already saved", HttpStatus.NOT_FOUND);
+	    }
+	    
+	    Opinion op = new Opinion();
+	    op.setIduseropinion(iduseropinion);
+	    op.setScore(score);
+	    op.setComment(comment);
+
+	    // Guardar los cambios
+	    opinionService.addOpinion(opinionService.transformOpinionModel(op));
+
+	    return new ResponseEntity<>("Opinion saved successfully", HttpStatus.OK);
+	}
+	
+	@PostMapping("/updateOpinion")
+	public ResponseEntity<String> editOpinion(@RequestParam int iduseropinion, @RequestParam int score,
+	        @RequestParam String comment) {
+		  
+	    Opinion op = opinionService.loadOpinionByIduser(iduseropinion);
+	    op.setIduseropinion(iduseropinion);
+	    op.setScore(score);
+	    op.setComment(comment);
+
+	    // Guardar los cambios
+	    opinionService.updateOpinion(iduseropinion, opinionService.transformOpinionModel(op));
+
+	    return new ResponseEntity<>("Opinion updated successfully", HttpStatus.OK);
+	}
+	
 
 }
