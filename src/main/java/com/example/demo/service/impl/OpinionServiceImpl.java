@@ -32,7 +32,6 @@ public class OpinionServiceImpl implements OpinionService {
 	@Override
 	public Opinion addOpinion(OpinionModel opinionModel) {
 		Opinion op =new Opinion();
-		op.setIdopinion(opinionModel.getIdopinion());
 		op.setIduseropinion(opinionModel.getIduseropinion());
 		op.setScore(opinionModel.getScore());
 		op.setComment(opinionModel.getComment());
