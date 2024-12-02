@@ -1,4 +1,4 @@
-#Sat Nov 30 15:52:15 CET 2024
+#Mon Dec 02 13:10:18 CET 2024
 base.0=C\:\\Users\\IvanCruzado\\Desktop\\Flutter\\flutter_application_bardamm\\build\\app\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
 base.1=C\:\\Users\\IvanCruzado\\Desktop\\Flutter\\flutter_application_bardamm\\build\\app\\intermediates\\dex\\debug\\mergeLibDexDebug\\0\\classes.dex
 base.2=C\:\\Users\\IvanCruzado\\Desktop\\Flutter\\flutter_application_bardamm\\build\\app\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex

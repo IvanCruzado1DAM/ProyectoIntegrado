@@ -1,9 +1,0 @@
-C:/Users/IvanCruzado/Desktop/Flutter/flutter_application_bardamm/build/windows/runner/Debug/data/icudtl.dat
-C:/Users/IvanCruzado/Desktop/Flutter/flutter_application_bardamm/build/windows/runner/Debug/flutter_windows.dll
-C:/Users/IvanCruzado/Desktop/Flutter/flutter_application_bardamm/build/windows/runner/Debug/data/flutter_assets/AssetManifest.bin
-C:/Users/IvanCruzado/Desktop/Flutter/flutter_application_bardamm/build/windows/runner/Debug/data/flutter_assets/AssetManifest.json
-C:/Users/IvanCruzado/Desktop/Flutter/flutter_application_bardamm/build/windows/runner/Debug/data/flutter_assets/FontManifest.json
-C:/Users/IvanCruzado/Desktop/Flutter/flutter_application_bardamm/build/windows/runner/Debug/data/flutter_assets/fonts/MaterialIcons-Regular.otf
-C:/Users/IvanCruzado/Desktop/Flutter/flutter_application_bardamm/build/windows/runner/Debug/data/flutter_assets/kernel_blob.bin
-C:/Users/IvanCruzado/Desktop/Flutter/flutter_application_bardamm/build/windows/runner/Debug/data/flutter_assets/NOTICES.Z
-C:/Users/IvanCruzado/Desktop/Flutter/flutter_application_bardamm/build/windows/runner/Debug/data/flutter_assets/shaders/ink_sparkle.frag

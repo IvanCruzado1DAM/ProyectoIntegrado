@@ -4,6 +4,7 @@ import 'package:BarDamm/models/user.dart';
 import 'package:BarDamm/models/drink.dart';
 import 'package:BarDamm/models/event.dart';
 import 'package:BarDamm/models/reservetable.dart';
+import 'package:BarDamm/models/opinion.dart';
 import 'dart:typed_data';
 import 'dart:io';
 import 'package:intl/intl.dart';
@@ -31,7 +32,7 @@ class ClientService {
     final response = await http.get(
       url,
       headers: {
-        'Authorization': 'Bearer $token', 
+        'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
       },
     );
@@ -61,7 +62,7 @@ class ClientService {
     final response = await http.get(
       url,
       headers: {
-        'Authorization': 'Bearer $token', 
+        'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
       },
     );
@@ -90,7 +91,7 @@ class ClientService {
     final response = await http.get(
       url,
       headers: {
-        'Authorization': 'Bearer $token', 
+        'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',
       },
     );
@@ -109,12 +110,40 @@ class ClientService {
           .toList();
       return reserves;
     } else {
-      throw Exception('Failed to load events: ${response.statusCode}');
+      throw Exception('Failed to load reserves: ${response.statusCode}');
     }
   }
 
-  Future<void> submitCv(
-      String token, File cvFile, int userId, bool accept, String username) async {
+  Future<List<Opinion>> fetchAllOpinions(String token) async {
+  final url = Uri.parse('$baseUrl/listopinions');
+  final response = await http.get(
+    url,
+    headers: {
+      'Authorization': 'Bearer $token',
+       'Content-Type': 'application/json',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    // Si la respuesta es exitosa, procesa el cuerpo
+    List<dynamic> body = jsonDecode(response.body);
+    List<Opinion> opinions = body
+        .map((dynamic item) => Opinion(
+              idOpinion: item['idopinion'],
+              idUserOpinion: item['iduseropinion'],
+              score: item['score'],
+              comment: item['comment'],
+            ))
+        .toList();
+    return opinions;
+  } else {
+    throw Exception('Failed to load opinions: ${response.statusCode}');
+  }
+}
+
+
+  Future<void> submitCv(String token, File cvFile, int userId, bool accept,
+      String username) async {
     try {
       final Uri url = Uri.parse('$baseUrl/uploadCv');
 
@@ -150,7 +179,7 @@ class ClientService {
       final response = await http.post(
         url,
         headers: {
-          'Authorization': 'Bearer $token', 
+          'Authorization': 'Bearer $token',
         },
         body: {
           'numtable': numTable.toString(),
@@ -158,7 +187,7 @@ class ClientService {
           'reservationHour': formattedDate,
         },
       );
-  
+
       if (response.statusCode == 200) {
         return 'Table reserved successfully';
       } else if (response.statusCode == 404) {
@@ -172,8 +201,71 @@ class ClientService {
   }
 
   String _formatDateTime(DateTime dateTime) {
-  // Formato sin milisegundos
-  final DateFormat dateFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
-  return dateFormat.format(dateTime);
-}
+    // Formato sin milisegundos
+    final DateFormat dateFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
+    return dateFormat.format(dateTime);
+  }
+
+  Future<void> saveOpinion(
+      {required int iduseropinion,
+      required int score,
+      required String comment,
+      required String token}) async {
+    const String url = '$baseUrl/saveOpinion';
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+        body: {
+          'iduseropinion': iduseropinion.toString(),
+          'score': score.toString(),
+          'comment': comment,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('Opinion saved successfully: ${response.body}');
+      } else if (response.statusCode == 404) {
+        print('Error: ${response.body}');
+      } else {
+        print('Unexpected response: ${response.statusCode} ${response.body}');
+      }
+    } catch (e) {
+      print('An error occurred: $e');
+    }
+  }
+
+  Future<void> editOpinion(
+      {required int idUserOpinion,
+      required int score,
+      required String comment,
+      required String token}) async {
+    const String url = '$baseUrl/updateOpinion';
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+        body: {
+          'iduseropinion': idUserOpinion.toString(),
+          'score': score.toString(),
+          'comment': comment,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('Opinion updated successfully: ${response.body}');
+      } else {
+        print(
+            'Failed to update opinion: ${response.statusCode} ${response.body}');
+      }
+    } catch (e) {
+      print('An error occurred: $e');
+    }
+  }
 }
