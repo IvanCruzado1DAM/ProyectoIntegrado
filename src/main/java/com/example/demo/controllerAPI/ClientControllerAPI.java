@@ -22,6 +22,7 @@ import com.example.demo.entity.Reservetable;
 import com.example.demo.model.CvModel;
 import com.example.demo.model.DrinkModel;
 import com.example.demo.model.EventModel;
+import com.example.demo.model.OpinionModel;
 import com.example.demo.model.ReservetableModel;
 import com.example.demo.service.impl.CVServiceImpl;
 import com.example.demo.service.impl.DrinkServiceImpl;
@@ -36,162 +37,167 @@ public class ClientControllerAPI {
 	@Autowired
 	@Qualifier("drinkService")
 	private DrinkServiceImpl drinkService;
-	
+
 	@Autowired
 	@Qualifier("eventService")
 	private EventServiceImpl eventService;
-	
+
 	@Autowired
 	@Qualifier("cvService")
 	private CVServiceImpl cvService;
-	
+
 	@Autowired
 	@Qualifier("reservetableService")
 	private ReservetableServiceImpl reservetableService;
-	
+
 	@Autowired
 	@Qualifier("opinionService")
 	private OpinionServiceImpl opinionService;
 
-	//Drinks
+	// Drinks
 	@GetMapping("/listdrinks")
 	public ResponseEntity<?> listAllDrinks() {
 		try {
-			List<DrinkModel> drinks = drinkService.listAllDrinks(); 
-			return ResponseEntity.ok(drinks); 
+			List<DrinkModel> drinks = drinkService.listAllDrinks();
+			return ResponseEntity.ok(drinks);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("There is a error with the drinks!");
 		}
 	}
-	
-	//Events
+
+	// Events
 	@GetMapping("/listevents")
 	public ResponseEntity<?> listAllEvents() {
 		try {
-			List<EventModel> events = eventService.listAllEventsAfterToday(); 
-			return ResponseEntity.ok(events); 
+			List<EventModel> events = eventService.listAllEventsAfterToday();
+			return ResponseEntity.ok(events);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("There is a error with the events!");
 		}
 	}
-	
-	//Reserves
+
+	// Reserves
 	@GetMapping("/listreserves")
 	public ResponseEntity<?> listAllReserves() {
 		try {
-			List<ReservetableModel> reserves = reservetableService.listAllTables(); 
-			return ResponseEntity.ok(reserves); 
+			List<ReservetableModel> reserves = reservetableService.listAllTables();
+			return ResponseEntity.ok(reserves);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("There is a error with the reserves!");
 		}
 	}
-	
-	//Cv
+
+	// Cv
 	@PostMapping("/uploadCv")
-    public ResponseEntity<String> uploadCv(@RequestParam("cvfile") MultipartFile cvFile,
-                                           @RequestParam("idusercv") int userId,
-                                           @RequestParam("username") String username,
-                                           @RequestParam("accept") boolean accept) {
-        try {
-            // Convertimos el archivo PDF a bytes
-            byte[] cvBytes = cvFile.getBytes();
+	public ResponseEntity<String> uploadCv(@RequestParam("cvfile") MultipartFile cvFile,
+			@RequestParam("idusercv") int userId, @RequestParam("username") String username,
+			@RequestParam("accept") boolean accept) {
+		try {
+			// Convertimos el archivo PDF a bytes
+			byte[] cvBytes = cvFile.getBytes();
 
-            // Creamos el objeto CV
-            CvModel cv = new CvModel();
-            cv.setIdusercv(userId);  // Asigna el ID del usuario
-            cv.setUsername(username);
-            cv.setCvdocument(cvBytes);  // Asigna los bytes del CV
-            cv.setAccept(accept);  // Asigna si el CV ha sido aceptado
+			// Creamos el objeto CV
+			CvModel cv = new CvModel();
+			cv.setIdusercv(userId); // Asigna el ID del usuario
+			cv.setUsername(username);
+			cv.setCvdocument(cvBytes); // Asigna los bytes del CV
+			cv.setAccept(accept); // Asigna si el CV ha sido aceptado
 
-            // Llamamos al servicio para guardar el CV
-            cvService.addCv(cv);
+			// Llamamos al servicio para guardar el CV
+			cvService.addCv(cv);
 
-            return ResponseEntity.status(HttpStatus.OK).body("CV uploaded successfully!");
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading CV: " + e.getMessage());
-        }
-    }
-	
-	//Table 
+			return ResponseEntity.status(HttpStatus.OK).body("CV uploaded successfully!");
+		} catch (IOException e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error uploading CV: " + e.getMessage());
+		}
+	}
+
+	// Table
 	@PostMapping("/reserveTable")
-	public ResponseEntity<String> reserveTable(
-	        @RequestParam int numtable,
-	        @RequestParam int idclient,
-	        @RequestParam String reservationHour) {
-		
+	public ResponseEntity<String> reserveTable(@RequestParam int numtable, @RequestParam int idclient,
+			@RequestParam String reservationHour) {
+
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		
-		 LocalDateTime reservationTime;
-		    try {
-		        reservationTime = LocalDateTime.parse(reservationHour, formatter);
-		    } catch (DateTimeParseException e) {
-		        return new ResponseEntity<>("Invalid date format. Expected format: yyyy-MM-dd HH:mm:ss", HttpStatus.BAD_REQUEST);
-		    }
 
-	    // Verificar si la mesa existe
-	    if (!reservetableService.exists(numtable)) {
-	        return new ResponseEntity<>("Table not found", HttpStatus.NOT_FOUND);
-	    }
-	    // Verificar si ya hay una reserva para esta mesa y esta hora
-	    boolean isReserved = reservetableService.checkIfTableIsReserved(numtable, reservationTime);
-	    if (isReserved) {
-	        return new ResponseEntity<>("This table is already reserved at this time", HttpStatus.CONFLICT);
-	    }
+		LocalDateTime reservationTime;
+		try {
+			reservationTime = LocalDateTime.parse(reservationHour, formatter);
+		} catch (DateTimeParseException e) {
+			return new ResponseEntity<>("Invalid date format. Expected format: yyyy-MM-dd HH:mm:ss",
+					HttpStatus.BAD_REQUEST);
+		}
 
+		// Verificar si la mesa existe
+		if (!reservetableService.exists(numtable)) {
+			return new ResponseEntity<>("Table not found", HttpStatus.NOT_FOUND);
+		}
+		// Verificar si ya hay una reserva para esta mesa y esta hora
+		boolean isReserved = reservetableService.checkIfTableIsReserved(numtable, reservationTime);
+		if (isReserved) {
+			return new ResponseEntity<>("This table is already reserved at this time", HttpStatus.CONFLICT);
+		}
 
-	    // Cargar la mesa existente por ID
-	    Reservetable existingTable = new Reservetable();
+		// Cargar la mesa existente por ID
+		Reservetable existingTable = new Reservetable();
 
+		// Actualizar los datos de la mesa
+		existingTable.setNumtable(numtable);
+		existingTable.setIdclient(idclient);
+		existingTable.setReservationhour(reservationTime);
+		existingTable.setOccupy(false);
+		existingTable.setWanttopay(false);
 
-	    // Actualizar los datos de la mesa
-	    existingTable.setNumtable(numtable);
-	    existingTable.setIdclient(idclient);
-	    existingTable.setReservationhour(reservationTime);
-	    existingTable.setOccupy(false);
-	    existingTable.setWanttopay(false);
+		// Guardar los cambios
+		reservetableService.addTable(reservetableService.transformTableModel(existingTable));
 
-	    // Guardar los cambios
-	    reservetableService.addTable(reservetableService.transformTableModel(existingTable));
-
-	    return new ResponseEntity<>("Table reserved successfully", HttpStatus.OK);
+		return new ResponseEntity<>("Table reserved successfully", HttpStatus.OK);
 	}
-	
-	//Opinion
+
+	// Opinion
 	@PostMapping("/saveOpinion")
-	public ResponseEntity<String> saveOpinion(
-	        @RequestParam int iduseropinion,
-	        @RequestParam int score,
-	        @RequestParam String comment) {
-		
-	    if (opinionService.loadOpinionByIduser(iduseropinion) !=null) {
-	        return new ResponseEntity<>("Your opinion is already saved", HttpStatus.NOT_FOUND);
-	    }
-	    
-	    Opinion op = new Opinion();
-	    op.setIduseropinion(iduseropinion);
-	    op.setScore(score);
-	    op.setComment(comment);
+	public ResponseEntity<String> saveOpinion(@RequestParam int iduseropinion, @RequestParam int score,
+			@RequestParam String comment) {
 
-	    // Guardar los cambios
-	    opinionService.addOpinion(opinionService.transformOpinionModel(op));
+		if (opinionService.loadOpinionByIduser(iduseropinion) != null) {
+			return new ResponseEntity<>("Your opinion is already saved", HttpStatus.NOT_FOUND);
+		}
 
-	    return new ResponseEntity<>("Opinion saved successfully", HttpStatus.OK);
+		Opinion op = new Opinion();
+		op.setIduseropinion(iduseropinion);
+		op.setScore(score);
+		op.setComment(comment);
+
+		// Guardar los cambios
+		opinionService.addOpinion(opinionService.transformOpinionModel(op));
+
+		return new ResponseEntity<>("Opinion saved successfully", HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/updateOpinion")
 	public ResponseEntity<String> editOpinion(@RequestParam int iduseropinion, @RequestParam int score,
-	        @RequestParam String comment) {
-		  
-	    Opinion op = opinionService.loadOpinionByIduser(iduseropinion);
-	    op.setIduseropinion(iduseropinion);
-	    op.setScore(score);
-	    op.setComment(comment);
+			@RequestParam String comment) {
 
-	    // Guardar los cambios
-	    opinionService.updateOpinion(iduseropinion, opinionService.transformOpinionModel(op));
+		Opinion op = opinionService.loadOpinionByIduser(iduseropinion);
+		op.setIduseropinion(iduseropinion);
+		op.setScore(score);
+		op.setComment(comment);
 
-	    return new ResponseEntity<>("Opinion updated successfully", HttpStatus.OK);
+		// Guardar los cambios
+		opinionService.updateOpinion(iduseropinion, opinionService.transformOpinionModel(op));
+
+		return new ResponseEntity<>("Opinion updated successfully", HttpStatus.OK);
 	}
-	
+
+	// Reserves
+	@GetMapping("/listopinions")
+	public ResponseEntity<?> listAllOpinions() {
+		try {
+			List<OpinionModel> opinions = opinionService.listAllOpinions();
+			return ResponseEntity.ok(opinions);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("There is a error with the opinions!");
+		}
+	}
 
 }
