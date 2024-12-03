@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.entity.Opinion;
+import com.example.demo.entity.Orderr;
 import com.example.demo.entity.Reservetable;
 import com.example.demo.model.CvModel;
 import com.example.demo.model.DrinkModel;
@@ -29,6 +30,7 @@ import com.example.demo.service.impl.CVServiceImpl;
 import com.example.demo.service.impl.DrinkServiceImpl;
 import com.example.demo.service.impl.EventServiceImpl;
 import com.example.demo.service.impl.OpinionServiceImpl;
+import com.example.demo.service.impl.OrderrServiceImpl;
 import com.example.demo.service.impl.ReservetableServiceImpl;
 
 @RestController
@@ -54,6 +56,10 @@ public class ClientControllerAPI {
 	@Autowired
 	@Qualifier("opinionService")
 	private OpinionServiceImpl opinionService;
+	
+	@Autowired
+	@Qualifier("orderrService")
+	private OrderrServiceImpl orderrService;
 
 	// Drinks
 	@GetMapping("/listdrinks")
@@ -219,6 +225,23 @@ public class ClientControllerAPI {
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("There is a error with the opinions!");
 		}
+	}
+	
+	//Order
+	@PostMapping("/addOrderr")
+	public ResponseEntity<String> addOrderr(@RequestParam String drinks, @RequestParam int numtable, 
+			@RequestParam double total) {
+
+		Orderr order = new Orderr();
+		order.setDrinks(drinks);
+		order.setNumtable(numtable);
+		order.setPaid(false);
+		order.setTotal(total);
+
+		// Guardar los cambios
+		orderrService.addOrderr(orderrService.transformOrderModel(order));
+
+		return new ResponseEntity<>("Order saved successfully", HttpStatus.OK);
 	}
 
 }
