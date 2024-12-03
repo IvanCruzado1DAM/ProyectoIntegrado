@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -86,6 +87,26 @@ public class ClientControllerAPI {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("There is a error with the reserves!");
 		}
 	}
+	
+	@GetMapping("/listreserves/{idClient}")
+	public ResponseEntity<?> listReservesByClient(@PathVariable int idClient) {
+	    try {
+	        // Obtén las reservas del cliente especificado
+	        List<ReservetableModel> reserves = reservetableService.listReservesByClient(idClient);
+	        
+	        // Si no se encuentran reservas para ese cliente, devuelve una respuesta vacía o un mensaje adecuado
+	        if (reserves.isEmpty()) {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No reservations found for the given client.");
+	        }
+
+	        // Si hay reservas, las devuelve con una respuesta HTTP 200 OK
+	        return ResponseEntity.ok(reserves);
+	    } catch (Exception e) {
+	        // En caso de error, se captura y se devuelve un mensaje de error genérico
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("There is an error with the reserves!");
+	    }
+	}
+
 
 	// Cv
 	@PostMapping("/uploadCv")

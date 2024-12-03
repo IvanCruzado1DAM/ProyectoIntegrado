@@ -12,4 +12,5 @@ public interface ReservetableRepository extends JpaRepository <Reservetable, Int
 	public abstract Reservetable findByIdtable(int id);
 	public abstract Reservetable findByIdclient(int id);
 	public abstract List<Reservetable> findByNumtable(int numtable);
+	public abstract List<Reservetable> findListByIdclient(int idClient);
 }

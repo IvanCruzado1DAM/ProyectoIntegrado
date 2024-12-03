@@ -110,4 +110,18 @@ public class ReservetableServiceImpl implements ReservetableService {
 		return false;
 	}
 
+	public List<ReservetableModel> listReservesByClient(int idClient) {
+		List<Reservetable> tablesList = reservetableRepository.findListByIdclient(idClient);
+
+	    // Creamos el ModelMapper
+	    ModelMapper modelMapper = new ModelMapper();
+
+	    // Mapeamos cada Reservetable a ReservetableModel
+	    List<ReservetableModel> result = tablesList.stream()
+	            .map((Reservetable reservetable) -> modelMapper.map(reservetable, ReservetableModel.class))
+	            .collect(Collectors.toList());
+
+	    return result;
+	}
+
 }
