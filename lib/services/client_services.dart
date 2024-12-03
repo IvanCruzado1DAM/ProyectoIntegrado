@@ -114,6 +114,36 @@ class ClientService {
     }
   }
 
+
+  Future<List<Reservetable>> fetchAllReservesbyClient(String token, int idClient) async {
+    final url = Uri.parse('$baseUrl/listreserves/$idClient');
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> body = jsonDecode(response.body);
+      List<Reservetable> reserves = body
+          .map((dynamic item) => Reservetable(
+                idTable: item['idtable'],
+                numTable: item['numtable'],
+                idClient: item['idclient'],
+                reservationHour: DateTime.parse(item['reservationhour']),
+                occupy: item['occupy'],
+                wantToPay: item['wanttopay'],
+              ))
+          .toList();
+      return reserves;
+    } else {
+      throw Exception('Failed to load reserves: ${response.statusCode}');
+    }
+  }
+
+
   Future<List<Opinion>> fetchAllOpinions(String token) async {
   final url = Uri.parse('$baseUrl/listopinions');
   final response = await http.get(

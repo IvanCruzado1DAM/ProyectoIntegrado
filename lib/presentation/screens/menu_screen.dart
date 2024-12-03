@@ -1,16 +1,17 @@
+import 'package:BarDamm/models/reservetable.dart';
 import 'package:flutter/material.dart';
 import 'package:BarDamm/presentation/screens/user_screen.dart';
 import 'package:BarDamm/services/client_services.dart';
 import 'package:BarDamm/models/drink.dart';
-import 'dart:typed_data'; 
+import 'dart:typed_data';
+import 'package:intl/intl.dart'; // Asegúrate de importar intl para formatear fechas y horas.
 
 class MenuScreen extends StatefulWidget {
-  final String token;  
+  final String token;
   final int idUser;
   final String username;
-  
 
-  const MenuScreen({Key? key, required this.token, required this.idUser,required this.username })
+  const MenuScreen({Key? key, required this.token, required this.idUser, required this.username})
       : super(key: key);
 
   @override
@@ -21,18 +22,60 @@ class _MenuScreenState extends State<MenuScreen> {
   bool isLoading = true;
   String errorMessage = '';
   List<Drink> allDrinks = [];
+  List<Reservetable> allReserves = [];
   final ClientService _clientService = ClientService();
+  Map<Drink, int> selectedDrinks = {};
+  bool hasReservation = false;
+  double totalPrice = 0.0;
 
   Future<void> fetchDrinks() async {
     try {
       List<Drink> drinks = await _clientService.fetchAllDrinks(widget.token);
+      List<Reservetable> reserves = await _clientService.fetchAllReservesbyClient(widget.token, widget.idUser);
+
+      // Obtén la fecha y hora actuales
+      DateTime now = DateTime.now();
+
+      // Filtrar las reservas para el usuario que sean del mismo día y cuya hora no haya pasado
+    List<Reservetable> validReserves = reserves.where((reserve) {
+      if (reserve.idClient == widget.idUser) {
+        DateTime reservationDateTime = DateTime.parse(reserve.reservationHour.toString());
+
+        // Comprobar que la reserva sea del mismo día y que la hora sea anterior a la actual
+        return reservationDateTime.year == now.year &&
+               reservationDateTime.month == now.month &&
+               reservationDateTime.day == now.day &&
+               reservationDateTime.isBefore(now);
+      }
+      return false;
+    }).toList();
+
+    bool reservationExists = false;
+    // Si hay reservas válidas, buscar la más cercana
+    if (validReserves.isNotEmpty) {
+      reservationExists = true;
+      // Ordenar las reservas válidas por la proximidad a la hora actual (más cercana sin pasarse)
+      validReserves.sort((a, b) {
+        DateTime aTime = DateTime.parse(a.reservationHour.toString());
+        DateTime bTime = DateTime.parse(b.reservationHour.toString());
+        return aTime.compareTo(bTime);
+      });
+
+      // La primera reserva de la lista será la más cercana sin pasarse
+      hasReservation = true;
+    } else {
+      hasReservation = false;  // Si no hay reservas válidas, entonces no se puede hacer pedido
+    }
+
       setState(() {
         allDrinks = drinks;
+        allReserves = reserves;
+        hasReservation = reservationExists; // Actualiza si el usuario tiene una reserva activa
         isLoading = false;
       });
     } catch (e) {
       setState(() {
-        errorMessage = 'Failed to load drinks: $e';
+        errorMessage = 'Failed to load drinks and reservations: $e';
         isLoading = false;
       });
     }
@@ -50,10 +93,19 @@ class _MenuScreenState extends State<MenuScreen> {
     return groupedDrinks;
   }
 
+  void updateTotalPrice() {
+    double newTotal = selectedDrinks.entries.fold(0, (sum, entry) {
+      return sum + (entry.key.drinkprice * entry.value);
+    });
+    setState(() {
+      totalPrice = newTotal;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    fetchDrinks();  
+    fetchDrinks();
   }
 
   @override
@@ -69,7 +121,11 @@ class _MenuScreenState extends State<MenuScreen> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => UserScreen(token: widget.token, idUser: widget.idUser, username: widget.username,),
+                builder: (context) => UserScreen(
+                  token: widget.token,
+                  idUser: widget.idUser,
+                  username: widget.username,
+                ),
               ),
             );
           },
@@ -79,14 +135,42 @@ class _MenuScreenState extends State<MenuScreen> {
           ? const Center(child: CircularProgressIndicator())
           : errorMessage.isNotEmpty
               ? Center(child: Text(errorMessage))
-              : SingleChildScrollView( 
-                  child: Column(
-                    children: [
-                      for (var category in groupDrinksByCategory().keys) 
-                        _buildCategoryExpansionTile(category),
-                    ],
-                  ),
-                ),
+              : buildDrinkMenuWithOrder(),
+    );
+  }
+
+  Widget buildDrinkMenuWithOrder() {
+    return Stack(
+      children: [
+        SingleChildScrollView(
+          child: Column(
+            children: [
+              for (var category in groupDrinksByCategory().keys)
+                _buildCategoryExpansionTile(category),
+            ],
+          ),
+        ),
+        // El botón de pedido solo se mostrará si hay una reserva activa
+        if (hasReservation)
+          Positioned(
+            bottom: 20,
+            right: 20,
+            child: FloatingActionButton.extended(
+              onPressed: () {
+                if (selectedDrinks.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Please select at least one drink to order.')),
+                  );
+                } else {
+                  confirmOrder();
+                }
+              },
+              label: Text('Order - €${totalPrice.toStringAsFixed(2)}'),
+              icon: Icon(Icons.shopping_cart),
+              backgroundColor: Colors.green,
+            ),
+          ),
+      ],
     );
   }
 
@@ -100,14 +184,14 @@ class _MenuScreenState extends State<MenuScreen> {
         style: TextStyle(
           fontSize: 22,
           fontWeight: FontWeight.bold,
-          color: Colors.blueAccent, 
+          color: Colors.blueAccent,
         ),
       ),
-      initiallyExpanded: isFirstCategory, 
-      backgroundColor: Colors.blueGrey.shade50, 
+      initiallyExpanded: isFirstCategory,
+      backgroundColor: Colors.blueGrey.shade50,
       leading: Icon(
         isFirstCategory ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-        color: Colors.blueAccent, 
+        color: Colors.blueAccent,
       ),
       children: drinksInCategory.map((drink) {
         Uint8List imageBytes = Uint8List.fromList(drink.drinkimage);
@@ -130,7 +214,7 @@ class _MenuScreenState extends State<MenuScreen> {
               contentPadding: const EdgeInsets.all(10),
               leading: CircleAvatar(
                 radius: 30,
-                backgroundImage: MemoryImage(imageBytes), 
+                backgroundImage: MemoryImage(imageBytes),
               ),
               title: Text(
                 drink.drinkname,
@@ -156,10 +240,47 @@ class _MenuScreenState extends State<MenuScreen> {
                   ),
                 ],
               ),
+              trailing: hasReservation
+                  ? Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              if (selectedDrinks.containsKey(drink) && selectedDrinks[drink]! > 0) {
+                                selectedDrinks[drink] = selectedDrinks[drink]! - 1;
+                                if (selectedDrinks[drink] == 0) {
+                                  selectedDrinks.remove(drink);
+                                }
+                              }
+                              updateTotalPrice();
+                            });
+                          },
+                          icon: Icon(Icons.remove_circle, color: Colors.red),
+                        ),
+                        Text('${selectedDrinks[drink] ?? 0}', style: TextStyle(fontSize: 16)),
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              selectedDrinks[drink] = (selectedDrinks[drink] ?? 0) + 1;
+                              updateTotalPrice();
+                            });
+                          },
+                          icon: Icon(Icons.add_circle, color: Colors.green),
+                        ),
+                      ],
+                    )
+                  : null,
             ),
           ),
         );
       }).toList(),
     );
+  }
+
+  void confirmOrder() {
+    // Send the selected drinks to the server or proceed to the next step
+    print('Order confirmed: $selectedDrinks');
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Order placed successfully!')));
   }
 }
