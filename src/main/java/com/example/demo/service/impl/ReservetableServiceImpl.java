@@ -100,7 +100,7 @@ public class ReservetableServiceImpl implements ReservetableService {
 		List<Reservetable> existingReserves = reservetableRepository.findByNumtable(numtable);
 		for (Reservetable reserve : existingReserves) {
 			// Verifica si la fecha y hora de la reserva coinciden
-			if (reserve.getReservationhour().isEqual(reservationTime) || reserve.isOccupy()) {
+			if (reserve.getReservationhour().isEqual(reservationTime)) {
 				return true;
 			}
 		}
