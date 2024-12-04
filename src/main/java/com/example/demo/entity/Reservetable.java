@@ -20,6 +20,4 @@ public class Reservetable {
 	private int idclient;
     private LocalDateTime reservationhour;
 	private boolean occupy;
-	private boolean wanttopay;
-
 }

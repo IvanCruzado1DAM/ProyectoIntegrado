@@ -36,7 +36,6 @@ public class ReservetableServiceImpl implements ReservetableService {
 		tb.setIdclient(tableModel.getIdclient());
 		tb.setReservationhour(tableModel.getReservationhour());
 		tb.setOccupy(tableModel.isOccupy());
-		tb.setWanttopay(tableModel.isWanttopay());
 
 		return reservetableRepository.save(tb);
 	}
@@ -59,7 +58,6 @@ public class ReservetableServiceImpl implements ReservetableService {
 		tb.setIdclient(table.getIdclient());
 		tb.setReservationhour(table.getReservationhour());
 		tb.setOccupy(table.isOccupy());
-		tb.setWanttopay(table.isWanttopay());
 
 		return tb;
 	}
@@ -92,7 +90,6 @@ public class ReservetableServiceImpl implements ReservetableService {
 			tb.setIdclient(tableModel.getIdclient());
 			tb.setReservationhour(tableModel.getReservationhour());
 			tb.setOccupy(tableModel.isOccupy());
-			tb.setWanttopay(tableModel.isWanttopay());
 
 			return reservetableRepository.save(tb);
 		}

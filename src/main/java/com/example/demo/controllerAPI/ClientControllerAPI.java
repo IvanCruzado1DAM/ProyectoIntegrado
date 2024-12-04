@@ -173,7 +173,6 @@ public class ClientControllerAPI {
 		existingTable.setIdclient(idclient);
 		existingTable.setReservationhour(reservationTime);
 		existingTable.setOccupy(false);
-		existingTable.setWanttopay(false);
 
 		// Guardar los cambios
 		reservetableService.addTable(reservetableService.transformTableModel(existingTable));
