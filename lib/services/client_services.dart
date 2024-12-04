@@ -298,4 +298,43 @@ class ClientService {
       print('An error occurred: $e');
     }
   }
+
+Future<void> addOrderr({
+  required String drinks,
+  required int numtable,
+  required double total,
+  required String token, // Si el endpoint necesita autenticación
+}) async {
+  final url = Uri.parse('$baseUrl/addOrderr'); // Cambia a tu URL base
+  final headers = {
+    'Authorization': 'Bearer $token', // Si se necesita autenticación
+  };
+
+  // Parámetros que se envían en la solicitud
+  final body = {
+    'drinks': drinks,
+    'numtable': numtable.toString(),
+    'total': total.toString(),
+  };
+
+  try {
+    final response = await http.post(
+      url,
+      headers: headers,
+      body: body,
+    );
+
+    if (response.statusCode == 200) {
+      print('Order saved successfully: ${response.body}');
+    } else {
+      print('Failed to save order. Status code: ${response.statusCode}');
+      print('Response body: ${response.body}');
+      throw Exception('Failed to save order: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Error: $e');
+    throw Exception('An error occurred while saving the order.');
+  }
+}
+
 }

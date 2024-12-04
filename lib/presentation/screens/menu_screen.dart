@@ -279,8 +279,56 @@ class _MenuScreenState extends State<MenuScreen> {
   }
 
   void confirmOrder() {
-    // Send the selected drinks to the server or proceed to the next step
-    print('Order confirmed: $selectedDrinks');
+    try {
+    // Preparar la lista de bebidas seleccionadas como un string separado por comas
+    String drinks = selectedDrinks.entries
+        .map((entry) => '${entry.key.drinkname} x${entry.value}')
+        .join(', ');
+
+    // Obtener el número de mesa de la reserva del usuario
+    DateTime now = DateTime.now();
+
+    int numTable = 0; // Valor por defecto si no hay reservas válidas.
+    List<Reservetable> validReserves = allReserves.where((reserve) {
+      if (reserve.idClient == widget.idUser) {
+        DateTime reservationDateTime = DateTime.parse(reserve.reservationHour.toString());
+        return reservationDateTime.year == now.year &&
+               reservationDateTime.month == now.month &&
+               reservationDateTime.day == now.day &&
+               reservationDateTime.isBefore(now);
+      }
+      return false;
+    }).toList();
+
+    if (validReserves.isNotEmpty) {
+      validReserves.sort((a, b) {
+        DateTime aTime = DateTime.parse(a.reservationHour.toString());
+        DateTime bTime = DateTime.parse(b.reservationHour.toString());
+        return aTime.compareTo(bTime);
+      });
+
+      // Tomar el número de mesa de la reserva más cercana
+      numTable = validReserves.last.numTable;
+    } else {
+      throw Exception('No valid reservations found.');
+    }
+
+    // Llamar al método `addOrderr` del servicio
+    _clientService.addOrderr(
+      drinks: drinks,
+      numtable: numTable,
+      total: totalPrice,
+      token: widget.token,
+    );
+
+    // Mostrar un mensaje de éxito y limpiar la selección
+    setState(() {
+      selectedDrinks.clear();
+      totalPrice = 0.0;
+    });
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Order placed successfully!')));
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to place order: $e')));
+  }
   }
 }
