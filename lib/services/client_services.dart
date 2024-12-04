@@ -105,7 +105,6 @@ class ClientService {
                 idClient: item['idclient'],
                 reservationHour: DateTime.parse(item['reservationhour']),
                 occupy: item['occupy'],
-                wantToPay: item['wanttopay'],
               ))
           .toList();
       return reserves;
@@ -134,7 +133,6 @@ class ClientService {
                 idClient: item['idclient'],
                 reservationHour: DateTime.parse(item['reservationhour']),
                 occupy: item['occupy'],
-                wantToPay: item['wanttopay'],
               ))
           .toList();
       return reserves;

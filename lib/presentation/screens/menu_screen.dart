@@ -327,8 +327,91 @@ class _MenuScreenState extends State<MenuScreen> {
       totalPrice = 0.0;
     });
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Order placed successfully!')));
+    showPaymentOptions(drinks, numTable);
+
   } catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to place order: $e')));
   }
   }
+
+  void showPaymentOptions(String drinks, int numTable) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Select Payment Method',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  buildPaymentOptionCard(
+                    title: 'Cash',
+                    imagePath: 'assets/images/cash.png', // Ruta de tu imagen de efectivo
+                    onTap: () {
+                      Navigator.pop(context); // Cierra el diálogo
+                      //handleOrderSubmission(drinks, numTable, 'Cash');
+                    },
+                  ),
+                  buildPaymentOptionCard(
+                    title: 'Card',
+                    imagePath: 'assets/images/card.png', // Ruta de tu imagen de tarjeta
+                    onTap: () {
+                      Navigator.pop(context); // Cierra el diálogo
+                      //handleOrderSubmission(drinks, numTable, 'Card');
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+Widget buildPaymentOptionCard({
+  required String title,
+  required String imagePath,
+  required VoidCallback onTap,
+}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      elevation: 4,
+      child: Container(
+        width: 120,
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              imagePath,
+              height: 60,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
 }
