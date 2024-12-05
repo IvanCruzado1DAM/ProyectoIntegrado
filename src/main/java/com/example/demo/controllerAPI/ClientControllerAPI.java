@@ -259,5 +259,20 @@ public class ClientControllerAPI {
 			return new ResponseEntity<>("Order not found", HttpStatus.OK);
 		}
 	}
+	
+	@PostMapping("/wanttopay")
+	public String setWantToPay(@RequestParam int idreservetable) {
+       
+		Reservetable reservation=reservetableService.loadTableByIdTable(idreservetable);
+
+        if (reservation != null) {
+            // Establece el atributo wantToPay a true
+            reservation.setWanttopay(true);
+            reservetableService.updateTable(idreservetable, reservetableService.transformTableModel(reservation)); // Guarda los cambios
+            return "Reservation updated successfully";
+        } else {
+            return "Reservation not found";
+        }
+    }
 
 }
