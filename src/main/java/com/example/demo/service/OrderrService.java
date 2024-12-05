@@ -21,5 +21,7 @@ public interface OrderrService {
 	
 	boolean exists(int id);
 
+	public abstract Orderr updateOrder(int id, OrderrModel orderModel);
+
 
 }

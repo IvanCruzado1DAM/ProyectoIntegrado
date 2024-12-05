@@ -1,8 +1,5 @@
 package com.example.demo.service.impl;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,6 +48,22 @@ public class OrderrServiceImpl implements OrderrService{
 		}
 		return -1;
 	}
+	
+	@Override
+	public Orderr updateOrder(int id, OrderrModel orderModel) {
+		Orderr order = orderrRepository.findByIdorder(id);
+		if (order != null) {
+			order.setNumtable(orderModel.getNumtable());
+			order.setDrinks(orderModel.getDrinks());
+			order.setTotal(orderModel.getTotal());
+			order.setPaid(orderModel.isPaid());
+			
+
+			return orderrRepository.save(order);
+		}
+		return null;
+	}
+
 
 	@Override
 	public Orderr transformOrder(OrderrModel orderModel) {
