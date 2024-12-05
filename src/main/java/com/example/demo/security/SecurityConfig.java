@@ -50,6 +50,7 @@ public class SecurityConfig {
                 .requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/imgs/**").permitAll()
                 .requestMatchers("/api/**").permitAll()
         		.requestMatchers("/apiclient/**").hasAuthority("ROLE_USER")
+        		.requestMatchers("/apiwaiter/**").hasAuthority("ROLE_WAITER")
                 .requestMatchers("/auth/registerForm/**").permitAll()
                 .requestMatchers("/auth/register/**").permitAll()
                 .requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
