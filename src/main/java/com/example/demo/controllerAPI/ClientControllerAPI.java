@@ -229,12 +229,13 @@ public class ClientControllerAPI {
 	
 	//Order
 	@PostMapping("/addOrderr")
-	public ResponseEntity<String> addOrderr(@RequestParam String drinks, @RequestParam int numtable, 
+	public ResponseEntity<String> addOrderr(@RequestParam String drinks, @RequestParam int numtable, @RequestParam int idreservetable,
 			@RequestParam double total) {
 
 		Orderr order = new Orderr();
 		order.setDrinks(drinks);
 		order.setNumtable(numtable);
+		order.setIdreservetable(idreservetable);
 		order.setPaid(false);
 		order.setTotal(total);
 
