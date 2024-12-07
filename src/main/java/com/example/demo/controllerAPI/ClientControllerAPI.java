@@ -245,21 +245,6 @@ public class ClientControllerAPI {
 	}
 	
 	//Order
-	@PostMapping("/payOrderr")
-	public ResponseEntity<String> payOrderr(@RequestParam int idorder) {
-
-		Orderr order = orderrService.loadOrderById(idorder);
-		if(order!=null){
-			order.setPaid(true);
-			// Guardar los cambios
-			orderrService.updateOrder(idorder, orderrService.transformOrderModel(order));
-
-			return new ResponseEntity<>("Order paid successfully", HttpStatus.OK);
-		}else {
-			return new ResponseEntity<>("Order not found", HttpStatus.OK);
-		}
-	}
-	
 	@PostMapping("/wanttopay")
 	public String setWantToPay(@RequestParam int idreservetable) {
        

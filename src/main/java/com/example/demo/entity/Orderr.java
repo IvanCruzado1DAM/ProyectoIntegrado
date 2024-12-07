@@ -15,6 +15,7 @@ public class Orderr {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int idorder;
 	private int numtable;
+	private int idreservetable;
 	private String drinks;
 	private Double total;
 	private boolean paid;

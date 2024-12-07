@@ -32,6 +32,7 @@ public class OrderrServiceImpl implements OrderrService{
 	public Orderr addOrderr(OrderrModel orderModel) {
 		Orderr or=new Orderr();
 		or.setNumtable(orderModel.getNumtable());
+		or.setIdreservetable(orderModel.getIdreservetable());
 		or.setDrinks(orderModel.getDrinks());
 		or.setTotal(orderModel.getTotal());
 		or.setPaid(orderModel.isPaid());
@@ -54,6 +55,7 @@ public class OrderrServiceImpl implements OrderrService{
 		Orderr order = orderrRepository.findByIdorder(id);
 		if (order != null) {
 			order.setNumtable(orderModel.getNumtable());
+			order.setIdreservetable(orderModel.getIdreservetable());
 			order.setDrinks(orderModel.getDrinks());
 			order.setTotal(orderModel.getTotal());
 			order.setPaid(orderModel.isPaid());
@@ -80,6 +82,7 @@ public class OrderrServiceImpl implements OrderrService{
 		OrderrModel om = new OrderrModel();
 		om.setIdorder(order.getIdorder());
 		om.setNumtable(order.getNumtable());
+		om.setIdreservetable(order.getIdreservetable());
 		om.setDrinks(order.getDrinks());
 		om.setTotal(order.getTotal());
 		om.setPaid(order.isPaid());

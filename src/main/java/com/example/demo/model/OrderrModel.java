@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 public class OrderrModel {
 	private int idorder;
 	private int numtable;
+	private int idreservetable;
 	private String drinks;
 	private Double total;
 	private boolean paid;
