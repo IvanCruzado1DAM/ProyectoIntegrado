@@ -287,7 +287,7 @@ class _MenuScreenState extends State<MenuScreen> {
 
     // Obtener el número de mesa de la reserva del usuario
     DateTime now = DateTime.now();
-
+    int idTable = 0;
     int numTable = 0; // Valor por defecto si no hay reservas válidas.
     List<Reservetable> validReserves = allReserves.where((reserve) {
       if (reserve.idClient == widget.idUser) {
@@ -307,8 +307,10 @@ class _MenuScreenState extends State<MenuScreen> {
         return aTime.compareTo(bTime);
       });
 
-      // Tomar el número de mesa de la reserva más cercana
-      numTable = validReserves.last.numTable;
+      setState(() {
+          numTable = validReserves.last.numTable;
+          idTable = validReserves.last.idTable; // Asumiendo que idTable existe en Reservetable
+        });
     } else {
       throw Exception('No valid reservations found.');
     }
@@ -327,14 +329,14 @@ class _MenuScreenState extends State<MenuScreen> {
       totalPrice = 0.0;
     });
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Order placed successfully!')));
-    showPaymentOptions(drinks, numTable);
+    showPaymentOptions(drinks, numTable, idTable);
 
   } catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to place order: $e')));
   }
   }
 
-  void showPaymentOptions(String drinks, int numTable) {
+  void showPaymentOptions(String drinks, int numTable, int idTable) {
   showDialog(
     context: context,
     builder: (context) {
@@ -360,7 +362,7 @@ class _MenuScreenState extends State<MenuScreen> {
                     imagePath: 'assets/images/cash.png', // Ruta de tu imagen de efectivo
                     onTap: () {
                       Navigator.pop(context); // Cierra el diálogo
-                      //handleOrderSubmission(drinks, numTable, 'Cash');
+                      handleWantToPay('Cash', idTable);
                     },
                   ),
                   buildPaymentOptionCard(
@@ -368,7 +370,7 @@ class _MenuScreenState extends State<MenuScreen> {
                     imagePath: 'assets/images/card.png', // Ruta de tu imagen de tarjeta
                     onTap: () {
                       Navigator.pop(context); // Cierra el diálogo
-                      //handleOrderSubmission(drinks, numTable, 'Card');
+                      handleWantToPay('Card', idTable);
                     },
                   ),
                 ],
@@ -413,5 +415,18 @@ Widget buildPaymentOptionCard({
       ),
     ),
   );
+}
+
+Future<void> handleWantToPay(String paymentMethod, int idTable) async {
+  try {
+    String response = await _clientService.wanttopay(idTable, widget.token);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Payment confirmed via $paymentMethod. Server says: $response')),
+    );
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Failed to confirm payment: $e')),
+    );
+  }
 }
 }

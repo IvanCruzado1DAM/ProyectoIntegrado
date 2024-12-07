@@ -3,6 +3,7 @@ import 'package:BarDamm/services/user_services.dart';
 import 'user_screen.dart';
 import 'package:BarDamm/models/user.dart';
 import 'register_screen.dart';
+import 'waiter_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -30,7 +31,11 @@ class _LoginScreenState extends State<LoginScreen> {
           MaterialPageRoute(builder: (context) => UserScreen(token: token!, idUser: idUser!, username:username!)),
         );
         break;
-      case 'ROLE_COACH':
+      case 'ROLE_WAITER':
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => WaiterScreen(token: token!, userId: idUser!, username:username!)),
+        );
         break;
       default:
         print('Unknown role: $role');

@@ -297,42 +297,89 @@ class ClientService {
     }
   }
 
-Future<void> addOrderr({
-  required String drinks,
-  required int numtable,
-  required double total,
-  required String token, // Si el endpoint necesita autenticación
-}) async {
-  final url = Uri.parse('$baseUrl/addOrderr'); // Cambia a tu URL base
-  final headers = {
-    'Authorization': 'Bearer $token', // Si se necesita autenticación
-  };
+  Future<void> addOrderr({
+    required String drinks,
+    required int numtable,
+    required double total,
+    required String token, // Si el endpoint necesita autenticación
+  }) async {
+    final url = Uri.parse('$baseUrl/addOrderr'); // Cambia a tu URL base
+    final headers = {
+      'Authorization': 'Bearer $token', // Si se necesita autenticación
+    };
 
-  // Parámetros que se envían en la solicitud
-  final body = {
-    'drinks': drinks,
-    'numtable': numtable.toString(),
-    'total': total.toString(),
-  };
+    // Parámetros que se envían en la solicitud
+    final body = {
+      'drinks': drinks,
+      'numtable': numtable.toString(),
+      'total': total.toString(),
+    };
 
+    try {
+      final response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        print('Order saved successfully: ${response.body}');
+      } else {
+        print('Failed to save order. Status code: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        throw Exception('Failed to save order: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('An error occurred while saving the order.');
+    }
+  }
+
+  Future<String> payOrder(int idOrder, String token) async {
+      final url = Uri.parse('$baseUrl/payOrderr');
+      try {
+        final response = await http.post(
+          url,
+          headers: {
+            'Authorization': 'Bearer $token', // Si usas autenticación con token
+            'Content-Type': 'application/json',
+          },
+          body: {
+            'idorder': idOrder.toString(),
+          },
+        );
+
+        if (response.statusCode == 200) {
+          return response.body; // Devuelve la respuesta de éxito o error
+        } else {
+          throw Exception('Failed to pay order. Status code: ${response.statusCode}');
+        }
+      } catch (e) {
+        throw Exception('Error paying order: $e');
+      }
+    }
+
+
+  Future<String> wanttopay(int idtable, String token) async {
+  final url = Uri.parse('$baseUrl/wanttopay?idreservetable=$idtable');
   try {
     final response = await http.post(
       url,
-      headers: headers,
-      body: body,
+      headers: {
+        'Authorization': 'Bearer $token', // Si usas autenticación con token
+        'Content-Type': 'application/json',
+      },
     );
 
     if (response.statusCode == 200) {
-      print('Order saved successfully: ${response.body}');
+      return response.body; // Devuelve la respuesta de éxito o error
     } else {
-      print('Failed to save order. Status code: ${response.statusCode}');
-      print('Response body: ${response.body}');
-      throw Exception('Failed to save order: ${response.statusCode}');
+      throw Exception('Failed. Status code: ${response.statusCode}');
     }
   } catch (e) {
-    print('Error: $e');
-    throw Exception('An error occurred while saving the order.');
+    throw Exception('Error: $e');
   }
 }
+
 
 }
