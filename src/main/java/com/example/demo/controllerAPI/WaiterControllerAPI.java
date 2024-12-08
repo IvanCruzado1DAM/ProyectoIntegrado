@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.Orderr;
+import com.example.demo.entity.Reservetable;
 import com.example.demo.model.OrderrModel;
 import com.example.demo.service.impl.OrderrServiceImpl;
+import com.example.demo.service.impl.ReservetableServiceImpl;
 
 @RestController
 @RequestMapping("/apiwaiter")
@@ -23,6 +25,10 @@ public class WaiterControllerAPI {
 	@Autowired
 	@Qualifier("orderrService")
 	private OrderrServiceImpl orderrService;
+	
+	@Autowired
+	@Qualifier("reservetableService")
+	private ReservetableServiceImpl reservetableService;
 	
 	// Order
 	@GetMapping("/listorders")
@@ -37,16 +43,26 @@ public class WaiterControllerAPI {
 	
 	@PostMapping("/payOrderr")
 	public ResponseEntity<String> payOrderr(@RequestParam int idorder) {
+	    // Validar si la orden existe
+	    Orderr order = orderrService.loadOrderById(idorder);
+	    if (order == null) {
+	        return new ResponseEntity<>("Order not found", HttpStatus.OK);
+	    }
+	    if(order.isPaid()) {
+	    	return new ResponseEntity<>("Order already paid", HttpStatus.OK);
+	    }
+	    Reservetable table = reservetableService.loadTableByIdTable(order.getIdreservetable());
+	    // Marcar la orden como pagada
+	    order.setPaid(true);
+	    // Si la mesa está marcada como "wanttopay", actualizarla
+	    if (table.isWanttopay()) {
+	        table.setWanttopay(false);
+	    }
+	    // Guardar los cambios
+	    reservetableService.updateTable(table.getIdtable(), reservetableService.transformTableModel(table));
+	    orderrService.updateOrder(idorder, orderrService.transformOrderModel(order));
 
-		Orderr order = orderrService.loadOrderById(idorder);
-		if(order!=null){
-			order.setPaid(true);
-			// Guardar los cambios
-			orderrService.updateOrder(idorder, orderrService.transformOrderModel(order));
-
-			return new ResponseEntity<>("Order paid successfully", HttpStatus.OK);
-		}else {
-			return new ResponseEntity<>("Order not found", HttpStatus.OK);
-		}
+	    return new ResponseEntity<>("Order paid successfully", HttpStatus.OK);
 	}
+
 }
