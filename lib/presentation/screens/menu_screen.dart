@@ -319,6 +319,7 @@ class _MenuScreenState extends State<MenuScreen> {
     _clientService.addOrderr(
       drinks: drinks,
       numtable: numTable,
+      idreservetable: idTable,
       total: totalPrice,
       token: widget.token,
     );

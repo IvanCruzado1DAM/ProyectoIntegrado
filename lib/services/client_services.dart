@@ -105,6 +105,7 @@ class ClientService {
                 idClient: item['idclient'],
                 reservationHour: DateTime.parse(item['reservationhour']),
                 occupy: item['occupy'],
+                wanttopay: item['wanttopay']
               ))
           .toList();
       return reserves;
@@ -133,6 +134,7 @@ class ClientService {
                 idClient: item['idclient'],
                 reservationHour: DateTime.parse(item['reservationhour']),
                 occupy: item['occupy'],
+                wanttopay: item['wanttopay']
               ))
           .toList();
       return reserves;
@@ -300,6 +302,7 @@ class ClientService {
   Future<void> addOrderr({
     required String drinks,
     required int numtable,
+    required int idreservetable,
     required double total,
     required String token, // Si el endpoint necesita autenticación
   }) async {
@@ -312,6 +315,7 @@ class ClientService {
     final body = {
       'drinks': drinks,
       'numtable': numtable.toString(),
+      'idreservetable': idreservetable.toString(),
       'total': total.toString(),
     };
 
@@ -334,31 +338,6 @@ class ClientService {
       throw Exception('An error occurred while saving the order.');
     }
   }
-
-  Future<String> payOrder(int idOrder, String token) async {
-      final url = Uri.parse('$baseUrl/payOrderr');
-      try {
-        final response = await http.post(
-          url,
-          headers: {
-            'Authorization': 'Bearer $token', // Si usas autenticación con token
-            'Content-Type': 'application/json',
-          },
-          body: {
-            'idorder': idOrder.toString(),
-          },
-        );
-
-        if (response.statusCode == 200) {
-          return response.body; // Devuelve la respuesta de éxito o error
-        } else {
-          throw Exception('Failed to pay order. Status code: ${response.statusCode}');
-        }
-      } catch (e) {
-        throw Exception('Error paying order: $e');
-      }
-    }
-
 
   Future<String> wanttopay(int idtable, String token) async {
   final url = Uri.parse('$baseUrl/wanttopay?idreservetable=$idtable');

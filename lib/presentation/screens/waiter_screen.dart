@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'orderr_screen.dart';
+import 'wanttopay_screen.dart';
 
 class WaiterScreen extends StatelessWidget {
   final String token;
@@ -25,6 +27,18 @@ class WaiterScreen extends StatelessWidget {
         ),
       );
     } else if (index == 1) {
+      // Navegar a la pantalla de Orders
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => WantsToPayScreen(
+            token: token,
+            userId: userId,
+          ),
+        ),
+      );
+    }
+    else if (index == 2) {
       // Navegar a la pantalla de Orders
       Navigator.push(
         context,
@@ -72,9 +86,25 @@ class WaiterScreen extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: _buildNavigationCard(
                     context,
+                    Icons.payment,
+                    'Wants to Pay',
+                    1,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: SizedBox.expand(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: _buildNavigationCard(
+                    context,
                     Icons.receipt_long,
                     'Orders',
-                    1,
+                    2,
                   ),
                 ),
               ),
@@ -147,28 +177,5 @@ class TablesScreen extends StatelessWidget {
   }
 }
 
-class OrdersScreen extends StatelessWidget {
-  final String token;
-  final int userId;
 
-  const OrdersScreen({
-    Key? key,
-    required this.token,
-    required this.userId,
-  }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Orders'),
-      ),
-      body: const Center(
-        child: Text(
-          'Orders Screen',
-          style: TextStyle(fontSize: 24),
-        ),
-      ),
-    );
-  }
-}

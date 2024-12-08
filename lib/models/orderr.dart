@@ -1,6 +1,7 @@
 class Orderr {
   int idorder;
   int numtable;
+  int idreservetable;
   String drinks;
   double total;
   bool paid;
@@ -8,6 +9,7 @@ class Orderr {
   Orderr({
     required this.idorder,
     required this.numtable,
+    required this.idreservetable,
     required this.drinks,
     required this.total,
     required this.paid,
@@ -18,6 +20,7 @@ class Orderr {
     return Orderr(
       idorder: json['idorder'] as int,
       numtable: json['numtable'] as int,
+      idreservetable: json['idreservetable'] as int,
       drinks: json['drinks'] as String,
       total: (json['total'] as num).toDouble(),
       paid: json['paid'] as bool,
@@ -29,6 +32,7 @@ class Orderr {
     return {
       'idorder': idorder,
       'numtable': numtable,
+      'idreservetable': idreservetable,
       'drinks': drinks,
       'total': total,
       'paid': paid,
