@@ -52,7 +52,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
             );
           } else {
             // Filtrar las órdenes donde `paid` es `false`.
-            final orders = snapshot.data!.where((order) => !order.paid).toList();
+            final orders =
+                snapshot.data!.where((order) => !order.paid).toList();
 
             if (orders.isEmpty) {
               return const Center(
@@ -98,9 +99,58 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                 ),
                                 const SizedBox(height: 5),
                                 Text('Drinks: ${order.drinks}'),
+                                const SizedBox(height: 5),
+                                // Texto explicativo sobre la confirmación de la reserva
+                                FutureBuilder<bool>(
+                                  future: _isReservationConfirmed(
+                                      order.idreservetable),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const Text(
+                                        'Checking reservation...',
+                                        style: TextStyle(color: Colors.grey),
+                                      ); // Indicador de carga
+                                    } else if (snapshot.hasError) {
+                                      return const Text(
+                                        'Error checking reservation',
+                                        style: TextStyle(color: Colors.red),
+                                      ); // Mensaje de error
+                                    } else {
+                                      final isConfirmed =
+                                          snapshot.data ?? false;
+                                      return Row(
+                                        children: [
+                                          Icon(
+                                            isConfirmed
+                                                ? Icons.check_circle
+                                                : Icons.cancel,
+                                            color: isConfirmed
+                                                ? Colors.green
+                                                : Colors.red,
+                                            size: 20,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          Text(
+                                            isConfirmed
+                                                ? 'Reservation Confirmed'
+                                                : 'Reservation Not Confirmed',
+                                            style: TextStyle(
+                                              color: isConfirmed
+                                                  ? Colors.green
+                                                  : Colors.red,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    }
+                                  },
+                                ),
                               ],
                             ),
                           ),
+                          const SizedBox(width: 10),
                           Text(
                             '\$${order.total.toStringAsFixed(2)}',
                             style: const TextStyle(
@@ -120,6 +170,32 @@ class _OrdersScreenState extends State<OrdersScreen> {
         },
       ),
     );
+  }
+
+  // Función para verificar si la reserva está confirmada
+  Future<bool> _isReservationConfirmed(int reservationId) async {
+    try {
+      final waiterServices = WaiterService();
+
+      // Obtener todas las reservas
+      final reserves = await waiterServices.fetchAllTables(widget.token);
+
+      // Buscar la reserva con el id especificado
+      final reservation =
+          reserves.firstWhere((reserve) => reserve.idTable == reservationId);
+
+      // Si no se encuentra la reserva, retornamos false por defecto
+      if (reservation == null) {
+        return false;
+      }
+
+      // Retornar el estado del atributo `occupy`
+      return reservation.occupy;
+    } catch (e) {
+      // Manejo de errores
+      print('Error fetching reservation: $e');
+      return false;
+    }
   }
 
   // Función para mostrar el BottomSheet con las opciones
@@ -149,9 +225,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       Navigator.pop(context); // Cerrar el BottomSheet
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      foregroundColor: Colors.white
-                    ),
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white),
                     child: const Text('Confirm Assist'),
                   ),
                   ElevatedButton(
@@ -160,9 +235,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       Navigator.pop(context); // Cerrar el BottomSheet
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      foregroundColor: Colors.white
-                    ),
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white),
                     child: const Text('Collect Money'),
                   ),
                 ],
@@ -177,7 +251,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
   // Función para confirmar asistencia
   void _confirmAssist(Orderr order) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Assistance confirmed for Table ${order.numtable}')),
+      SnackBar(
+          content: Text('Assistance confirmed for Table ${order.numtable}')),
     );
   }
 
@@ -187,7 +262,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
     try {
       // Llamar al método payOrder
-      final responseMessage = waiterService.payOrder(order.idorder, widget.token);
+      final responseMessage =
+          waiterService.payOrder(order.idorder, widget.token);
 
       // Mostrar mensaje de éxito
       ScaffoldMessenger.of(context).showSnackBar(
