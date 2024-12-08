@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.entity.Orderr;
 import com.example.demo.entity.Reservetable;
 import com.example.demo.model.OrderrModel;
+import com.example.demo.model.ReservetableModel;
 import com.example.demo.service.impl.OrderrServiceImpl;
 import com.example.demo.service.impl.ReservetableServiceImpl;
 
@@ -38,6 +39,17 @@ public class WaiterControllerAPI {
 			return ResponseEntity.ok(orders);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("There is a error with the orders!");
+		}
+	}
+	
+	// Order
+	@GetMapping("/listtables")
+	public ResponseEntity<?> listAllTables() {
+		try {
+			List<ReservetableModel> tables = reservetableService.listAllTables();
+			return ResponseEntity.ok(tables);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("There is a error with the tables!");
 		}
 	}
 	
