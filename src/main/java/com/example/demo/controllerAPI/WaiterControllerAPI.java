@@ -76,5 +76,19 @@ public class WaiterControllerAPI {
 
 	    return new ResponseEntity<>("Order paid successfully", HttpStatus.OK);
 	}
+	
+	@PostMapping("/confirmAssist")
+	public ResponseEntity<String> confirmAssist(@RequestParam int idreservetable) {
+	    // Validar si la orden existe
+	    Reservetable table = reservetableService.loadTableByIdTable(idreservetable);
+	    if (table == null) {
+	        return new ResponseEntity<>("Table not found", HttpStatus.OK);
+	    }
+	    // Marcar la orden como pagada
+	    table.setOccupy(true);
+	    // Guardar los cambios
+	    reservetableService.updateTable(table.getIdtable(), reservetableService.transformTableModel(table));
+	    return new ResponseEntity<>("Confirm assist successfully", HttpStatus.OK);
+	}
 
 }
