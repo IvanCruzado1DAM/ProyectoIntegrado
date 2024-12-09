@@ -104,4 +104,28 @@ class WaiterService {
       throw Exception('Error paying order: $e');
     }
   }
+
+  Future<String> confirmAssist(int idreservetable, String token) async {
+    // Construir la URL con el parámetro idorder
+    final url = Uri.parse('$baseUrl/confirmAssist?idreservetable=$idreservetable');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token', // Si usas autenticación con token
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return 'Confirm assist successfully'; // Devuelve la respuesta de éxito o error
+      } else {
+        throw Exception(
+            'Failed to confirm assist. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error paying order: $e');
+    }
+  }
 }

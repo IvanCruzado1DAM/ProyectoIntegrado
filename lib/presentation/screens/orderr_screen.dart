@@ -64,107 +64,110 @@ class _OrdersScreenState extends State<OrdersScreen> {
               );
             }
 
-            return ListView.builder(
-              itemCount: orders.length,
-              padding: const EdgeInsets.all(8.0),
-              itemBuilder: (context, index) {
-                final order = orders[index];
+            return RefreshIndicator(
+              onRefresh: _refreshOrders, // Método para recargar datos
+              child: ListView.builder(
+                itemCount: orders.length,
+                padding: const EdgeInsets.all(8.0),
+                itemBuilder: (context, index) {
+                  final order = orders[index];
 
-                return GestureDetector(
-                  onTap: () {
-                    // Al seleccionar una orden, mostramos el BottomSheet con las opciones
-                    _showOrderOptions(context, order);
-                  },
-                  child: Card(
-                    elevation: 5,
-                    margin: const EdgeInsets.symmetric(vertical: 8.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Table: ${order.numtable}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
+                  return GestureDetector(
+                    onTap: () {
+                      // Al seleccionar una orden, mostramos el BottomSheet con las opciones
+                      _showOrderOptions(context, order);
+                    },
+                    child: Card(
+                      elevation: 5,
+                      margin: const EdgeInsets.symmetric(vertical: 8.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Table: ${order.numtable}',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(height: 5),
-                                Text('Drinks: ${order.drinks}'),
-                                const SizedBox(height: 5),
-                                // Texto explicativo sobre la confirmación de la reserva
-                                FutureBuilder<bool>(
-                                  future: _isReservationConfirmed(
-                                      order.idreservetable),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return const Text(
-                                        'Checking reservation...',
-                                        style: TextStyle(color: Colors.grey),
-                                      ); // Indicador de carga
-                                    } else if (snapshot.hasError) {
-                                      return const Text(
-                                        'Error checking reservation',
-                                        style: TextStyle(color: Colors.red),
-                                      ); // Mensaje de error
-                                    } else {
-                                      final isConfirmed =
-                                          snapshot.data ?? false;
-                                      return Row(
-                                        children: [
-                                          Icon(
-                                            isConfirmed
-                                                ? Icons.check_circle
-                                                : Icons.cancel,
-                                            color: isConfirmed
-                                                ? Colors.green
-                                                : Colors.red,
-                                            size: 20,
-                                          ),
-                                          const SizedBox(width: 5),
-                                          Text(
-                                            isConfirmed
-                                                ? 'Reservation Confirmed'
-                                                : 'Reservation Not Confirmed',
-                                            style: TextStyle(
+                                  const SizedBox(height: 5),
+                                  Text('Drinks: ${order.drinks}'),
+                                  const SizedBox(height: 5),
+                                  // Texto explicativo sobre la confirmación de la reserva
+                                  FutureBuilder<bool>(
+                                    future: _isReservationConfirmed(
+                                        order.idreservetable),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const Text(
+                                          'Checking reservation...',
+                                          style: TextStyle(color: Colors.grey),
+                                        ); // Indicador de carga
+                                      } else if (snapshot.hasError) {
+                                        return const Text(
+                                          'Error checking reservation',
+                                          style: TextStyle(color: Colors.red),
+                                        ); // Mensaje de error
+                                      } else {
+                                        final isConfirmed =
+                                            snapshot.data ?? false;
+                                        return Row(
+                                          children: [
+                                            Icon(
+                                              isConfirmed
+                                                  ? Icons.check_circle
+                                                  : Icons.cancel,
                                               color: isConfirmed
                                                   ? Colors.green
                                                   : Colors.red,
-                                              fontWeight: FontWeight.bold,
+                                              size: 20,
                                             ),
-                                          ),
-                                        ],
-                                      );
-                                    }
-                                  },
-                                ),
-                              ],
+                                            const SizedBox(width: 5),
+                                            Text(
+                                              isConfirmed
+                                                  ? 'Reservation Confirmed'
+                                                  : 'Reservation Not Confirmed',
+                                              style: TextStyle(
+                                                color: isConfirmed
+                                                    ? Colors.green
+                                                    : Colors.red,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 10),
-                          Text(
-                            '\$${order.total.toStringAsFixed(2)}',
-                            style: const TextStyle(
-                              color: Colors.blue,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                            const SizedBox(width: 10),
+                            Text(
+                              '\$${order.total.toStringAsFixed(2)}',
+                              style: const TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             );
           }
         },
@@ -195,6 +198,21 @@ class _OrdersScreenState extends State<OrdersScreen> {
       // Manejo de errores
       print('Error fetching reservation: $e');
       return false;
+    }
+  }
+
+  // Método para recargar datos
+  Future<void> _refreshOrders() async {
+    final waiterServices = WaiterService();
+    try {
+      final updatedOrders = waiterServices.fetchAllOrders(widget.token);
+      setState(() {
+        _ordersFuture = Future.value(updatedOrders);
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error refreshing orders: $e')),
+      );
     }
   }
 
@@ -249,33 +267,96 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   // Función para confirmar asistencia
-  void _confirmAssist(Orderr order) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-          content: Text('Assistance confirmed for Table ${order.numtable}')),
-    );
+  Future<void> _confirmAssist(Orderr order) async {
+    final waiterService = WaiterService(); // Instancia de WaiterService
+
+    try {
+      // Verificar si la asistencia ya está confirmada (await porque es asíncrono)
+      final isAlreadyConfirmed =
+          await _isReservationConfirmed(order.idreservetable);
+
+      if (isAlreadyConfirmed) {
+        // Mostrar mensaje si ya está confirmada
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Assist already confirmed'),
+            backgroundColor: Colors.orange,
+          ),
+        );
+        return; // Salir de la función si ya está confirmado
+      }
+
+      // Llamar al método confirmAssist del servicio
+      final responseMessage =
+          await waiterService.confirmAssist(order.idreservetable, widget.token);
+
+      // Mostrar mensaje de éxito
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(responseMessage),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      // Recargar la lista de órdenes tras confirmar la asistencia
+      await _refreshOrders();
+    } catch (e) {
+      // Mostrar mensaje de error en caso de fallo
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error confirming assistance: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   // Función para cobrar dinero
   void _collectMoney(Orderr order) {
     final waiterService = WaiterService(); // Instancia de WaiterService
 
-    try {
-      // Llamar al método payOrder
-      final responseMessage =
-          waiterService.payOrder(order.idorder, widget.token);
+    // Verificar si la asistencia está confirmada
+    _isReservationConfirmed(order.idreservetable).then((isConfirmed) {
+      if (!isConfirmed) {
+        // Mostrar mensaje si no se ha confirmado la asistencia
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('You need to confirm assistance first.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      } else {
+        try {
+          // Llamar al método payOrder
+          final responseMessage =
+              waiterService.payOrder(order.idorder, widget.token);
 
-      // Mostrar mensaje de éxito
+          // Mostrar mensaje de éxito
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content:
+                  Text('Order paid successfully, please refresh the screen'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        } catch (e) {
+          // Manejo de errores
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error: $e'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    }).catchError((error) {
+      // Manejo de error al verificar la asistencia
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Order paid successfully')),
+        SnackBar(
+          content: Text('Error checking assistance: $error'),
+          backgroundColor: Colors.red,
+        ),
       );
-
-      Navigator.pop(context);
-    } catch (e) {
-      // Manejo de errores
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
-    }
+    });
   }
 }
