@@ -90,5 +90,19 @@ public class WaiterControllerAPI {
 	    reservetableService.updateTable(table.getIdtable(), reservetableService.transformTableModel(table));
 	    return new ResponseEntity<>("Confirm assist successfully", HttpStatus.OK);
 	}
+	
+	@PostMapping("/settablefree")
+	public ResponseEntity<String> settablefree(@RequestParam int idreservetable) {
+	    // Validar si la orden existe
+	    Reservetable table = reservetableService.loadTableByIdTable(idreservetable);
+	    if (table == null) {
+	        return new ResponseEntity<>("Table not found", HttpStatus.OK);
+	    }
+	    // Marcar la orden como pagada
+	    table.setOccupy(false);
+	    // Guardar los cambios
+	    reservetableService.updateTable(table.getIdtable(), reservetableService.transformTableModel(table));
+	    return new ResponseEntity<>("Mark table as free successfully", HttpStatus.OK);
+	}
 
 }
