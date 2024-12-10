@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'orderr_screen.dart';
 import 'wanttopay_screen.dart';
+import 'table_screen.dart';
 
 class WaiterScreen extends StatelessWidget {
   final String token;
@@ -20,7 +21,7 @@ class WaiterScreen extends StatelessWidget {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => TablesScreen(
+          builder: (context) => TableScreen(
             token: token,
             userId: userId,
           ),
@@ -150,32 +151,7 @@ class WaiterScreen extends StatelessWidget {
   }
 }
 
-// Pantallas de ejemplo para Tables y Orders
-class TablesScreen extends StatelessWidget {
-  final String token;
-  final int userId;
 
-  const TablesScreen({
-    Key? key,
-    required this.token,
-    required this.userId,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Tables'),
-      ),
-      body: const Center(
-        child: Text(
-          'Tables Screen',
-          style: TextStyle(fontSize: 24),
-        ),
-      ),
-    );
-  }
-}
 
 
 
