@@ -11,7 +11,11 @@ class MenuScreen extends StatefulWidget {
   final int idUser;
   final String username;
 
-  const MenuScreen({Key? key, required this.token, required this.idUser, required this.username})
+  const MenuScreen(
+      {Key? key,
+      required this.token,
+      required this.idUser,
+      required this.username})
       : super(key: key);
 
   @override
@@ -31,46 +35,60 @@ class _MenuScreenState extends State<MenuScreen> {
   Future<void> fetchDrinks() async {
     try {
       List<Drink> drinks = await _clientService.fetchAllDrinks(widget.token);
-      List<Reservetable> reserves = await _clientService.fetchAllReservesbyClient(widget.token, widget.idUser);
-
+      List<Reservetable> reserves = [];
+      try {
+        reserves = await _clientService.fetchAllReservesbyClient(
+            widget.token, widget.idUser);
+      } catch (e) {
+        // Si hay un error 404 al buscar reservas, lo manejamos específicamente
+        if (e.toString().contains('404')) {
+          reserves = []; // No hay reservas, se establece una lista vacía
+        } else {
+          // Si es otro error, lo lanzamos para que sea manejado más adelante
+          rethrow;
+        }
+      }
       // Obtén la fecha y hora actuales
       DateTime now = DateTime.now();
 
       // Filtrar las reservas para el usuario que sean del mismo día y cuya hora no haya pasado
-    List<Reservetable> validReserves = reserves.where((reserve) {
-      if (reserve.idClient == widget.idUser) {
-        DateTime reservationDateTime = DateTime.parse(reserve.reservationHour.toString());
+      List<Reservetable> validReserves = reserves.where((reserve) {
+        if (reserve.idClient == widget.idUser) {
+          DateTime reservationDateTime =
+              DateTime.parse(reserve.reservationHour.toString());
 
-        // Comprobar que la reserva sea del mismo día y que la hora sea anterior a la actual
-        return reservationDateTime.year == now.year &&
-               reservationDateTime.month == now.month &&
-               reservationDateTime.day == now.day &&
-               reservationDateTime.isBefore(now);
+          // Comprobar que la reserva sea del mismo día y que la hora sea anterior a la actual
+          return reservationDateTime.year == now.year &&
+              reservationDateTime.month == now.month &&
+              reservationDateTime.day == now.day &&
+              reservationDateTime.isBefore(now);
+        }
+        return false;
+      }).toList();
+
+      bool reservationExists = false;
+      // Si hay reservas válidas, buscar la más cercana
+      if (validReserves.isNotEmpty) {
+        reservationExists = true;
+        // Ordenar las reservas válidas por la proximidad a la hora actual (más cercana sin pasarse)
+        validReserves.sort((a, b) {
+          DateTime aTime = DateTime.parse(a.reservationHour.toString());
+          DateTime bTime = DateTime.parse(b.reservationHour.toString());
+          return aTime.compareTo(bTime);
+        });
+
+        // La primera reserva de la lista será la más cercana sin pasarse
+        hasReservation = true;
+      } else {
+        hasReservation =
+            false; // Si no hay reservas válidas, entonces no se puede hacer pedido
       }
-      return false;
-    }).toList();
-
-    bool reservationExists = false;
-    // Si hay reservas válidas, buscar la más cercana
-    if (validReserves.isNotEmpty) {
-      reservationExists = true;
-      // Ordenar las reservas válidas por la proximidad a la hora actual (más cercana sin pasarse)
-      validReserves.sort((a, b) {
-        DateTime aTime = DateTime.parse(a.reservationHour.toString());
-        DateTime bTime = DateTime.parse(b.reservationHour.toString());
-        return aTime.compareTo(bTime);
-      });
-
-      // La primera reserva de la lista será la más cercana sin pasarse
-      hasReservation = true;
-    } else {
-      hasReservation = false;  // Si no hay reservas válidas, entonces no se puede hacer pedido
-    }
 
       setState(() {
         allDrinks = drinks;
         allReserves = reserves;
-        hasReservation = reservationExists; // Actualiza si el usuario tiene una reserva activa
+        hasReservation =
+            reservationExists; // Actualiza si el usuario tiene una reserva activa
         isLoading = false;
       });
     } catch (e) {
@@ -159,7 +177,9 @@ class _MenuScreenState extends State<MenuScreen> {
               onPressed: () {
                 if (selectedDrinks.isEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Please select at least one drink to order.')),
+                    SnackBar(
+                        content:
+                            Text('Please select at least one drink to order.')),
                   );
                 } else {
                   confirmOrder();
@@ -176,7 +196,8 @@ class _MenuScreenState extends State<MenuScreen> {
 
   Widget _buildCategoryExpansionTile(String category) {
     List<Drink> drinksInCategory = groupDrinksByCategory()[category]!;
-    bool isFirstCategory = groupDrinksByCategory().keys.toList().indexOf(category) == 0;
+    bool isFirstCategory =
+        groupDrinksByCategory().keys.toList().indexOf(category) == 0;
 
     return ExpansionTile(
       title: Text(
@@ -247,8 +268,10 @@ class _MenuScreenState extends State<MenuScreen> {
                         IconButton(
                           onPressed: () {
                             setState(() {
-                              if (selectedDrinks.containsKey(drink) && selectedDrinks[drink]! > 0) {
-                                selectedDrinks[drink] = selectedDrinks[drink]! - 1;
+                              if (selectedDrinks.containsKey(drink) &&
+                                  selectedDrinks[drink]! > 0) {
+                                selectedDrinks[drink] =
+                                    selectedDrinks[drink]! - 1;
                                 if (selectedDrinks[drink] == 0) {
                                   selectedDrinks.remove(drink);
                                 }
@@ -258,11 +281,13 @@ class _MenuScreenState extends State<MenuScreen> {
                           },
                           icon: Icon(Icons.remove_circle, color: Colors.red),
                         ),
-                        Text('${selectedDrinks[drink] ?? 0}', style: TextStyle(fontSize: 16)),
+                        Text('${selectedDrinks[drink] ?? 0}',
+                            style: TextStyle(fontSize: 16)),
                         IconButton(
                           onPressed: () {
                             setState(() {
-                              selectedDrinks[drink] = (selectedDrinks[drink] ?? 0) + 1;
+                              selectedDrinks[drink] =
+                                  (selectedDrinks[drink] ?? 0) + 1;
                               updateTotalPrice();
                             });
                           },
@@ -280,154 +305,161 @@ class _MenuScreenState extends State<MenuScreen> {
 
   void confirmOrder() {
     try {
-    // Preparar la lista de bebidas seleccionadas como un string separado por comas
-    String drinks = selectedDrinks.entries
-        .map((entry) => '${entry.key.drinkname} x${entry.value}')
-        .join(', ');
+      // Preparar la lista de bebidas seleccionadas como un string separado por comas
+      String drinks = selectedDrinks.entries
+          .map((entry) => '${entry.key.drinkname} x${entry.value}')
+          .join(', ');
 
-    // Obtener el número de mesa de la reserva del usuario
-    DateTime now = DateTime.now();
-    int idTable = 0;
-    int numTable = 0; // Valor por defecto si no hay reservas válidas.
-    List<Reservetable> validReserves = allReserves.where((reserve) {
-      if (reserve.idClient == widget.idUser) {
-        DateTime reservationDateTime = DateTime.parse(reserve.reservationHour.toString());
-        return reservationDateTime.year == now.year &&
-               reservationDateTime.month == now.month &&
-               reservationDateTime.day == now.day &&
-               reservationDateTime.isBefore(now);
-      }
-      return false;
-    }).toList();
+      // Obtener el número de mesa de la reserva del usuario
+      DateTime now = DateTime.now();
+      int idTable = 0;
+      int numTable = 0; // Valor por defecto si no hay reservas válidas.
+      List<Reservetable> validReserves = allReserves.where((reserve) {
+        if (reserve.idClient == widget.idUser) {
+          DateTime reservationDateTime =
+              DateTime.parse(reserve.reservationHour.toString());
+          return reservationDateTime.year == now.year &&
+              reservationDateTime.month == now.month &&
+              reservationDateTime.day == now.day &&
+              reservationDateTime.isBefore(now);
+        }
+        return false;
+      }).toList();
 
-    if (validReserves.isNotEmpty) {
-      validReserves.sort((a, b) {
-        DateTime aTime = DateTime.parse(a.reservationHour.toString());
-        DateTime bTime = DateTime.parse(b.reservationHour.toString());
-        return aTime.compareTo(bTime);
-      });
-
-      setState(() {
-          numTable = validReserves.last.numTable;
-          idTable = validReserves.last.idTable; // Asumiendo que idTable existe en Reservetable
+      if (validReserves.isNotEmpty) {
+        validReserves.sort((a, b) {
+          DateTime aTime = DateTime.parse(a.reservationHour.toString());
+          DateTime bTime = DateTime.parse(b.reservationHour.toString());
+          return aTime.compareTo(bTime);
         });
-    } else {
-      throw Exception('No valid reservations found.');
+
+        setState(() {
+          numTable = validReserves.last.numTable;
+          idTable = validReserves
+              .last.idTable; // Asumiendo que idTable existe en Reservetable
+        });
+      } else {
+        throw Exception('No valid reservations found.');
+      }
+
+      // Llamar al método `addOrderr` del servicio
+      _clientService.addOrderr(
+        drinks: drinks,
+        numtable: numTable,
+        idreservetable: idTable,
+        total: totalPrice,
+        token: widget.token,
+      );
+
+      // Mostrar un mensaje de éxito y limpiar la selección
+      setState(() {
+        selectedDrinks.clear();
+        totalPrice = 0.0;
+      });
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Order placed successfully!')));
+      showPaymentOptions(drinks, numTable, idTable);
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Failed to place order: $e')));
     }
-
-    // Llamar al método `addOrderr` del servicio
-    _clientService.addOrderr(
-      drinks: drinks,
-      numtable: numTable,
-      idreservetable: idTable,
-      total: totalPrice,
-      token: widget.token,
-    );
-
-    // Mostrar un mensaje de éxito y limpiar la selección
-    setState(() {
-      selectedDrinks.clear();
-      totalPrice = 0.0;
-    });
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Order placed successfully!')));
-    showPaymentOptions(drinks, numTable, idTable);
-
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to place order: $e')));
-  }
   }
 
   void showPaymentOptions(String drinks, int numTable, int idTable) {
-  showDialog(
-    context: context,
-    builder: (context) {
-      return Dialog(
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Select Payment Method',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    buildPaymentOptionCard(
+                      title: 'Cash',
+                      imagePath:
+                          'assets/images/cash.png', // Ruta de tu imagen de efectivo
+                      onTap: () {
+                        Navigator.pop(context); // Cierra el diálogo
+                        handleWantToPay('Cash', idTable);
+                      },
+                    ),
+                    buildPaymentOptionCard(
+                      title: 'Card',
+                      imagePath:
+                          'assets/images/card.png', // Ruta de tu imagen de tarjeta
+                      onTap: () {
+                        Navigator.pop(context); // Cierra el diálogo
+                        handleWantToPay('Card', idTable);
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget buildPaymentOptionCard({
+    required String title,
+    required String imagePath,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(12),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+        elevation: 4,
+        child: Container(
+          width: 120,
+          padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                'Select Payment Method',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              Image.asset(
+                imagePath,
+                height: 60,
               ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  buildPaymentOptionCard(
-                    title: 'Cash',
-                    imagePath: 'assets/images/cash.png', // Ruta de tu imagen de efectivo
-                    onTap: () {
-                      Navigator.pop(context); // Cierra el diálogo
-                      handleWantToPay('Cash', idTable);
-                    },
-                  ),
-                  buildPaymentOptionCard(
-                    title: 'Card',
-                    imagePath: 'assets/images/card.png', // Ruta de tu imagen de tarjeta
-                    onTap: () {
-                      Navigator.pop(context); // Cierra el diálogo
-                      handleWantToPay('Card', idTable);
-                    },
-                  ),
-                ],
+              const SizedBox(height: 10),
+              Text(
+                title,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ],
           ),
         ),
-      );
-    },
-  );
-}
-
-Widget buildPaymentOptionCard({
-  required String title,
-  required String imagePath,
-  required VoidCallback onTap,
-}) {
-  return GestureDetector(
-    onTap: onTap,
-    child: Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
       ),
-      elevation: 4,
-      child: Container(
-        width: 120,
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(
-              imagePath,
-              height: 60,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              title,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
-}
-
-Future<void> handleWantToPay(String paymentMethod, int idTable) async {
-  try {
-    String response = await _clientService.wanttopay(idTable, widget.token);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Payment confirmed via $paymentMethod. Server says: $response')),
-    );
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Failed to confirm payment: $e')),
     );
   }
-}
+
+  Future<void> handleWantToPay(String paymentMethod, int idTable) async {
+    try {
+      String response = await _clientService.wanttopay(idTable, widget.token);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(
+                'Payment confirmed via $paymentMethod. Server says: $response')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to confirm payment: $e')),
+      );
+    }
+  }
 }
