@@ -109,7 +109,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
                         selectedDate!.day,
                         selectedTime!.hour,
                         selectedTime!.minute,
-                      );
+                      ).subtract(const Duration(hours: 1));
 
                       final reserves = await clientServices.fetchAllReserves(widget.token);
 
