@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Cv;
 import com.example.demo.entity.Opinion;
+import com.example.demo.entity.Orderr;
 import com.example.demo.entity.Pool;
 import com.example.demo.entity.User;
 import com.example.demo.model.CvModel;
@@ -74,6 +75,12 @@ public class PoolServiceImpl implements PoolService {
 		pm.setNumturn(pool.getNumturn());
 		
 		return pm;
+	}
+
+	@Override
+	public Pool loadOrderById(int id) {
+		Pool pool = poolRepository.findByIdpool(id);
+		return pool;
 	}
 
 	

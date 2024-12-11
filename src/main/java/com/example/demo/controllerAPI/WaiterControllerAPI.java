@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entity.Orderr;
+import com.example.demo.entity.Pool;
 import com.example.demo.entity.Reservetable;
 import com.example.demo.model.OrderrModel;
 import com.example.demo.model.ReservetableModel;
 import com.example.demo.service.impl.OrderrServiceImpl;
+import com.example.demo.service.impl.PoolServiceImpl;
 import com.example.demo.service.impl.ReservetableServiceImpl;
 
 @RestController
@@ -30,6 +32,10 @@ public class WaiterControllerAPI {
 	@Autowired
 	@Qualifier("reservetableService")
 	private ReservetableServiceImpl reservetableService;
+	
+	@Autowired
+	@Qualifier("poolService")
+	private PoolServiceImpl poolService;
 	
 	// Order
 	@GetMapping("/listorders")
@@ -103,6 +109,15 @@ public class WaiterControllerAPI {
 	    // Guardar los cambios
 	    reservetableService.updateTable(table.getIdtable(), reservetableService.transformTableModel(table));
 	    return new ResponseEntity<>("Mark table as free successfully", HttpStatus.OK);
+	}
+	
+	@PostMapping("/setpoolfree")
+	public ResponseEntity<String> setpoolfree() {
+		Pool p = poolService.loadOrderById(1);
+	    p.setNumturn(p.getNumturn()+1);
+	    // Guardar los cambios
+	    poolService.updatePool(1, poolService.transformPoolModel(p));
+	    return new ResponseEntity<>("Mark pool as free successfully", HttpStatus.OK);
 	}
 
 }
