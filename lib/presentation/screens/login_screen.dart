@@ -78,106 +78,118 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true, // Permite que la pantalla se desplace con el teclado
       body: Stack(
         children: [
+          // Fondo de pantalla
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(
-                    "assets/images/fondologinapp.jpg"), 
-                fit: BoxFit
-                    .cover, 
+                image: AssetImage("assets/images/fondologinapp.jpg"),
+                fit: BoxFit.cover,
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 15),
-                Image.asset(
-                  'assets/images/file.png',
-                  height: 150, 
-                  width: 150,
-                  fit: BoxFit.contain,
-                ),
-                const SizedBox(height: 15),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color:
-                        Colors.white.withOpacity(0.8), 
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Username', style: TextStyle(fontSize: 20)),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Enter your username',
-                        ),
-                        onChanged: (value) => setState(() => username = value),
+          SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 60),
+                    Image.asset(
+                      'assets/images/file.png',
+                      height: 150,
+                      width: 150,
+                      fit: BoxFit.contain,
+                    ),
+                    const SizedBox(height: 15),
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white.withOpacity(0.8),
                       ),
-                      const SizedBox(height: 10),
-                      const Text('Password', style: TextStyle(fontSize: 20)),
-                      TextFormField(
-                        obscureText: isObscure,
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          hintText: 'Enter your password',
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              isObscure
-                                  ? Icons.visibility
-                                  : Icons.visibility_off,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('Username', style: TextStyle(fontSize: 20)),
+                          TextFormField(
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintText: 'Enter your username',
                             ),
-                            onPressed: () =>
-                                setState(() => isObscure = !isObscure),
+                            onChanged: (value) => setState(() => username = value),
                           ),
-                        ),
-                        onChanged: (value) => setState(() => password = value),
-                      ),
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: _login, 
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xff142047),
+                          const SizedBox(height: 10),
+                          const Text('Password', style: TextStyle(fontSize: 20)),
+                          TextFormField(
+                            obscureText: isObscure,
+                            decoration: InputDecoration(
+                              border: const OutlineInputBorder(),
+                              hintText: 'Enter your password',
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  isObscure
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                ),
+                                onPressed: () =>
+                                    setState(() => isObscure = !isObscure),
+                              ),
+                            ),
+                            onTap: () {
+                              // Desplazamiento automático hacia arriba al tocar el campo de contraseña
+                              Future.delayed(
+                                const Duration(milliseconds: 300),
+                                () => Scrollable.ensureVisible(
+                                  context,
+                                  duration: const Duration(milliseconds: 300),
+                                ),
+                              );
+                            },
+                            onChanged: (value) => setState(() => password = value),
                           ),
-                          child: const Text('Login',
-                              style: TextStyle(color: Colors.white)),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Center(
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const RegisterScreen()),
-                            );
-                          },
-                          child: const Text(
-                            'Register',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              decoration: TextDecoration.underline,
+                          const SizedBox(height: 20),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 50,
+                            child: ElevatedButton(
+                              onPressed: _login,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xff142047),
+                              ),
+                              child: const Text('Login',
+                                  style: TextStyle(color: Colors.white)),
                             ),
                           ),
-                        ),
+                          const SizedBox(height: 20),
+                          Center(
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const RegisterScreen()),
+                                );
+                              },
+                              child: const Text(
+                                'Register',
+                                style: TextStyle(
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ],
