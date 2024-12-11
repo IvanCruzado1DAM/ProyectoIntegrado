@@ -64,7 +64,7 @@ class _UserScreenState extends State<UserScreen> {
               username: widget.username),
         ),
       );
-    } else {
+    } else if (index == 4) {
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -74,6 +74,9 @@ class _UserScreenState extends State<UserScreen> {
               username: widget.username),
         ),
       );
+    } else if (index == 5) {
+      // Aquí puedes añadir la funcionalidad para la pantalla de Pool.
+      print("Pool screen tapped");
     }
   }
 
@@ -116,40 +119,16 @@ class _UserScreenState extends State<UserScreen> {
             ),
           ),
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Row(
               children: [
                 Expanded(
-                  child: GestureDetector(
-                    onTap: () => _onCardTapped(4),
-                    child: Card(
-                      elevation: 5,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      color: Color.fromARGB(255, 21, 135, 228),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.feedback, // Icono para opiniones
-                            size: 40,
-                            color: Colors.white,
-                          ),
-                          const SizedBox(
-                              height: 10), // Espacio entre el icono y el texto
-                          Text(
-                            'Give Us Your Opinion',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  child: _buildNavigationCard(
+                      Icons.feedback, 'Give Us Your Opinion', 4),
+                ),
+                Expanded(
+                  child: _buildNavigationCardWithImage(
+                      'assets/images/billar.png', 'Pool', 5), // Imagen del juego de billar
                 ),
               ],
             ),
@@ -188,4 +167,37 @@ class _UserScreenState extends State<UserScreen> {
       ),
     );
   }
+  Widget _buildNavigationCardWithImage(String imagePath, String label, int index) {
+    return GestureDetector(
+      onTap: () => _onCardTapped(index),
+      child: Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        color: Colors.blue.shade700,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              imagePath,
+              height: 80,
+              width: 80,
+              fit: BoxFit.contain,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              label,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
 }
+
+
