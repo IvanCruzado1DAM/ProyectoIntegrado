@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'orderr_screen.dart';
 import 'wanttopay_screen.dart';
 import 'table_screen.dart';
+import 'package:BarDamm/services/waiter_services.dart'; // Importación del servicio de Waiter
 
 class WaiterScreen extends StatelessWidget {
   final String token;
@@ -15,9 +16,8 @@ class WaiterScreen extends StatelessWidget {
     required this.username,
   }) : super(key: key);
 
-  void _onCardTapped(BuildContext context, int index) {
+  void _onCardTapped(BuildContext context, int index) async {
     if (index == 0) {
-      // Navegar a la pantalla de Tables
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -28,7 +28,6 @@ class WaiterScreen extends StatelessWidget {
         ),
       );
     } else if (index == 1) {
-      // Navegar a la pantalla de Orders
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -38,9 +37,7 @@ class WaiterScreen extends StatelessWidget {
           ),
         ),
       );
-    }
-    else if (index == 2) {
-      // Navegar a la pantalla de Orders
+    } else if (index == 2) {
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -50,7 +47,69 @@ class WaiterScreen extends StatelessWidget {
           ),
         ),
       );
+    } else if (index == 3) {
+      // Acción para "Set Pool Free"
+      final confirm = await _showConfirmationDialog(context);
+      if (confirm == true) {
+        // Llama al método setPoolFree del servicio
+        WaiterService ws = WaiterService();
+
+        try {
+          // Llamamos al método setpoolfree con el token
+          String message = await ws.setpoolfree(token);
+
+          // Si la respuesta es exitosa, mostramos un mensaje de agradecimiento
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Pool is free succesfully',
+                style: TextStyle(fontSize: 16),
+              ),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        } catch (e) {
+          // En caso de error, mostramos un mensaje de error en la parte inferior
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Error: $e',
+                style: TextStyle(fontSize: 16),
+              ),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        }
+      }
     }
+  }
+
+  Future<bool> _showConfirmationDialog(BuildContext context) async {
+    return (await showDialog<bool>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Confirmation'),
+              content:
+                  const Text('Do you want to mark the pool table as free?'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false); // Cancelar
+                  },
+                  child: const Text('No'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true); // Confirmar
+                  },
+                  child: const Text('Yes'),
+                ),
+              ],
+            );
+          },
+        )) ??
+        false; // Devuelve false si el usuario cierra el cuadro de diálogo.
   }
 
   @override
@@ -111,6 +170,22 @@ class WaiterScreen extends StatelessWidget {
               ),
             ),
           ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: SizedBox.expand(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: _buildNavigationCardWithImage(
+                    context,
+                    'assets/images/billar.png',
+                    'Set Pool Free',
+                    3,
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -149,9 +224,38 @@ class WaiterScreen extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildNavigationCardWithImage(
+      BuildContext context, String imagePath, String label, int index) {
+    return GestureDetector(
+      onTap: () => _onCardTapped(context, index),
+      child: Card(
+        elevation: 5,
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        color: Colors.blue.shade700,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              imagePath,
+              height: 60,
+              fit: BoxFit.contain,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              label,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
-
-
-
-
-
