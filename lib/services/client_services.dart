@@ -5,6 +5,8 @@ import 'package:BarDamm/models/drink.dart';
 import 'package:BarDamm/models/event.dart';
 import 'package:BarDamm/models/reservetable.dart';
 import 'package:BarDamm/models/opinion.dart';
+import 'package:BarDamm/models/pool.dart';
+import 'package:BarDamm/models/turnpool.dart';
 import 'dart:typed_data';
 import 'dart:io';
 import 'package:intl/intl.dart';
@@ -100,13 +102,12 @@ class ClientService {
       List<dynamic> body = jsonDecode(response.body);
       List<Reservetable> reserves = body
           .map((dynamic item) => Reservetable(
-                idTable: item['idtable'],
-                numTable: item['numtable'],
-                idClient: item['idclient'],
-                reservationHour: DateTime.parse(item['reservationhour']),
-                occupy: item['occupy'],
-                wanttopay: item['wanttopay']
-              ))
+              idTable: item['idtable'],
+              numTable: item['numtable'],
+              idClient: item['idclient'],
+              reservationHour: DateTime.parse(item['reservationhour']),
+              occupy: item['occupy'],
+              wanttopay: item['wanttopay']))
           .toList();
       return reserves;
     } else {
@@ -114,8 +115,8 @@ class ClientService {
     }
   }
 
-
-  Future<List<Reservetable>> fetchAllReservesbyClient(String token, int idClient) async {
+  Future<List<Reservetable>> fetchAllReservesbyClient(
+      String token, int idClient) async {
     final url = Uri.parse('$baseUrl/listreserves/$idClient');
     final response = await http.get(
       url,
@@ -129,13 +130,12 @@ class ClientService {
       List<dynamic> body = jsonDecode(response.body);
       List<Reservetable> reserves = body
           .map((dynamic item) => Reservetable(
-                idTable: item['idtable'],
-                numTable: item['numtable'],
-                idClient: item['idclient'],
-                reservationHour: DateTime.parse(item['reservationhour']),
-                occupy: item['occupy'],
-                wanttopay: item['wanttopay']
-              ))
+              idTable: item['idtable'],
+              numTable: item['numtable'],
+              idClient: item['idclient'],
+              reservationHour: DateTime.parse(item['reservationhour']),
+              occupy: item['occupy'],
+              wanttopay: item['wanttopay']))
           .toList();
       return reserves;
     } else {
@@ -143,34 +143,32 @@ class ClientService {
     }
   }
 
-
   Future<List<Opinion>> fetchAllOpinions(String token) async {
-  final url = Uri.parse('$baseUrl/listopinions');
-  final response = await http.get(
-    url,
-    headers: {
-      'Authorization': 'Bearer $token',
-       'Content-Type': 'application/json',
-    },
-  );
+    final url = Uri.parse('$baseUrl/listopinions');
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+    );
 
-  if (response.statusCode == 200) {
-    // Si la respuesta es exitosa, procesa el cuerpo
-    List<dynamic> body = jsonDecode(response.body);
-    List<Opinion> opinions = body
-        .map((dynamic item) => Opinion(
-              idOpinion: item['idopinion'],
-              idUserOpinion: item['iduseropinion'],
-              score: item['score'],
-              comment: item['comment'],
-            ))
-        .toList();
-    return opinions;
-  } else {
-    throw Exception('Failed to load opinions: ${response.statusCode}');
+    if (response.statusCode == 200) {
+      // Si la respuesta es exitosa, procesa el cuerpo
+      List<dynamic> body = jsonDecode(response.body);
+      List<Opinion> opinions = body
+          .map((dynamic item) => Opinion(
+                idOpinion: item['idopinion'],
+                idUserOpinion: item['iduseropinion'],
+                score: item['score'],
+                comment: item['comment'],
+              ))
+          .toList();
+      return opinions;
+    } else {
+      throw Exception('Failed to load opinions: ${response.statusCode}');
+    }
   }
-}
-
 
   Future<void> submitCv(String token, File cvFile, int userId, bool accept,
       String username) async {
@@ -340,25 +338,128 @@ class ClientService {
   }
 
   Future<String> wanttopay(int idtable, String token) async {
-  final url = Uri.parse('$baseUrl/wanttopay?idreservetable=$idtable');
-  try {
-    final response = await http.post(
-      url,
-      headers: {
-        'Authorization': 'Bearer $token', // Si usas autenticación con token
-        'Content-Type': 'application/json',
-      },
-    );
+    final url = Uri.parse('$baseUrl/wanttopay?idreservetable=$idtable');
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token', // Si usas autenticación con token
+          'Content-Type': 'application/json',
+        },
+      );
 
-    if (response.statusCode == 200) {
-      return response.body; // Devuelve la respuesta de éxito o error
-    } else {
-      throw Exception('Failed. Status code: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        return response.body; // Devuelve la respuesta de éxito o error
+      } else {
+        throw Exception('Failed. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
     }
-  } catch (e) {
-    throw Exception('Error: $e');
   }
-}
 
+  Future<int> getTurnpool(String token) async {
+    final url = Uri.parse('$baseUrl/getTurnpool');
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
 
+      if (response.statusCode == 200) {
+        return int.parse(
+            response.body); // Asumimos que la respuesta es un número
+      } else {
+        throw Exception(
+            'Failed to load turnpool. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
+  Future<List<Turnpool>> getnumTurnpool(int iduserpool, String token) async {
+    final url = Uri.parse('$baseUrl/getnumTurnpool?iduserpool=$iduserpool');
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Si la respuesta es exitosa, parseamos los datos
+        List<dynamic> data = json.decode(response.body);
+        if (data.isEmpty) {
+          return []; // Si no hay datos, devolvemos una lista vacía
+        }
+        // Mapeamos los datos a una lista de objetos Turnpool
+        List<Turnpool> tables = data
+            .map((dynamic item) => Turnpool(
+                  idturnpool: item['idturnpool'],
+                  iduserpool: item['iduserpool'],
+                ))
+            .toList();
+        return tables;
+      } else if (response.statusCode == 404) {
+        // Si el servidor responde con un 404 (No encontrado), retornamos una lista vacía
+        return [];
+      } else {
+        throw Exception(
+            'Failed to load turnpool list. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Capturamos cualquier otro error y lo lanzamos
+      throw Exception('Error: $e');
+    }
+  }
+
+  Future<String> setpoolfree(String token) async {
+    final url = Uri.parse('$baseUrl/setpoolfree');
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return 'Mark pool as free successfully';
+      } else {
+        throw Exception(
+            'Failed to mark pool as free. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
+  Future<String> addTurnpool(int iduserpool, String token) async {
+    final url = Uri.parse('$baseUrl/addturnpool?iduserpool=$iduserpool');
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return response.body; // Mensaje de éxito
+      } else {
+        throw Exception(
+            'Failed to add turnpool. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
 }

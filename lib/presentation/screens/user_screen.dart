@@ -4,7 +4,8 @@ import 'menu_screen.dart';
 import 'package:BarDamm/presentation/screens/events_screen.dart';
 import 'package:BarDamm/presentation/screens/cv_screen.dart';
 import 'package:BarDamm/presentation/screens/reserve_screen.dart';
-import 'package:BarDamm/presentation/screens/opinion_screen.dart'; // Nueva pantalla para "Give Us Your Opinion"
+import 'package:BarDamm/presentation/screens/opinion_screen.dart'; 
+import 'package:BarDamm/presentation/screens/pool_screen.dart'; 
 
 class UserScreen extends StatefulWidget {
   final String token;
@@ -75,8 +76,15 @@ class _UserScreenState extends State<UserScreen> {
         ),
       );
     } else if (index == 5) {
-      // Aquí puedes añadir la funcionalidad para la pantalla de Pool.
-      print("Pool screen tapped");
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PoolScreen(
+              token: widget.token,
+              idUser: widget.idUser,
+              username: widget.username),
+        ),
+      );
     }
   }
 

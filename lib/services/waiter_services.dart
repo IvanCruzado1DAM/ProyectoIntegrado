@@ -152,4 +152,26 @@ class WaiterService {
       throw Exception('Error paying order: $e');
     }
   }
+
+  Future<String> setpoolfree(String token) async {
+    final url = Uri.parse('$baseUrl/setpoolfree');
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return 'Mark pool as free successfully';
+      } else {
+        throw Exception(
+            'Failed to mark pool as free. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
 }
