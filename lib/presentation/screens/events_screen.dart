@@ -9,10 +9,9 @@ import 'package:BarDamm/presentation/screens/user_screen.dart';
 class EventsScreen extends StatefulWidget {
   final String token;
   final int idUser;
- final String username;
-  
+  final String username;
 
-  const EventsScreen({Key? key, required this.token, required this.idUser,required this.username })
+  const EventsScreen({Key? key, required this.token, required this.idUser, required this.username})
       : super(key: key);
 
   @override
@@ -34,8 +33,16 @@ class _EventsScreenState extends State<EventsScreen> {
   Future<void> _loadEvents() async {
     try {
       List<Event> fetchedEvents = await _eventService.fetchAllEvents(widget.token);
+
+      // Filtrar eventos cuya fecha de finalización no sea anterior a la fecha actual
+      DateTime now = DateTime.now();
+      List<Event> validEvents = fetchedEvents.where((event) {
+        DateTime endDate = DateTime.parse(event.eventenddate.toString());
+        return endDate.isAfter(now);
+      }).toList();
+
       setState(() {
-        events = fetchedEvents;
+        events = validEvents;
         isLoading = false;
       });
     } catch (e) {
@@ -53,13 +60,17 @@ class _EventsScreenState extends State<EventsScreen> {
         title: const Text('Soon Events'),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
-        leading: IconButton( 
+        leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => UserScreen(token: widget.token, idUser: widget.idUser, username: widget.username,), 
+                builder: (context) => UserScreen(
+                  token: widget.token,
+                  idUser: widget.idUser,
+                  username: widget.username,
+                ),
               ),
             );
           },
@@ -74,7 +85,7 @@ class _EventsScreenState extends State<EventsScreen> {
                     Expanded(
                       child: CarouselSlider(
                         options: CarouselOptions(
-                          height: MediaQuery.of(context).size.height * 0.70, 
+                          height: MediaQuery.of(context).size.height * 0.70,
                           autoPlay: true,
                           enlargeCenterPage: true,
                           aspectRatio: 16 / 9,
@@ -86,7 +97,7 @@ class _EventsScreenState extends State<EventsScreen> {
                         items: events.map((event) => _buildEventCard(event)).toList(),
                       ),
                     ),
-                    const SizedBox(height: 20), 
+                    const SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
@@ -119,7 +130,7 @@ class _EventsScreenState extends State<EventsScreen> {
             ),
             child: Image.memory(
               event.eventimage,
-              height: 400, 
+              height: 400,
               width: double.infinity,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) {
@@ -147,8 +158,8 @@ class _EventsScreenState extends State<EventsScreen> {
                   const SizedBox(height: 5),
                   Text(
                     event.eventdescription,
-                    maxLines: null, 
-                    overflow: TextOverflow.visible, 
+                    maxLines: null,
+                    overflow: TextOverflow.visible,
                     style: const TextStyle(fontSize: 16),
                   ),
                   const SizedBox(height: 10),
