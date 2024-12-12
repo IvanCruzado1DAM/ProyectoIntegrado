@@ -20,7 +20,7 @@ class TableScreen extends StatefulWidget {
 
 class _TableScreenState extends State<TableScreen> {
   int? selectedTable;
-  List<Reservetable> reservedTables = []; // Lista de reservas para hoy
+  List<Reservetable> reservedTables = []; 
   late ClientService clientServices;
   late WaiterService waiterService;
   bool isLoading = true;
@@ -42,7 +42,7 @@ class _TableScreenState extends State<TableScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(snackBarMessage!)),
         );
-        snackBarMessage = null; // Limpiar mensaje
+        snackBarMessage = null; 
       });
     }
   }
@@ -52,15 +52,12 @@ class _TableScreenState extends State<TableScreen> {
       final reserves = await waiterService.fetchAllTables(widget.token);
 
       DateTime now = DateTime.now()
-          .toLocal(); // Asegurar que la hora actual esté en la zona horaria local
+          .toLocal(); 
 
-      // Filtrar las reservas del día de hoy con occupy == true y antes de la hora actual
       List<Reservetable> todayReservedTables = reserves.where((reserve) {
-        // Convertir reservationHour a DateTime
         DateTime reservationDateTime =
             DateTime.parse(reserve.reservationHour.toString()).toLocal();
 
-        // Comprobar que la reserva sea del mismo día, anterior a la hora actual y que esté ocupada
         return reserve.occupy == true &&
             reservationDateTime.year == now.year &&
             reservationDateTime.month == now.month &&
@@ -68,7 +65,7 @@ class _TableScreenState extends State<TableScreen> {
       }).toList();
 
       setState(() {
-        reservedTables = todayReservedTables; // Actualizar las mesas reservadas
+        reservedTables = todayReservedTables; 
         isLoading = false;
       });
     } catch (e) {
@@ -83,7 +80,6 @@ class _TableScreenState extends State<TableScreen> {
     }
   }
 
-  // Método para encontrar la reserva más cercana
   Reservetable? _getClosestReservation(int tableNumber) {
     DateTime now = DateTime.now().toLocal();
     List<Reservetable> tableReservations = reservedTables
@@ -92,7 +88,6 @@ class _TableScreenState extends State<TableScreen> {
 
     if (tableReservations.isEmpty) return null;
 
-    // Filtrar las reservas que no son posteriores a la hora actual
     List<Reservetable> validReservations = tableReservations.where((reserve) {
       DateTime reservationTime =
           DateTime.parse(reserve.reservationHour.toString()).toLocal();
@@ -100,34 +95,29 @@ class _TableScreenState extends State<TableScreen> {
           reservationTime.isAtSameMomentAs(now);
     }).toList();
 
-    // Si no hay reservas válidas
     if (validReservations.isEmpty) return null;
 
-    // Ordenar las reservas válidas por hora, de más cercana a más lejana
     validReservations.sort((a, b) {
       DateTime aTime = DateTime.parse(a.reservationHour.toString()).toLocal();
       DateTime bTime = DateTime.parse(b.reservationHour.toString()).toLocal();
-      return aTime.compareTo(bTime); // Ascendente
+      return aTime.compareTo(bTime); 
     });
 
-    // Devuelve la última reserva válida (la más cercana a la hora actual)
     return validReservations.last;
   }
 
-  // Método para liberar la mesa
   Future<void> _freeTable(int tableNumber) async {
     try {
-      // Encontramos la reserva más cercana para la mesa seleccionada
       Reservetable? closestReservation = _getClosestReservation(tableNumber);
 
       if (closestReservation != null) {
         String message = await waiterService.settablefree(
             closestReservation.idTable, widget.token);
         setState(() {
-          snackBarMessage = 'Table free now'; // Mostrar mensaje de éxito
-          reservedTables.remove(closestReservation); // Eliminar la reserva de la lista
+          snackBarMessage = 'Table free now'; 
+          reservedTables.remove(closestReservation); 
         });
-        // Mostrar mensaje con el resultado
+        
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Table free now')),
         );
@@ -143,7 +133,6 @@ class _TableScreenState extends State<TableScreen> {
     }
   }
 
-  // Mostrar el diálogo para liberar la mesa
   void _showFreeTableDialog(int tableNumber) {
     showDialog(
       context: context,
@@ -154,14 +143,14 @@ class _TableScreenState extends State<TableScreen> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Cerrar el diálogo sin hacer nada
+                Navigator.of(context).pop(); 
               },
               child: const Text("Cancel"),
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Cerrar el diálogo
-                _freeTable(tableNumber); // Liberar la mesa
+                Navigator.of(context).pop(); 
+                _freeTable(tableNumber);  
               },
               child: const Text("Yes"),
             ),
@@ -218,7 +207,6 @@ class _TableScreenState extends State<TableScreen> {
   Widget _buildTableIcon(int index, String label, double dx, double dy) {
     double screenWidth = MediaQuery.of(context).size.width;
 
-    // Verificar si alguna reserva de la mesa está ocupada
     bool isReserved = reservedTables.any((reserve) {
       return reserve.numTable == index + 1 && reserve.occupy == true;
     });
@@ -228,7 +216,7 @@ class _TableScreenState extends State<TableScreen> {
       child: GestureDetector(
         onTap: () {
           if (isReserved) {
-            _showFreeTableDialog(index + 1); // Mostrar opción para liberar mesa
+            _showFreeTableDialog(index + 1); 
           } else {
             setState(() {
               selectedTable = index + 1;
@@ -246,14 +234,14 @@ class _TableScreenState extends State<TableScreen> {
               height: screenWidth * 0.15,
               decoration: BoxDecoration(
                 color: isReserved
-                    ? Colors.transparent // Sin color de fondo para las mesas reservadas
+                    ? Colors.transparent 
                     : (selectedTable == index + 1
-                        ? Colors.blue.withOpacity(0.7) // Mesa seleccionada en azul
-                        : Colors.grey.withOpacity(0.3)), // Mesa disponible en gris
+                        ? Colors.blue.withOpacity(0.7)  
+                        : Colors.grey.withOpacity(0.3)),  
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: isReserved
-                      ? Colors.transparent // Sin borde para las mesas reservadas
+                      ? Colors.transparent  
                       : (selectedTable == index + 1
                           ? Colors.blue
                           : Colors.grey),
@@ -264,7 +252,7 @@ class _TableScreenState extends State<TableScreen> {
                 Icons.table_restaurant,
                 size: screenWidth * 0.1,
                 color: isReserved
-                    ? Colors.black // Color del icono de mesa reservada
+                    ? Colors.black  
                     : (selectedTable == index + 1
                         ? Colors.white
                         : Colors.black),

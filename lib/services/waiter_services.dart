@@ -82,20 +82,19 @@ class WaiterService {
   }
 
   Future<String> payOrder(int idOrder, String token) async {
-    // Construir la URL con el parámetro idorder
     final url = Uri.parse('$baseUrl/payOrderr?idorder=$idOrder');
 
     try {
       final response = await http.post(
         url,
         headers: {
-          'Authorization': 'Bearer $token', // Si usas autenticación con token
+          'Authorization': 'Bearer $token', 
           'Content-Type': 'application/json',
         },
       );
 
       if (response.statusCode == 200) {
-        return 'Order paid successfully'; // Devuelve la respuesta de éxito o error
+        return 'Order paid successfully'; 
       } else {
         throw Exception(
             'Failed to pay order. Status code: ${response.statusCode}');
@@ -106,20 +105,19 @@ class WaiterService {
   }
 
   Future<String> confirmAssist(int idreservetable, String token) async {
-    // Construir la URL con el parámetro idorder
     final url = Uri.parse('$baseUrl/confirmAssist?idreservetable=$idreservetable');
 
     try {
       final response = await http.post(
         url,
         headers: {
-          'Authorization': 'Bearer $token', // Si usas autenticación con token
+          'Authorization': 'Bearer $token', 
           'Content-Type': 'application/json',
         },
       );
 
       if (response.statusCode == 200) {
-        return 'Confirm assist successfully'; // Devuelve la respuesta de éxito o error
+        return 'Confirm assist successfully'; 
       } else {
         throw Exception(
             'Failed to confirm assist. Status code: ${response.statusCode}');
@@ -130,20 +128,19 @@ class WaiterService {
   }
 
   Future<String> settablefree(int idreservetable, String token) async {
-    // Construir la URL con el parámetro idorder
     final url = Uri.parse('$baseUrl/settablefree?idreservetable=$idreservetable');
 
     try {
       final response = await http.post(
         url,
         headers: {
-          'Authorization': 'Bearer $token', // Si usas autenticación con token
+          'Authorization': 'Bearer $token', 
           'Content-Type': 'application/json',
         },
       );
 
       if (response.statusCode == 200) {
-        return 'Mark table as free successfully'; // Devuelve la respuesta de éxito o error
+        return 'Mark table as free successfully'; 
       } else {
         throw Exception(
             'Failed to confirm assist. Status code: ${response.statusCode}');

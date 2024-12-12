@@ -1,10 +1,9 @@
 class Opinion {
-  final int idOpinion; // Nullable porque puede ser generado automáticamente
+  final int idOpinion; 
   final int idUserOpinion;
   final int score;
   final String comment;
 
-  // Constructor
   Opinion({
     required this.idOpinion,
     required this.idUserOpinion,
@@ -12,7 +11,6 @@ class Opinion {
     required this.comment,
   });
 
-  // Método para convertir desde JSON a una instancia de Opinion
   factory Opinion.fromJson(Map<String, dynamic> json) {
     return Opinion(
       idOpinion: json['idopinion'],
@@ -22,7 +20,6 @@ class Opinion {
     );
   }
 
-  // Método para convertir una instancia de Opinion a JSON
   Map<String, dynamic> toJson() {
     return {
       'idopinion': idOpinion,

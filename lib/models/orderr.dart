@@ -15,7 +15,6 @@ class Orderr {
     required this.paid,
   });
 
-  // Método para crear una instancia de Orderr desde un JSON
   factory Orderr.fromJson(Map<String, dynamic> json) {
     return Orderr(
       idorder: json['idorder'] as int,
@@ -27,7 +26,6 @@ class Orderr {
     );
   }
 
-  // Método para convertir una instancia de Orderr a JSON
   Map<String, dynamic> toJson() {
     return {
       'idorder': idorder,

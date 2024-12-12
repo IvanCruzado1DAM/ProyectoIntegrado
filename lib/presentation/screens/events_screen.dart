@@ -34,7 +34,6 @@ class _EventsScreenState extends State<EventsScreen> {
     try {
       List<Event> fetchedEvents = await _eventService.fetchAllEvents(widget.token);
 
-      // Filtrar eventos cuya fecha de finalización no sea anterior a la fecha actual
       DateTime now = DateTime.now();
       List<Event> validEvents = fetchedEvents.where((event) {
         DateTime endDate = DateTime.parse(event.eventenddate.toString());

@@ -4,7 +4,7 @@ import 'package:BarDamm/presentation/screens/user_screen.dart';
 import 'package:BarDamm/services/client_services.dart';
 import 'package:BarDamm/models/drink.dart';
 import 'dart:typed_data';
-import 'package:intl/intl.dart'; // Asegúrate de importar intl para formatear fechas y horas.
+import 'package:intl/intl.dart'; 
 
 class MenuScreen extends StatefulWidget {
   final String token;
@@ -40,24 +40,19 @@ class _MenuScreenState extends State<MenuScreen> {
         reserves = await _clientService.fetchAllReservesbyClient(
             widget.token, widget.idUser);
       } catch (e) {
-        // Si hay un error 404 al buscar reservas, lo manejamos específicamente
         if (e.toString().contains('404')) {
-          reserves = []; // No hay reservas, se establece una lista vacía
+          reserves = []; 
         } else {
-          // Si es otro error, lo lanzamos para que sea manejado más adelante
           rethrow;
         }
       }
-      // Obtén la fecha y hora actuales
       DateTime now = DateTime.now();
 
-      // Filtrar las reservas para el usuario que sean del mismo día y cuya hora no haya pasado
       List<Reservetable> validReserves = reserves.where((reserve) {
         if (reserve.idClient == widget.idUser) {
           DateTime reservationDateTime =
               DateTime.parse(reserve.reservationHour.toString());
 
-          // Comprobar que la reserva sea del mismo día y que la hora sea anterior a la actual
           return reservationDateTime.year == now.year &&
               reservationDateTime.month == now.month &&
               reservationDateTime.day == now.day &&
@@ -67,28 +62,25 @@ class _MenuScreenState extends State<MenuScreen> {
       }).toList();
 
       bool reservationExists = false;
-      // Si hay reservas válidas, buscar la más cercana
       if (validReserves.isNotEmpty) {
         reservationExists = true;
-        // Ordenar las reservas válidas por la proximidad a la hora actual (más cercana sin pasarse)
         validReserves.sort((a, b) {
           DateTime aTime = DateTime.parse(a.reservationHour.toString());
           DateTime bTime = DateTime.parse(b.reservationHour.toString());
           return aTime.compareTo(bTime);
         });
 
-        // La primera reserva de la lista será la más cercana sin pasarse
         hasReservation = true;
       } else {
         hasReservation =
-            false; // Si no hay reservas válidas, entonces no se puede hacer pedido
+            false; 
       }
 
       setState(() {
         allDrinks = drinks;
         allReserves = reserves;
         hasReservation =
-            reservationExists; // Actualiza si el usuario tiene una reserva activa
+            reservationExists; 
         isLoading = false;
       });
     } catch (e) {
@@ -168,7 +160,7 @@ class _MenuScreenState extends State<MenuScreen> {
             ],
           ),
         ),
-        // El botón de pedido solo se mostrará si hay una reserva activa
+        
         if (hasReservation)
           Positioned(
             bottom: 20,
@@ -305,15 +297,13 @@ class _MenuScreenState extends State<MenuScreen> {
 
   void confirmOrder() {
     try {
-      // Preparar la lista de bebidas seleccionadas como un string separado por comas
       String drinks = selectedDrinks.entries
           .map((entry) => '${entry.key.drinkname} x${entry.value}')
           .join(', ');
 
-      // Obtener el número de mesa de la reserva del usuario
       DateTime now = DateTime.now();
       int idTable = 0;
-      int numTable = 0; // Valor por defecto si no hay reservas válidas.
+      int numTable = 0; 
       List<Reservetable> validReserves = allReserves.where((reserve) {
         if (reserve.idClient == widget.idUser) {
           DateTime reservationDateTime =
@@ -336,13 +326,12 @@ class _MenuScreenState extends State<MenuScreen> {
         setState(() {
           numTable = validReserves.last.numTable;
           idTable = validReserves
-              .last.idTable; // Asumiendo que idTable existe en Reservetable
+              .last.idTable; 
         });
       } else {
         throw Exception('No valid reservations found.');
       }
 
-      // Llamar al método `addOrderr` del servicio
       _clientService.addOrderr(
         drinks: drinks,
         numtable: numTable,
@@ -351,7 +340,6 @@ class _MenuScreenState extends State<MenuScreen> {
         token: widget.token,
       );
 
-      // Mostrar un mensaje de éxito y limpiar la selección
       setState(() {
         selectedDrinks.clear();
         totalPrice = 0.0;
@@ -389,18 +377,18 @@ class _MenuScreenState extends State<MenuScreen> {
                     buildPaymentOptionCard(
                       title: 'Cash',
                       imagePath:
-                          'assets/images/cash.png', // Ruta de tu imagen de efectivo
+                          'assets/images/cash.png', 
                       onTap: () {
-                        Navigator.pop(context); // Cierra el diálogo
+                        Navigator.pop(context); 
                         handleWantToPay('Cash', idTable);
                       },
                     ),
                     buildPaymentOptionCard(
                       title: 'Card',
                       imagePath:
-                          'assets/images/card.png', // Ruta de tu imagen de tarjeta
+                          'assets/images/card.png', 
                       onTap: () {
-                        Navigator.pop(context); // Cierra el diálogo
+                        Navigator.pop(context); 
                         handleWantToPay('Card', idTable);
                       },
                     ),

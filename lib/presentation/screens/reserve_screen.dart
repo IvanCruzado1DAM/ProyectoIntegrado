@@ -171,7 +171,7 @@ class _ReserveScreenState extends State<ReserveScreen> {
             setState(() {
               selectedDate = datePicked;
             });
-            TimeOfDay? timePicked = await _selectTime(context); // Usar el dialog personalizado
+            TimeOfDay? timePicked = await _selectTime(context); 
             if (timePicked != null) {
               setState(() {
                 selectedTime = timePicked;
@@ -225,12 +225,10 @@ class _ReserveScreenState extends State<ReserveScreen> {
     return picked;
   }
 
-  // Función para mostrar solo las horas en punto
   Future<TimeOfDay?> _selectTime(BuildContext context) async {
-    // Lista de horas en punto que queremos mostrar (de 08:00 AM a 10:00 PM)
     List<TimeOfDay> availableTimes = List.generate(24, (index) {
-      return TimeOfDay(hour: index, minute: 0); // solo horas en punto
-    }).where((time) => time.hour >= 8 && time.hour <= 22).toList(); // Limitar a las 8AM - 10PM
+      return TimeOfDay(hour: index, minute: 0); 
+    }).where((time) => time.hour >= 8 && time.hour <= 22).toList(); 
 
     return await showDialog<TimeOfDay>(
       context: context,
@@ -267,9 +265,8 @@ class _ReserveScreenState extends State<ReserveScreen> {
     time.minute,
   );
 
-  // Aquí se convierte a un formato sin "T" ni milisegundos
   final DateFormat dateFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
-  return dateFormat.format(combinedDateTime);  // Devuelve la fecha con formato adecuado
+  return dateFormat.format(combinedDateTime);  
 }
 
 

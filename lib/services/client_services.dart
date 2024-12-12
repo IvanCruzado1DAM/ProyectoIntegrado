@@ -154,7 +154,6 @@ class ClientService {
     );
 
     if (response.statusCode == 200) {
-      // Si la respuesta es exitosa, procesa el cuerpo
       List<dynamic> body = jsonDecode(response.body);
       List<Opinion> opinions = body
           .map((dynamic item) => Opinion(
@@ -229,7 +228,6 @@ class ClientService {
   }
 
   String _formatDateTime(DateTime dateTime) {
-    // Formato sin milisegundos
     final DateFormat dateFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
     return dateFormat.format(dateTime);
   }
@@ -302,14 +300,14 @@ class ClientService {
     required int numtable,
     required int idreservetable,
     required double total,
-    required String token, // Si el endpoint necesita autenticación
+    required String token, 
   }) async {
-    final url = Uri.parse('$baseUrl/addOrderr'); // Cambia a tu URL base
+    final url = Uri.parse('$baseUrl/addOrderr'); 
     final headers = {
-      'Authorization': 'Bearer $token', // Si se necesita autenticación
+      'Authorization': 'Bearer $token', 
     };
 
-    // Parámetros que se envían en la solicitud
+  
     final body = {
       'drinks': drinks,
       'numtable': numtable.toString(),
@@ -343,13 +341,13 @@ class ClientService {
       final response = await http.post(
         url,
         headers: {
-          'Authorization': 'Bearer $token', // Si usas autenticación con token
+          'Authorization': 'Bearer $token', 
           'Content-Type': 'application/json',
         },
       );
 
       if (response.statusCode == 200) {
-        return response.body; // Devuelve la respuesta de éxito o error
+        return response.body; 
       } else {
         throw Exception('Failed. Status code: ${response.statusCode}');
       }
@@ -371,7 +369,7 @@ class ClientService {
 
       if (response.statusCode == 200) {
         return int.parse(
-            response.body); // Asumimos que la respuesta es un número
+            response.body); 
       } else {
         throw Exception(
             'Failed to load turnpool. Status code: ${response.statusCode}');
@@ -393,12 +391,12 @@ class ClientService {
       );
 
       if (response.statusCode == 200) {
-        // Si la respuesta es exitosa, parseamos los datos
+        
         List<dynamic> data = json.decode(response.body);
         if (data.isEmpty) {
-          return []; // Si no hay datos, devolvemos una lista vacía
+          return []; 
         }
-        // Mapeamos los datos a una lista de objetos Turnpool
+        
         List<Turnpool> tables = data
             .map((dynamic item) => Turnpool(
                   idturnpool: item['idturnpool'],
@@ -407,14 +405,13 @@ class ClientService {
             .toList();
         return tables;
       } else if (response.statusCode == 404) {
-        // Si el servidor responde con un 404 (No encontrado), retornamos una lista vacía
         return [];
       } else {
         throw Exception(
             'Failed to load turnpool list. Status code: ${response.statusCode}');
       }
     } catch (e) {
-      // Capturamos cualquier otro error y lo lanzamos
+      
       throw Exception('Error: $e');
     }
   }
@@ -453,7 +450,7 @@ class ClientService {
       );
 
       if (response.statusCode == 200) {
-        return response.body; // Mensaje de éxito
+        return response.body; 
       } else {
         throw Exception(
             'Failed to add turnpool. Status code: ${response.statusCode}');

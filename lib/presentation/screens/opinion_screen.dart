@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:BarDamm/services/client_services.dart';
-import 'package:BarDamm/models/opinion.dart'; // Importa tu modelo de Opinion
+import 'package:BarDamm/models/opinion.dart'; 
 
 class OpinionScreen extends StatefulWidget {
   final String token;
@@ -20,39 +20,35 @@ class OpinionScreen extends StatefulWidget {
 
 class _OpinionScreenState extends State<OpinionScreen> {
   int _selectedStars =
-      0; // Para rastrear la cantidad de estrellas seleccionadas
+      0; 
   final TextEditingController _commentController =
-      TextEditingController(); // Controlador para el campo de texto
-  bool _opinionSaved = false; // Indica si la opinión ya ha sido guardada
+      TextEditingController(); 
+  bool _opinionSaved = false; 
   final ClientService clservices = ClientService();
 
   @override
   void initState() {
     super.initState();
-    _checkExistingOpinion(); // Verificar si ya existe una opinión guardada
+    _checkExistingOpinion(); 
   }
 
   Future<void> _checkExistingOpinion() async {
   try {
-    // Verificar que el token no esté vacío
     if (widget.token.isEmpty) {
       throw Exception('El token está vacío');
     }
 
-    // Hacer la solicitud para obtener las opiniones
     final List<Opinion> opinions = await clservices.fetchAllOpinions(widget.token);
 
-    // Si la respuesta es exitosa, verificar si la opinión existe
     if (opinions.isEmpty) {
       print('No hay opiniones disponibles.');
       return;
     }
 
-    // Buscar la opinión del usuario
     final existingOpinion = opinions.firstWhere(
       (opinion) => opinion.idUserOpinion == widget.idUser,
       orElse: () => Opinion(
-        idOpinion: -1, // Valor por defecto o centinela
+        idOpinion: -1, 
         idUserOpinion: widget.idUser,
         score: 0,
         comment: '',
@@ -67,7 +63,6 @@ class _OpinionScreenState extends State<OpinionScreen> {
       });
     }
   } catch (e) {
-    // Registrar el error para entender qué falla
     print('Error al verificar la opinión: $e');
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Error al verificar la opinión: $e')),
@@ -75,10 +70,6 @@ class _OpinionScreenState extends State<OpinionScreen> {
   }
 }
 
-
-
-
-  // Llama al método saveOpinion del servicio
   Future<void> _sendOpinion() async {
     final int score = _selectedStars;
     final String? comment = _commentController.text.trim().isEmpty
@@ -93,7 +84,7 @@ class _OpinionScreenState extends State<OpinionScreen> {
         token: widget.token,
       );
       setState(() {
-        _opinionSaved = true; // Cambiar el estado a "opinion guardada"
+        _opinionSaved = true; 
       });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Opinion sent successfully!')),
@@ -105,7 +96,6 @@ class _OpinionScreenState extends State<OpinionScreen> {
     }
   }
 
-  // Llama al método updateOpinion del servicio
   Future<void> _editOpinion() async {
     final int score = _selectedStars;
     final String? comment = _commentController.text.trim().isEmpty
@@ -142,7 +132,7 @@ class _OpinionScreenState extends State<OpinionScreen> {
           onPressed: () {
             setState(() {
               _selectedStars =
-                  index + 1; // Cambia el número de estrellas seleccionadas
+                  index + 1; 
             });
           },
         );

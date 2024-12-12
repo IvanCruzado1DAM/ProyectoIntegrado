@@ -24,7 +24,7 @@ class _PoolScreenState extends State<PoolScreen> {
   late ClientService _clientService;
 
   String _errorMessage = '';
-  String _buttonText = ''; // Variable para almacenar el texto del botón
+  String _buttonText = ''; 
 
   @override
   void initState() {
@@ -39,19 +39,18 @@ class _PoolScreenState extends State<PoolScreen> {
     return num.toString().padLeft(2, '0');
   }
 
-  // Método de recarga al hacer pull-to-refresh
+ 
   Future<void> _onRefresh() async {
     setState(() {
       _turnPoolFuture = _clientService.getTurnpool(widget.token);
       _numTurnpoolFuture =
           _clientService.getnumTurnpool(widget.idUser, widget.token);
     });
-    await _turnPoolFuture; // Espera a que se recarguen los datos
+    await _turnPoolFuture; 
     await _numTurnpoolFuture;
   }
 
   void _handleButtonPress() {
-    // Lógica cuando el botón es presionado
     if (_buttonText == 'Request a turn for pool') {
       _requestTurn();
     } else if (_buttonText == 'Request a new turn for pool') {
@@ -59,7 +58,6 @@ class _PoolScreenState extends State<PoolScreen> {
     } else if (_buttonText == 'Wait your turn for pool') {
       _waitForTurn();
     } else if (_buttonText == 'It is your turn to play, enjoy the game!') {
-      // Mostrar el mensaje en la parte inferior derecha
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -68,10 +66,10 @@ class _PoolScreenState extends State<PoolScreen> {
           ),
           duration: Duration(seconds: 4),
           behavior:
-              SnackBarBehavior.floating, // Permite que el Snackbar sea flotante
+              SnackBarBehavior.floating, 
           margin: EdgeInsets.only(
               bottom: 20,
-              right: 20), // Posiciona el SnackBar en la parte inferior derecha
+              right: 20), 
         ),
       );
     } else if (_buttonText == 'I finished my game') {
@@ -81,23 +79,19 @@ class _PoolScreenState extends State<PoolScreen> {
 
   void _requestTurn() async {
     try {
-      // Llamamos al método addTurnpool con el idUser y el token
       String message =
           await _clientService.addTurnpool(widget.idUser, widget.token);
 
-      // Si la respuesta es exitosa, mostramos un mensaje en la parte inferior
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content:
-              Text('New turn taken, refresh the page'), // Mensaje en inglés
-          duration: Duration(seconds: 3), // Duración del mensaje
+              Text('New turn taken, refresh the page'), 
+          duration: Duration(seconds: 3), 
         ),
       );
 
-      // Opcional: Puedes recargar la página o hacer algo más después de obtener un turno
-      _onRefresh(); // Llama a la función de recarga si es necesario
+      _onRefresh(); 
     } catch (e) {
-      // En caso de error, mostramos un mensaje de error en la parte inferior
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error: $e'),
@@ -109,21 +103,17 @@ class _PoolScreenState extends State<PoolScreen> {
 
   void _requestNewTurn() async {
   try {
-    // Llamamos al método addTurnpool con el idUser y el token para solicitar un nuevo turno
     String message = await _clientService.addTurnpool(widget.idUser, widget.token);
 
-    // Si la respuesta es exitosa, mostramos un mensaje en la parte inferior
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('New turn taken, refresh the page'), // Mensaje en inglés
-        duration: Duration(seconds: 3), // Duración del mensaje
+        content: Text('New turn taken, refresh the page'), 
+        duration: Duration(seconds: 3), 
       ),
     );
 
-    // Opcional: Puedes recargar la página o hacer algo más después de obtener un nuevo turno
-    _onRefresh(); // Llama a la función de recarga si es necesario
+    _onRefresh(); 
   } catch (e) {
-    // En caso de error, mostramos un mensaje de error en la parte inferior
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Error: $e'),
@@ -135,21 +125,20 @@ class _PoolScreenState extends State<PoolScreen> {
 
 
   void _waitForTurn() {
-    // Lógica para esperar el turno
+    
     print('Esperando turno...');
   }
 
   void _startGame() {
-    // Lógica para iniciar la partida
+    
     print('Iniciando la partida...');
   }
 
   void _finishGame() async {
   try {
-    // Llamamos al método setpoolfree con el token
+    
     String message = await _clientService.setpoolfree(widget.token);
 
-    // Si la respuesta es exitosa, mostramos un mensaje de agradecimiento
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -161,7 +150,7 @@ class _PoolScreenState extends State<PoolScreen> {
     );
     _onRefresh();
   } catch (e) {
-    // En caso de error, mostramos un mensaje de error en la parte inferior
+    
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -191,9 +180,9 @@ class _PoolScreenState extends State<PoolScreen> {
               fit: BoxFit.cover,
             ),
           ),
-          // Usamos un RefreshIndicator encima de la imagen de fondo
+          
           RefreshIndicator(
-            onRefresh: _onRefresh, // Aquí es donde se dispara la recarga
+            onRefresh: _onRefresh, 
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
@@ -202,9 +191,9 @@ class _PoolScreenState extends State<PoolScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Fila para los recuadros "Turn Pool" y "Your Turn"
+                      
                       FutureBuilder<int>(
-                        // FutureBuilder para obtener los datos de Turnpool
+                        
                         future: _turnPoolFuture,
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
@@ -299,7 +288,6 @@ class _PoolScreenState extends State<PoolScreen> {
                                                 numTurnpool.last.idturnpool)
                                             : 'N/D';
 
-                                        // Definir el texto del botón según la situación
                                         String buttonText;
                                         if (userTurn == 'N/D') {
                                           buttonText =
@@ -317,7 +305,6 @@ class _PoolScreenState extends State<PoolScreen> {
                                               'It is your turn to play, enjoy the game!';
                                         }
 
-                                        // Utiliza un post-frame callback para ejecutar setState después de la construcción del widget
                                         WidgetsBinding.instance
                                             .addPostFrameCallback((_) {
                                           setState(() {
@@ -363,12 +350,10 @@ class _PoolScreenState extends State<PoolScreen> {
                           }
                         },
                       ),
-                      // El botón ahora está fuera de la fila de rectángulos
                       ElevatedButton(
                         onPressed: _handleButtonPress,
                         child: Text(_buttonText),
                       ),
-                      // Mostrar el botón "Terminé mi partida" solo si es el turno del jugador
                       if (_buttonText ==
                           'It is your turn to play, enjoy the game!')
                         ElevatedButton(

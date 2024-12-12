@@ -105,7 +105,7 @@ Widget build(BuildContext context) {
         },
       ),
     ),
-    body: SingleChildScrollView(  // Envuelve el contenido en un SingleChildScrollView
+    body: SingleChildScrollView(  
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -150,7 +150,7 @@ Widget build(BuildContext context) {
                 'Selected file: ${_selectedFile!.path.split('/').last}',
                 style: const TextStyle(color: Colors.green),
               ),
-            const SizedBox(height: 20),  // Agregar espacio para que el contenido no se amontone
+            const SizedBox(height: 20), 
             ElevatedButton(
               onPressed: () => _submitCv(widget.userId, widget.username),
               child: const Text('Submit'),

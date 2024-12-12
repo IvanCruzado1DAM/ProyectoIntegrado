@@ -136,7 +136,7 @@ class _UserScreenState extends State<UserScreen> {
                 ),
                 Expanded(
                   child: _buildNavigationCardWithImage(
-                      'assets/images/billar.png', 'Pool', 5), // Imagen del juego de billar
+                      'assets/images/billar.png', 'Pool', 5), 
                 ),
               ],
             ),

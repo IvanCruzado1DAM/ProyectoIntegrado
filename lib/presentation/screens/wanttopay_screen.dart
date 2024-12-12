@@ -22,12 +22,10 @@ class _WantsToPayScreenState extends State<WantsToPayScreen> {
     _loadTables();
   }
 
-  // Método para cargar las mesas
   void _loadTables() {
     _tablesFuture = _fetchWantsToPayTables(widget.token);
   }
 
-  // Método para filtrar las mesas que quieren pagar
   Future<List<Reservetable>> _fetchWantsToPayTables(String token) async {
     final waiterService = WaiterService();
     final allTables = await waiterService.fetchAllTables(token);
@@ -54,9 +52,9 @@ class _WantsToPayScreenState extends State<WantsToPayScreen> {
       body: RefreshIndicator(
         onRefresh: () async {
           setState(() {
-            _loadTables(); // Recargar las mesas
+            _loadTables(); 
           });
-          // Esperar a que los datos se recarguen
+          
           await _tablesFuture;
         },
         child: FutureBuilder<List<Reservetable>>(

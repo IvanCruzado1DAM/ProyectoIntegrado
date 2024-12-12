@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:BarDamm/services/user_services.dart';
-import 'package:BarDamm/presentation/screens/login_screen.dart'; // Asegúrate de que tienes la pantalla LoginScreen
+import 'package:BarDamm/presentation/screens/login_screen.dart'; 
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -75,25 +75,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          // Fondo de imagen
           Positioned.fill(
             child: Image.asset(
               'assets/images/fondologinapp.jpg',
               fit: BoxFit.cover,
             ),
           ),
-          // Contenido centrado en la pantalla
+  
           Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Formulario
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.8), // Fondo blanco semitransparente
+                      color: Colors.white.withOpacity(0.8), 
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
@@ -107,75 +105,75 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       children: [
                         TextFormField(
                           controller: _usernameController,
-                          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold), // Texto negro y en negrita
+                          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold), 
                           decoration: const InputDecoration(
                             labelText: 'Usuario',
-                            labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), // Etiqueta en negro y negrita
+                            labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), 
                             border: OutlineInputBorder(),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.black),
                             ),
-                            fillColor: Colors.white60, // Fondo semitransparente en el campo
-                            filled: true, // Habilitar el fondo en el campo
+                            fillColor: Colors.white60, 
+                            filled: true, 
                           ),
                         ),
                         const SizedBox(height: 16),
                         TextFormField(
                           controller: _passwordController,
                           obscureText: true,
-                          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold), // Texto negro y en negrita
+                          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold), 
                           decoration: const InputDecoration(
                             labelText: 'Contraseña',
-                            labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), // Etiqueta en negro y negrita
+                            labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), 
                             border: OutlineInputBorder(),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.black),
                             ),
-                            fillColor: Colors.white60, // Fondo semitransparente en el campo
-                            filled: true, // Habilitar el fondo en el campo
+                            fillColor: Colors.white60, 
+                            filled: true, 
                           ),
                         ),
                         const SizedBox(height: 16),
                         TextFormField(
                           controller: _nameController,
-                          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold), // Texto negro y en negrita
+                          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold), 
                           decoration: const InputDecoration(
                             labelText: 'Nombre',
-                            labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), // Etiqueta en negro y negrita
+                            labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), 
                             border: OutlineInputBorder(),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.black),
                             ),
-                            fillColor: Colors.white60, // Fondo semitransparente en el campo
-                            filled: true, // Habilitar el fondo en el campo
+                            fillColor: Colors.white60, 
+                            filled: true, 
                           ),
                         ),
                         const SizedBox(height: 16),
                         TextFormField(
                           controller: _emailController,
-                          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold), // Texto negro y en negrita
+                          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold), 
                           decoration: const InputDecoration(
                             labelText: 'Email',
-                            labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), // Etiqueta en negro y negrita
+                            labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), 
                             border: OutlineInputBorder(),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.black),
                             ),
-                            fillColor: Colors.white60, // Fondo semitransparente en el campo
-                            filled: true, // Habilitar el fondo en el campo
+                            fillColor: Colors.white60, 
+                            filled: true, 
                           ),
                         ),
                         const SizedBox(height: 16),
-                        // Botones centrados horizontalmente
+                        
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.center, // Centrado horizontal
+                          mainAxisAlignment: MainAxisAlignment.center, 
                           children: [
                             ElevatedButton(
                               onPressed: _register,
                               child: const Text('Registrarse'),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue, // Fondo del botón en azul
-                                foregroundColor: Colors.white, // Texto del botón en blanco
+                                backgroundColor: Colors.blue, 
+                                foregroundColor: Colors.white, 
                               ),
                             ),
                             const SizedBox(width: 16),
@@ -183,8 +181,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               onPressed: _goBack,
                               child: const Text('Back'),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red, // Fondo del botón en gris
-                                foregroundColor: Colors.white, // Texto del botón en blanco
+                                backgroundColor: Colors.red,
+                                foregroundColor: Colors.white, 
                               ),
                             ),
                           ],

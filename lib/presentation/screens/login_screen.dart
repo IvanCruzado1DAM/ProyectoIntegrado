@@ -78,10 +78,9 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true, // Permite que la pantalla se desplace con el teclado
+      resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
-          // Fondo de pantalla
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -140,7 +139,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             onTap: () {
-                              // Desplazamiento automático hacia arriba al tocar el campo de contraseña
                               Future.delayed(
                                 const Duration(milliseconds: 300),
                                 () => Scrollable.ensureVisible(

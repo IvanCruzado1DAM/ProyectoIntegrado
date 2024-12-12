@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'orderr_screen.dart';
 import 'wanttopay_screen.dart';
 import 'table_screen.dart';
-import 'package:BarDamm/services/waiter_services.dart'; // Importación del servicio de Waiter
+import 'package:BarDamm/services/waiter_services.dart'; 
 
 class WaiterScreen extends StatelessWidget {
   final String token;
@@ -48,17 +48,14 @@ class WaiterScreen extends StatelessWidget {
         ),
       );
     } else if (index == 3) {
-      // Acción para "Set Pool Free"
+      
       final confirm = await _showConfirmationDialog(context);
       if (confirm == true) {
-        // Llama al método setPoolFree del servicio
         WaiterService ws = WaiterService();
 
         try {
-          // Llamamos al método setpoolfree con el token
           String message = await ws.setpoolfree(token);
 
-          // Si la respuesta es exitosa, mostramos un mensaje de agradecimiento
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
@@ -69,7 +66,6 @@ class WaiterScreen extends StatelessWidget {
             ),
           );
         } catch (e) {
-          // En caso de error, mostramos un mensaje de error en la parte inferior
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
@@ -95,13 +91,13 @@ class WaiterScreen extends StatelessWidget {
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop(false); // Cancelar
+                    Navigator.of(context).pop(false); 
                   },
                   child: const Text('No'),
                 ),
                 TextButton(
                   onPressed: () {
-                    Navigator.of(context).pop(true); // Confirmar
+                    Navigator.of(context).pop(true); 
                   },
                   child: const Text('Yes'),
                 ),
@@ -109,7 +105,7 @@ class WaiterScreen extends StatelessWidget {
             );
           },
         )) ??
-        false; // Devuelve false si el usuario cierra el cuadro de diálogo.
+        false; 
   }
 
   @override
